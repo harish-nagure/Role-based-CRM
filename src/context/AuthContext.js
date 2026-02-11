@@ -10,16 +10,17 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   /* ===== LOGIN ===== */
-  const loginUser = async ({ token, role }) => {
+  const loginUser = async ({ token, role,roleId }) => {
     console.log(role," dsf ",token)
     sessionStorage.setItem("token", token);
     sessionStorage.setItem("role", role);
+    sessionStorage.setItem("roleId",roleId)
 
     setToken(token);
     setRole(role);
 
-    const menuRes = await fetchMenusByRole(role);
-    setMenus(menuRes);
+    const menuRes = await fetchMenusByRole(roleId);
+    setMenus(menuRes.data || menuRes);
     setLoading(false);
   };
 
@@ -27,18 +28,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedToken = sessionStorage.getItem("token");
     const storedRole = sessionStorage.getItem("role");
-
-    if (!storedToken || !storedRole) {
+    const storedRoleId = sessionStorage.getItem("roleId");
+    if (!storedToken || !storedRole || !storedRoleId) {
       setLoading(false);
       return;
     }
 
     setToken(storedToken);
     setRole(storedRole);
-
-    fetchMenusByRole(storedRole)
-      .then(setMenus)
-      .finally(() => setLoading(false));
+    
+ fetchMenusByRole(storedRoleId)
+    .then(res => setMenus(res.data || res))
+    .finally(() => setLoading(false));
   }, []);
 
   /* ===== LOGOUT ===== */

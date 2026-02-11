@@ -52,9 +52,10 @@ const Login = () => {
       await loginUser({
         token: res.token,
         role: res.role,
+        roleId: res.roleId,
       });
 
-      navigate("/dashboard/create-user");
+      navigate("/dashboard/users");
     } catch (err) {
       setErrors({
         form: err.response?.data?.message || "Invalid credentials",

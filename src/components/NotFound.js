@@ -31,7 +31,7 @@ const NotFound = () => {
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <button
           onClick={handleGoBack}
-          className="px-6 py-2 bg-color-primary text-white rounded hover:bg-primary transition"
+          className="px-6 py-2 bg-color-primary text-primary rounded hover:bg-primary transition border border-primary"
         >
           Go Back
         </button>

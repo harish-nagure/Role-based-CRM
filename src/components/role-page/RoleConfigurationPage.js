@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ShieldCheck,
   Plus,
@@ -7,9 +7,10 @@ import {
   CalendarDays
 } from "lucide-react";
 import RoleForm from "./RoleForm";
+import { createRole, updateRole, fetchAllRoles, deleteRole } from "../../api.auth";
 
 /* ================= HEADER ================= */
-const RoleHeader = ({ onAdd }) => (
+const RoleHeader = ({ onAdd, canWrite }) => (
   <div className="flex items-center justify-between">
     <div>
       <h2 className="text-2xl font-semibold flex items-center gap-2 text-primary">
@@ -22,90 +23,93 @@ const RoleHeader = ({ onAdd }) => (
     </div>
 
     <button
-      title="Create a new role"
+      title={
+        canWrite
+          ? "Create a new role"
+          : "You don't have permission to create roles"
+      }
       onClick={onAdd}
-      className="bg-primary-light border hover:bg-foreground hover:border-primary text-inverse px-4 py-2 rounded-lg flex items-center gap-2 transition"
+      disabled={!canWrite}
+      className={`px-4 py-2 rounded-lg flex items-center gap-2 transition border
+      ${canWrite
+          ? "bg-primary-light border-primary text-inverse hover:bg-foreground hover:border-primary"
+          : "bg-gray-200 border-gray-300 text-gray-400 cursor-not-allowed"
+        }`}
     >
       <Plus className="w-4 h-4" />
       Add Role
     </button>
+
   </div>
 );
 
 /* ================= ROLE CARD ================= */
-const RoleCard = ({ role, onEdit, onDelete }) => (
-  <div className="bg-background border border-border rounded-lg p-6 flex justify-between items-start hover:shadow transition">
-    <div>
+const RoleCard = ({ role, onEdit, onDelete, canWrite }) => (
+  <div className="bg-background border border-border rounded-lg p-6 flex justify-between items-start hover:shadow transition max-w-full w-full">
+    {/* Left Section */}
+    <div className="flex flex-col gap-3 max-w-[60%]">
       <div className="flex items-center gap-3">
-        <span className="text-xs font-mono bg-input px-2 py-1 rounded text-muted">
-          {role.code}
+        <span className="text-xs font-mono bg-input px-2 py-1 rounded-full text-muted border border-muted">
+          {role.name.slice(0, 2).toUpperCase()}
         </span>
-        <h3 className="text-lg font-semibold text-text">
+        <h3 className="text-lg font-semibold text-text truncate">
           {role.name}
         </h3>
       </div>
 
-      <p className="text-muted mt-2">
+      <p className="text-muted mt-2 break-words overflow-hidden whitespace-pre-wrap max-w-full">
         {role.description}
       </p>
 
-      <p className="text-xs text-muted mt-3 flex items-center gap-1">
-        <CalendarDays className="w-3 h-3" />
-        Created on {role.createdAt}
+      <p className="text-sm text-muted mt-3 flex items-center gap-1">
+        <CalendarDays className="w-4 h-4" />
+        Created on {new Date(role.createdAt).toLocaleDateString()}
       </p>
     </div>
 
-    <div className="flex gap-2">
+    {/* Right Section: Buttons */}
+    <div className="flex  gap-2 ml-4 shrink-0">
       <button
-        title="Edit role details"
+        title={`Edit role ${role.name}`}
         onClick={onEdit}
-        className="border border-border px-3 py-2 rounded-md text-sm flex items-center gap-1 hover:bg-input transition"
+        disabled={!canWrite}
+        className={`border px-3 py-2 rounded-md text-sm flex items-center gap-1 transition
+        ${canWrite
+            ? "border-border hover:bg-input"
+            : "border-gray-300 text-gray-400 cursor-not-allowed"
+          }`}
       >
         <Pencil className="w-4 h-4" />
-        {/* Edit */}
+        Edit
       </button>
 
       <button
+        title={`Delete role ${role.name}`}
         onClick={onDelete}
-        title="Delete this role"
-        className="border border-error text-error px-3 py-2 rounded-md text-sm flex items-center gap-1 hover:bg-error/10 transition"
+        disabled={!canWrite}
+        className={`border px-3 py-2 rounded-md text-sm flex items-center gap-1 transition
+        ${canWrite
+            ? "border-error text-error hover:bg-error/10"
+            : "border-gray-300 text-gray-400 cursor-not-allowed"
+          }`}
       >
         <Trash2 className="w-4 h-4" />
-        {/* Delete */}
+        Delete
       </button>
+
     </div>
   </div>
 );
 
-/* ================= MOCK DATA ================= */
-const initialRoles = [
-  {
-    code: "ADM001",
-    name: "System Administrator",
-    description: "Full system access with all administrative privileges",
-    createdAt: "15 Jan 2025",
-  },
-  {
-    code: "RTL001",
-    name: "Retail Banking User",
-    description: "Customer account management and transaction processing",
-    createdAt: "20 Jan 2025",
-  },
-  {
-    code: "CRP001",
-    name: "Corporate Banking User",
-    description: "Corporate operations with maker-checker workflow",
-    createdAt: "01 Feb 2025",
-  },
-];
 
 /* ================= PAGE ================= */
-const RoleConfigurationPage = () => {
-  const [roles, setRoles] = useState(initialRoles);
+const RoleConfigurationPage = ({ canWrite = false }) => {
+  const [roles, setRoles] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
 
   const handleAdd = () => {
+    if (!canWrite) return;
     setSelectedRole(null);
     setModalOpen(true);
   };
@@ -115,37 +119,99 @@ const RoleConfigurationPage = () => {
     setModalOpen(true);
   };
 
-  const handleDelete = (role) => {
+  const handleonClose = () => {
+    setSelectedRole(null)
+    setModalOpen(false)
+  }
+  const handleDelete = async (role) => {
+    if (!canWrite) return;
     if (!window.confirm(`Delete role "${role.name}"?`)) return;
-    setRoles(prev => prev.filter(r => r.code !== role.code));
+
+    const res = await deleteRole(role.id);
+    alert(res.message);
+    setRoles(prev => prev.filter(r => r.id !== role.id));
   };
 
-  const handleSubmit = (data) => {
+  const handleSubmit = async (data) => {
+    if (!canWrite) return;
     console.log(selectedRole ? "UPDATE ROLE" : "CREATE ROLE", data);
-    setModalOpen(false);
+
+    const payload = {
+      name: data.name,
+      description: data.description,
+    };
+
+    try {
+      if (!selectedRole) {
+
+        const res = await createRole(payload);
+        console.log("Role created:", res);
+
+        setRoles((prev) => [...prev, res.data]);
+
+        alert(res?.message);
+
+      } else {
+        // UPDATE
+        const res = await updateRole(data.id, payload);
+        console.log("Role Updated:", res);
+
+        setRoles((prev) =>
+          prev.map((role) => (role.id === data.id ? res.data : role))
+        );
+        alert(res?.message);
+      }
+
+      setModalOpen(false);
+      setSelectedRole(null);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
   };
+
+
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const res = await fetchAllRoles();
+        console.log(res.data);
+        setRoles(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadRoles();
+  }, [])
 
   return (
-    <div className="min-h-screen bg-secondary p-8">
-      <div className="mx-auto bg-background rounded-lg shadow-lg p-8 space-y-6">
-        <RoleHeader onAdd={handleAdd} />
+    <div className="bg-secondary px-8 pt-8">
+      {/* <div className="min-h-[85vh] mx-auto bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
 
-        <div className="space-y-4">
-          {roles.map(role => (
-            <RoleCard
-              key={role.code}
-              role={role}
-              onEdit={() => handleEdit(role)}
-              onDelete={() => handleDelete(role)}
-            />
-          ))}
+      <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col gap-6">
+        <RoleHeader onAdd={handleAdd} canWrite={canWrite} />
+
+        {/* <div className="space-y-4"> */}
+
+        <div className=" custom-scrollbar overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {roles.map(role => (
+              <RoleCard
+                key={role.id}
+                role={role}
+                onEdit={() => handleEdit(role)}
+                onDelete={() => handleDelete(role)}
+                canWrite={canWrite}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
       <RoleForm
         open={modalOpen}
         role={selectedRole}
-        onClose={() => setModalOpen(false)}
+        onClose={handleonClose}
         onSubmit={handleSubmit}
       />
     </div>

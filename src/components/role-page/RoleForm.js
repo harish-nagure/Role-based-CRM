@@ -1,169 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import {
-//   X,
-//   ShieldCheck,
-//   Hash,
-//   Type,
-//   AlignLeft,
-//   Layers
-// } from "lucide-react";
-
-// const RoleForm = ({ open, onClose, onSubmit, role }) => {
-
-//   /* ================= STATE ================= */
-//   const [form, setForm] = useState({
-//     // code: "",
-//     name: "",
-//     // type: "Operational",
-//     description: "",
-//   });
-
-//   /* ================= EDIT MODE ================= */
-//   useEffect(() => {
-//     if (role) {
-//       setForm({
-//         // code: role.code || "",
-//         name: role.name || "",
-//         // type: role.type || "Operational",
-//         description: role.description || "",
-//       });
-//     }
-//   }, [role]);
-
-//   if (!open) return null;
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     onSubmit(form);
-//   };
-
-//   return (
-//     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-//       <div className="bg-background w-full max-w-lg rounded-lg shadow-xl border border-border">
-
-//         {/* ================= HEADER ================= */}
-//         <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-//           <div className="flex items-center gap-2 text-primary">
-//             <ShieldCheck className="w-5 h-5" />
-//             <h3 className="text-lg font-semibold">
-//               {role ? "Edit Role" : "Create New Role"}
-//             </h3>
-//           </div>
-
-//           <button
-//             onClick={onClose}
-//             className="text-muted hover:text-text transition"
-//           >
-//             <X size={18} />
-//           </button>
-//         </div>
-
-//         {/* ================= FORM ================= */}
-//         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-
-//           {/* Role Code */}
-//           {/* <div>
-//             <label className="block text-sm font-medium text-text mb-1">
-//               Role Code
-//             </label>
-//             <div className="relative">
-//               <Hash className="absolute left-3 top-3 text-muted w-4 h-4" />
-//               <input
-//                 name="code"
-//                 value={form.code}
-//                 onChange={handleChange}
-//                 placeholder="e.g. ADM001"
-//                 className="w-full pl-10 pr-4 py-2 rounded-md bg-input border border-border focus:ring-2 focus:ring-primary focus:outline-none"
-//                 required
-//               />
-//             </div>
-//           </div> */}
-
-//           {/* Role Name */}
-//           <div>
-//             <label className="block text-sm font-medium text-text mb-1">
-//               Role Name
-//             </label>
-//             <div className="relative">
-//               <Type className="absolute left-3 top-3 text-muted w-4 h-4" />
-//               <input
-//                 name="name"
-//                 value={form.name}
-//                 onChange={handleChange}
-//                 placeholder="System Administrator"
-//                 className="w-full pl-10 pr-4 py-2 rounded-md bg-input border border-border focus:ring-2 focus:ring-primary focus:outline-none"
-//                 required
-//               />
-//             </div>
-//           </div>
-
-//           {/* Role Type */}
-//           {/* <div>
-//             <label className="block text-sm font-medium text-text mb-1">
-//               Role Type
-//             </label>
-//             <div className="relative">
-//               <Layers className="absolute left-3 top-3 text-muted w-4 h-4" />
-//               <select
-//                 name="type"
-//                 value={form.type}
-//                 onChange={handleChange}
-//                 className="w-full pl-10 pr-4 py-2 rounded-md bg-input border border-border focus:ring-2 focus:ring-primary focus:outline-none"
-//               >
-//                 <option value="Administrative">Administrative</option>
-//                 <option value="Operational">Operational</option>
-//               </select>
-//             </div>
-//           </div> */}
-
-//           {/* Description */}
-//           <div>
-//             <label className="block text-sm font-medium text-text mb-1">
-//               Description
-//             </label>
-//             <div className="relative">
-//               <AlignLeft className="absolute left-3 top-3 text-muted w-4 h-4" />
-//               <textarea
-//                 name="description"
-//                 value={form.description}
-//                 onChange={handleChange}
-//                 placeholder="Describe role responsibilities"
-//                 rows="3"
-//                 className="w-full pl-10 pr-4 py-2 rounded-md bg-input border border-border focus:ring-2 focus:ring-primary focus:outline-none resize-none"
-//               />
-//             </div>
-//           </div>
-
-//           {/* ================= ACTIONS ================= */}
-//           <div className="flex justify-end gap-3 pt-4 border-t border-border">
-//             <button
-//               type="button"
-//               onClick={onClose}
-//               className="px-4 py-2 rounded-md border border-border text-text hover:bg-input transition"
-//             >
-//               Cancel
-//             </button>
-
-//             <button
-//               type="submit"
-//               className="px-5 py-2 rounded-md bg-primary-light hover:bg-foreground text-inverse font-semibold transition"
-//             >
-//               {role ? "Update Role" : "Create Role"}
-//             </button>
-//           </div>
-
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RoleForm;
 import React, { useState, useEffect } from "react";
 import {
   X,
@@ -184,14 +18,14 @@ const RoleForm = ({ open, onClose, onSubmit, role }) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (role) {
+    if (open) {
       setForm({
-        name: role.name || "",
-        description: role.description || "",
+        name: role?.name || "",
+        description: role?.description || "",
       });
       setErrors({});
     }
-  }, [role]);
+  }, [role, open]);
 
   if (!open) return null;
 
@@ -228,7 +62,12 @@ const RoleForm = ({ open, onClose, onSubmit, role }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    onSubmit(form);
+    // onSubmit(form); 
+    onSubmit({
+    id: role?.id,
+    name: form.name,
+    description: form.description,
+  });
   };
 
   return (
