@@ -42,7 +42,8 @@ const SelectType = ({ onSubmit }) => {
 
             onSubmit({
                 functionType,
-                cifNumber
+                cifNumber,
+                functionTypeName: functionTypeOptions.find(opt => opt.code === functionType)?.label || ""
             });
 
         }
@@ -57,7 +58,8 @@ const SelectType = ({ onSubmit }) => {
 
         onSubmit({
             functionType: "",
-            cifNumber: ""
+            cifNumber: "",  
+            functionTypeName:""
         });
 
     };

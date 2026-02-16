@@ -23,6 +23,8 @@ const CIFForm = () => {
         cifNumber: ""
     });
 
+    console.log("Form Data:", selectTypeData, formData, errors);
+
     /* ================= SELECT TYPE HANDLER ================= */
 
     const handleSelectType = async (data) => {
@@ -33,7 +35,8 @@ const CIFForm = () => {
             ...prev,
             meta: {
                 functionType: data.functionType,
-                cifNumber: data.cifNumber
+                cifNumber: data.cifNumber,
+                functionTypeName: data.functionTypeName
             }
         }));
 
@@ -44,7 +47,7 @@ const CIFForm = () => {
         }
 
         // ADD MODE
-        if (data.functionType === "A") {
+        if (data.functionType.startsWith("A")) {
             setFormData({});
             setShowForm(true);
             return;
@@ -66,7 +69,8 @@ const CIFForm = () => {
                     ...apiData,
                     meta: {
                         functionType: data.functionType,
-                        cifNumber: data.cifNumber
+                        cifNumber: data.cifNumber,
+                        functionTypeName: data.functionTypeName
                     }
                 }));
                 setShowForm(true);
@@ -280,15 +284,52 @@ const CIFForm = () => {
 
         <div className="bg-secondary px-8 pt-8">
             {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
-            <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col gap-6">
+            <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col">
 
-                <SelectType onSubmit={handleSelectType} />
-
+                {!showForm && (
+                    <SelectType onSubmit={handleSelectType} />
+                )}
                 {loading && (
                     <div className="text-primary font-medium">
                         Loading CIF data...
                     </div>
                 )}
+
+
+                <div className="flex items-center justify-between gap-6 px-5">
+                    {showForm && (
+                        <>
+                            <div>
+                                <h1 className="text-xl font-semibold text-primary">
+                                    CRM-CIF Retail Customer
+                                </h1>
+
+                                <p className="text-primary font-semibold">
+                                    Function Type: <span className="font-medium">{selectTypeData.functionType} - {selectTypeData.functionTypeName}</span>
+                                </p>
+
+                                {selectTypeData.cifNumber && (
+                                    <p className="text-primary font-semibold">
+                                        CIF Number: <span className="font-medium">{selectTypeData.cifNumber}</span>
+                                    </p>
+                                )}
+                            </div>
+
+                            <button
+                                onClick={() => {
+                                    setShowForm(false);
+                                    setFormData({});
+                                    setErrors({});
+                                    setSelectTypeData({ functionType: "", cifNumber: "", functionTypeName: "" });
+                                }}
+                                className="px-4 py-2 bg-muted text-white rounded hover:bg-gray-600 transition"
+                            >
+                                Go back
+                            </button>
+                        </>
+                    )}
+                </div>
+
 
                 {showForm && (
                     <>
