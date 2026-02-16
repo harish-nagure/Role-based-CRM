@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DynamicField from "./DynamicField";
 import { CIF_SCHEMA } from "./cifSchema";
+import SelectType from "./SelectType";
 
 const CIFForm = () => {
 
@@ -14,8 +15,71 @@ const CIFForm = () => {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
 
+    const [showForm, setShowForm] = useState(false);
+    const [loading, setLoading] = useState(false);
+    // eslint-disable-next-line
+    const [selectTypeData, setSelectTypeData] = useState({
+        functionType: "",
+        cifNumber: ""
+    });
 
-    /* ================= VALIDATION ================= */
+    /* ================= SELECT TYPE HANDLER ================= */
+
+    const handleSelectType = async (data) => {
+
+        setSelectTypeData(data);
+
+        setFormData(prev => ({
+            ...prev,
+            meta: {
+                functionType: data.functionType,
+                cifNumber: data.cifNumber
+            }
+        }));
+
+        if (data.functionType === "") {
+            setFormData({});
+            setShowForm(false);
+            return;
+        }
+
+        // ADD MODE
+        if (data.functionType === "A") {
+            setFormData({});
+            setShowForm(true);
+            return;
+        }
+
+        // OTHER MODES → NEED CIF
+        if (data.cifNumber) {
+            try {
+                setLoading(true);
+
+                // Example API call
+                // const res = await fetch(`/api/cif/${data.cifNumber}`);
+                // const apiData = await res.json();
+
+                const apiData = {};
+
+                setFormData(prev => ({
+                    ...prev,
+                    ...apiData,
+                    meta: {
+                        functionType: data.functionType,
+                        cifNumber: data.cifNumber
+                    }
+                }));
+                setShowForm(true);
+
+            } catch (err) {
+                alert("Invalid CIF or not found");
+                setShowForm(false);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
 
     const validateField = (
         section,
@@ -23,10 +87,16 @@ const CIFForm = () => {
         value,
         field
     ) => {
+        const sectionData = formData?.[section] || {};
 
-        if (field.required && !value)
+        const isRequired =
+            typeof field.required === "function"
+                ? field.required(sectionData)
+                : field.required;
+
+        if (isRequired && !value) {
             return `${field.label} is required`;
-
+        }
         if (field.validate) {
 
             const sectionData =
@@ -62,6 +132,60 @@ const CIFForm = () => {
             ...formData,
             [section]: updatedSection
         };
+
+
+        //Address Sync
+        if (section === "presentAddress" && name === "sameAsPermanent") {
+
+            if (value === "yes") {
+
+                const permanent = formData?.permanentAddress || {};
+
+                updatedForm.presentAddress = {
+                    ...updatedForm.presentAddress,
+                    sameAsPermanent: "yes",
+                    addressLine1: permanent.addressLine1 || "",
+                    addressLine2: permanent.addressLine2 || "",
+                    houseNo: permanent.houseNo || "",
+                    city: permanent.city || "",
+                    stateProvinceRegion:
+                        permanent.stateProvinceRegion || "",
+                    countryOfResidence:
+                        permanent.countryOfResidence || "",
+                    postalCode: permanent.postalCode || ""
+                };
+            }
+            else {
+                updatedForm.presentAddress = {
+                    sameAsPermanent: "no"
+                };
+
+            }
+
+        }
+
+        if (section === "permanentAddress" && formData?.presentAddress?.sameAsPermanent === "yes") {
+
+            const permanent = {
+                ...formData.permanentAddress,
+                [name]: value
+            };
+
+            updatedForm.presentAddress = {
+                sameAsPermanent: "yes",
+
+                addressLine1: permanent.addressLine1 || "",
+                addressLine2: permanent.addressLine2 || "",
+                houseNo: permanent.houseNo || "",
+                city: permanent.city || "",
+                stateProvinceRegion:
+                    permanent.stateProvinceRegion || "",
+                countryOfResidence:
+                    permanent.countryOfResidence || "",
+                postalCode: permanent.postalCode || ""
+            };
+
+        }
 
         setFormData(updatedForm);
 
@@ -145,90 +269,112 @@ const CIFForm = () => {
 
     };
 
+    const handleReset = () => {
+        setFormData({});
+        setErrors({});
+    };
 
     /* ================= UI ================= */
 
     return (
 
-         <div className="bg-secondary px-8 pt-8">
+        <div className="bg-secondary px-8 pt-8">
             {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
             <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col gap-6">
 
-            {/* <div className="bg-background rounded-lg shadow-lg p-8 flex flex-col gap-8 "> */}
-            <div className="overflow-y-auto pr-2 pl-1 custom-scrollbar scroll-smooth">
+                <SelectType onSubmit={handleSelectType} />
 
-                {
+                {loading && (
+                    <div className="text-primary font-medium">
+                        Loading CIF data...
+                    </div>
+                )}
 
-                    sections.map(sectionKey => {
+                {showForm && (
+                    <>
+                        {/* <div className="bg-background rounded-lg shadow-lg p-8 flex flex-col gap-8 "> */}
+                        <div className="overflow-y-auto pr-2 pl-1 custom-scrollbar scroll-smooth">
 
-                        const section =
-                            schema[sectionKey];
+                            {
 
-                        return (
+                                sections.map(sectionKey => {
 
-                            <div key={sectionKey} className="pt-5">
+                                    const section =
+                                        schema[sectionKey];
 
-                                {/* Section Title */}
+                                    return (
 
-                                <h2 className="text-2xl text-primary font-semibold mb-6 border-b border-primary-light pb-2">
+                                        <div key={sectionKey} className="pt-5">
 
-                                    {section.title}
+                                            {/* Section Title */}
 
-                                </h2>
+                                            <h2 className="text-2xl text-primary font-semibold mb-6 border-b border-primary-light pb-2">
+
+                                                {section.title}
+
+                                            </h2>
 
 
-                                {/* Fields */}
+                                            {/* Fields */}
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                                    {
+                                                {
 
-                                        Object.entries(section)
-                                            .filter(([key]) => key !== "title")
-                                            .map(([name, field]) => (
+                                                    Object.entries(section)
+                                                        .filter(([key]) => key !== "title")
+                                                        .map(([name, field]) => (
 
-                                                <DynamicField
-                                                    key={name}
-                                                    section={sectionKey}
-                                                    name={name}
-                                                    field={field}
-                                                    value={
-                                                        formData?.[sectionKey]?.[name]
-                                                    }
-                                                    error={
-                                                        errors?.[sectionKey]?.[name]
-                                                    }
-                                                    onChange={handleChange}
-                                                />
+                                                            <DynamicField
+                                                                key={name}
+                                                                section={sectionKey}
+                                                                name={name}
+                                                                field={field}
+                                                                value={
+                                                                    formData?.[sectionKey]?.[name]
+                                                                }
+                                                                error={
+                                                                    errors?.[sectionKey]?.[name]
+                                                                }
+                                                                onChange={handleChange}
+                                                                formData={formData}
+                                                            />
 
-                                            ))
+                                                        ))
 
-                                    }
+                                                }
 
-                                </div>
+                                            </div>
 
+                                        </div>
+
+                                    );
+
+                                })
+
+                            }
+
+
+                            {/* Submit Button */}
+
+                            <div className="flex justify-start mt-6">
+
+                                <button
+                                    onClick={handleSubmit}
+                                    className="px-6 py-2 bg-primary-light text-white rounded hover:bg-primary transition"
+                                >
+                                    Submit
+                                </button>
+                                <button
+                                    onClick={handleReset}
+                                    className="px-6 py-2 bg-muted text-white rounded hover:bg-gray-600 ml-4"
+                                >
+                                    Reset
+                                </button>
                             </div>
-
-                        );
-
-                    })
-
-                }
-
-
-                {/* Submit Button */}
-
-                <div className="flex justify-end mt-6">
-
-                    <button
-                        onClick={handleSubmit}
-                        className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                    >
-                        Submit
-                    </button>
-
-                </div>
-                </div>
+                        </div>
+                    </>
+                )}
             </div>
 
         </div>
@@ -238,3 +384,5 @@ const CIFForm = () => {
 };
 
 export default CIFForm;
+
+

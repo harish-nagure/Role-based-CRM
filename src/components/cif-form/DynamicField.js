@@ -11,7 +11,7 @@
 //     w-full px-4 py-2 border rounded-lg
 //     ${error ? "border-error focus:outline-none focus:ring-1 focus:ring-error focus:border-error" 
 //       : "border-muted focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-    
+
 //     }`;
 
 //   const handleChange = (e) => {
@@ -90,8 +90,17 @@ const DynamicField = ({
   field,
   value,
   error,
-  onChange
+  onChange,
+  formData
 }) => {
+
+  const sectionData = formData?.[section] || {};
+
+  const isRequired =
+    typeof field.required === "function"
+      ? field.required(sectionData)
+      : field.required;
+
 
   const commonClass = `
     w-full px-4 py-2 border rounded-lg
@@ -109,15 +118,27 @@ const DynamicField = ({
     onChange(section, name, val, field);
   };
 
+  const isDisabled =
+  section === "presentAddress" &&
+  name !== "sameAsPermanent" &&
+  formData?.presentAddress?.sameAsPermanent === "yes";
+
   return (
     <div className="flex flex-col gap-1">
 
-      <label className="text-sm font-medium">
+      {/* <label className="text-sm font-medium">
         {field.label}
         {field.required && (
           <span className="text-red-500 ml-1">*</span>
         )}
+      </label> */}
+      <label className="text-sm font-medium">
+        {field.label}
+        {isRequired && (
+          <span className="text-error ml-1">*</span>
+        )}
       </label>
+
 
       {/* SELECT */}
       {field.type === "select" && (
@@ -174,6 +195,45 @@ const DynamicField = ({
         </div>
       )}
 
+      {/* RADIO */}
+      {field.type === "radio" && (
+        <div className="flex gap-6 mt-1">
+
+          {field.options
+            .filter(opt => opt.value !== "") // optional: remove Select option
+            .map((opt, i) => {
+
+              const id = `${section}-${name}-${opt.value}`;
+
+              return (
+                <label
+                  key={i}
+                  htmlFor={id}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+
+                  <input
+                    id={id}
+                    type="radio"
+                    name={`${section}-${name}`}
+                    value={opt.value}
+                    checked={value === opt.value}
+                    onChange={handleChange}
+                    className="w-4 h-4 text-primary border-muted focus:ring-primary"
+                  />
+
+                  <span className="text-sm">
+                    {opt.label}
+                  </span>
+
+                </label>
+              );
+
+            })}
+
+        </div>
+      )}
+
       {/* INPUT */}
       {["text", "date", "email", "tel"].includes(field.type) && (
         <input
@@ -182,6 +242,7 @@ const DynamicField = ({
           className={commonClass}
           onChange={handleChange}
           placeholder={field.placeholder || ""}
+          disabled={isDisabled}
         />
       )}
 

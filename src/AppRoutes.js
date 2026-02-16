@@ -73,6 +73,10 @@ const AppRoutes = () => {
 
         {/* ---------- DASHBOARD ---------- */}
         <Route path="/dashboard" element={<DashboardLayout />}>
+    
+        {/* Demoo */}
+        <Route path="forms" element={<CIFForm />} />
+
 
           {flatMenus.map(menu => {
             const Component = COMPONENT_MAP[menu.path];
@@ -97,7 +101,6 @@ const AppRoutes = () => {
 
         {/* ---------- FALLBACK ---------- */}
         <Route path="*" element={<NotFound />} />
-        <Route path="/forms" element={<CIFForm />} />
 
       </Routes>
     </BrowserRouter>

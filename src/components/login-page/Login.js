@@ -35,12 +35,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-
-    // Temporary Navigation (Remove after implementing login logic)
-    navigate("/dashboard/users");
-
-
     if (!validate()) return;
 
     const payload = {
@@ -189,6 +183,14 @@ const Login = () => {
             </div>
           </div>
         </div> */}
+
+        <button
+            type="submit"
+            onClick={()=>{navigate("/dashboard/forms")}}
+            className="w-full py-3 rounded-md bg-primary-light hover:bg-foreground text-inverse font-semibold transition"
+          >
+            CIF FORMS
+          </button>
 
       </div>
     </div>
