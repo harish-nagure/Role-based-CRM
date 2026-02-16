@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
-import {login} from "../../api.auth"
+import {login} from "../../api/api.auth"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -97,7 +97,7 @@ const Login = () => {
               }
               placeholder="Enter your user name"
               className={`w-full px-4 py-3 rounded-md bg-input border ${errors.username ? "border-error" : "border-border"
-                } focus:outline-none focus:ring-2 focus:ring-primary`}
+                } focus:outline-none focus:ring-1 focus:ring-primary`}
             />
             {errors.username && (
               <p className="text-error text-xs mt-1">
@@ -120,7 +120,7 @@ const Login = () => {
                 }
                 placeholder="Enter your password"
                 className={`w-full px-4 py-3 rounded-md bg-input border ${errors.password ? "border-error" : "border-border"
-                  } focus:outline-none focus:ring-2 focus:ring-primary`}
+                  } focus:outline-none focus:ring-1 focus:ring-primary`}
               />
               <button
                 type="button"

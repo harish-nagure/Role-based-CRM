@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import {
     fetchAllUsers,
     deleteUser
-} from "../../api.auth";
+} from "../../api/api.auth";
 
 /* ================= HEADER ================= */
-const UserHeader = () => {
+const UserHeader = ({ canWrite }) => {
     const navigate = useNavigate();
 
     return (
@@ -25,7 +25,9 @@ const UserHeader = () => {
 
             <button
                 onClick={() => navigate("/dashboard/create-user")}
-                className="bg-primary-light border hover:bg-foreground hover:border-primary text-inverse px-4 py-2 rounded-lg flex items-center gap-2 transition"
+                disabled={!canWrite}
+                className="bg-primary-light border hover:bg-foreground hover:border-primary text-inverse px-4 py-2 rounded-lg flex items-center gap-2 transition
+                    disabled:bg-gray-300 disabled:border-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
             >
                 <UserPlus size={16} />
                 Add User
@@ -112,6 +114,7 @@ const UserCard = ({ user, onEdit, onDelete, canWrite }) => {
 const UserConfigurationPage = ({ canWrite = false }) => {
 
     const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState("");
 
     const navigate = useNavigate();
 
@@ -149,16 +152,39 @@ const UserConfigurationPage = ({ canWrite = false }) => {
         })
     }
 
+    const filteredUsers = users.filter((user) => {
+        const query = search.toLowerCase();
+
+        return (
+            user.firstname?.toLowerCase().includes(query) ||
+            user.lastname?.toLowerCase().includes(query) ||
+            user.emailid?.toLowerCase().includes(query) ||
+            user.role?.name?.toLowerCase().includes(query)
+        );
+    });
+
     return (
         <div className="bg-secondary px-8 pt-8">
             {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
             <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col gap-6">
 
-                <UserHeader />
+                <UserHeader canWrite={canWrite} />
+
+                <div className="flex items-center justify-between">
+                    <input
+                        type="text"
+                        placeholder="Search by name, email or role..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full md:w-1/3 px-4 py-2 rounded-lg border border-primary-dark bg-input
+                   focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                </div>
+
 
                 <div className="flex-1 custom-scrollbar overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {users.map(user => (
+                        {filteredUsers.map(user => (
                             <UserCard
                                 key={user.id}
                                 user={user}

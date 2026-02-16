@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { fetchMenusByRole } from "../api.auth";
+import { fetchMenusByRole } from "../api/api.auth";
 
 const AuthContext = createContext(null);
 

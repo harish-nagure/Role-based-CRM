@@ -7,7 +7,7 @@ import {
   CalendarDays
 } from "lucide-react";
 import RoleForm from "./RoleForm";
-import { createRole, updateRole, fetchAllRoles, deleteRole } from "../../api.auth";
+import { createRole, updateRole, fetchAllRoles, deleteRole } from "../../api/api.auth";
 
 /* ================= HEADER ================= */
 const RoleHeader = ({ onAdd, canWrite }) => (

@@ -12,7 +12,6 @@ import {
   ContactRound,
 } from "lucide-react";
 import { useState } from "react";
-// import { useMenu } from "../../context/MenuContext";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -29,82 +28,6 @@ const iconMap = {
   ClipboardList: <ClipboardList size={18} />,
   FileText: <FileText size={20} />
 };
-
-
-// const Navigation = ({ collapsed }) => {
-//   const { menus, loading } = useAuth();
-//   const [openMenu, setOpenMenu] = useState(null);
-
-//   if (loading) return null;
-
-//   return (
-//     <nav className="flex-1 px-2 py-4 space-y-1">
-//       {menus.map((menu) => {
-//         if (!menu.canRead) return null;
-
-//         const hasChildren = menu.children?.length > 0;
-//         const isOpen = openMenu === menu.name;
-
-//         return (
-//           <div key={menu.name}>
-//             {/* Parent Menu */}
-//             <button
-//               onClick={() =>
-//                 setOpenMenu(isOpen ? null : menu.name)
-//               }
-//               className={`flex w-full items-center gap-3 px-4 py-3 rounded-md
-//               text-inverse hover:bg-primary-light transition ${isOpen ? "bg-primary-light" : ""} `}
-//             >
-
-//               {iconMap[menu.icon]}
-
-//               {!collapsed && (
-//                 <>
-//                   <span className="text-sm font-medium flex-1 text-left">
-
-//                     {menu.name}
-//                   </span>
-//                   {hasChildren && (
-//                     <ChevronDown
-//                       size={16}
-//                       className={`transition-transform ${isOpen ? "rotate-180" : ""
-//                         }`}
-//                     />
-//                   )}
-//                 </>
-//               )}
-//             </button>
-
-//             {/* Sub Menus */}
-//             {hasChildren && isOpen && !collapsed && (
-//               <div className="ml-8 mt-1 space-y-1">
-//                 {menu.children.map((child) =>
-//                   child.canRead ? (
-//                     <NavLink
-//                       key={child.path}
-//                       to={child.path}
-//                       className={({ isActive }) =>
-//                         `block px-3 py-2 rounded-md text-sm transition
-//                         ${isActive
-//                           ? "bg-background text-primary"
-//                           : "text-inverse/80 hover:bg-primary-light"
-//                         }`
-//                       }
-//                     >
-//                       {iconMap[child.icon]}
-//                       {child.name}
-//                     </NavLink>
-//                   ) : null
-//                 )}
-//               </div>
-//             )}
-//           </div>
-//         );
-//       })}
-//     </nav>
-//   );
-// };
-
 
 const Navigation = ({ collapsed }) => {
   const { menus, loading } = useAuth();
@@ -211,7 +134,7 @@ const Sidebar = () => {
   }
   return (
     <aside
-      className={`h-screen bg-primary text-inverse shadow-lg flex flex-col transition-all duration-300 ${collapsed ? "w-20" : "w-64"
+      className={`min-h-screen bg-primary text-inverse shadow-lg flex flex-col transition-all duration-300 ${collapsed ? "w-20" : "w-64"
         }`}
     >
       {/* Header */}
@@ -233,7 +156,7 @@ const Sidebar = () => {
       <Navigation collapsed={collapsed} />
 
       {/* Footer */}
-      <div className="px-4 py-4 border-t border-primary-light">
+      <div className="px-4 py-2 border-t border-primary-light">
         <button
           className="flex items-center gap-3 w-full px-4 py-3 rounded-md
           text-inverse hover:bg-primary-light transition"

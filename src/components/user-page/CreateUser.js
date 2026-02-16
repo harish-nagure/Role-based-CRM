@@ -9,9 +9,9 @@ import {
   UserPlus,
   RotateCcw
 } from "lucide-react";
-import { fetchAllRoles, createUser, updateUser } from "../../api.auth";
+import { fetchAllRoles, createUser, updateUser } from "../../api/api.auth";
 
-const CreateUser = () => {
+const CreateUser = ({ canWrite }) => {
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -330,7 +330,9 @@ const CreateUser = () => {
           <div className="flex items-center gap-6 pt-6 border-t border-border">
             <button
               type="submit"
-              className="flex items-center gap-2 bg-primary-light text-inverse px-6 py-3 rounded-lg hover:bg-primary transition"
+              disabled={!canWrite}
+              className="flex items-center gap-2 bg-primary-light text-inverse px-6 py-3 rounded-lg hover:bg-primary transition
+                disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
             >
               <UserPlus size={16} />
               {!editUser ? 'Create' : 'Update'} Account

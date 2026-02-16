@@ -1,0 +1,910 @@
+// // import React, { useState } from "react";
+
+
+// // /* ===============================
+// //    Initial Data Structure
+// // ================================= */
+
+// // const dataCIFR = {
+
+// //     IdentificationDetails: {
+// //         documentType: "",
+// //         documentNumber: "",
+// //         placeOfIssue: "",
+// //         countryOfIssue: "",
+// //         issueDate: "",
+// //         expiryDate: "",
+// //         issuingAuthority: ""
+// //     },
+
+// //     generalInformation: {
+// //         firstName: "",
+// //         middleName: "",
+// //         lastName: "",
+// //         dateOfBirth: "",
+// //         gender: "",
+// //         country: "",
+// //         email: "",
+// //         mobile: ""
+// //     }
+
+// // };
+
+
+
+// // /* ===============================
+// //    Reusable Input Field
+// // ================================= */
+
+// // const InputField = ({
+// //     label,
+// //     name,
+// //     value,
+// //     onChange,
+// //     type = "text",
+// //     required = false,
+// //     error = ""
+// // }) => {
+
+// //     return (
+
+// //         <div className="flex flex-col">
+
+// //             <label className="text-sm font-medium mb-1">
+// //                 {label}
+// //                 {required && <span className="text-red-500 ml-1">*</span>}
+// //             </label>
+
+// //             <input
+// //                 type={type}
+// //                 name={name}
+// //                 value={value}
+// //                 onChange={onChange}
+// //                 className={`px-4 py-2 border rounded-lg bg-input focus:outline-none focus:ring-2 transition
+// //                 ${error
+// //                         ? "border-red-500 focus:ring-red-400"
+// //                         : "border-border focus:ring-primary"
+// //                     }`}
+// //             />
+
+// //             {error && (
+// //                 <span className="text-red-500 text-sm mt-1">
+// //                     {error}
+// //                 </span>
+// //             )}
+
+// //         </div>
+
+// //     );
+
+// // };
+
+
+
+// // /* ===============================
+// //    Identification Details Component
+// //    (Validation + onChange INSIDE)
+// // ================================= */
+
+// // const IdentificationDetails = ({
+// //     formData,
+// //     setFormData
+// // }) => {
+
+// //     const [errors, setErrors] = useState({});
+
+// //     const validateField = (name, value, updatedForm) => {
+
+// //         let error = "";
+
+// //         switch (name) {
+
+// //             case "documentType":
+// //                 if (!value)
+// //                     error = "Document Type is required";
+// //                 break;
+
+// //             case "documentNumber":
+// //                 if (!value)
+// //                     error = "Document Number is required";
+// //                 else if (value.length < 5)
+// //                     error = "Minimum 5 characters required";
+// //                 break;
+
+// //             case "issueDate":
+// //                 if (!value)
+// //                     error = "Issue Date is required";
+// //                 break;
+
+// //             case "expiryDate":
+// //                 if (
+// //                     value &&
+// //                     updatedForm.issueDate &&
+// //                     value < updatedForm.issueDate
+// //                 )
+// //                     error = "Expiry must be after Issue Date";
+// //                 break;
+
+// //             default:
+// //                 break;
+
+// //         }
+
+// //         return error;
+
+// //     };
+
+
+// //     /* ========= ON CHANGE ========= */
+
+// //     const handleChange = (e) => {
+
+// //         const { name, value } = e.target;
+
+// //         const updatedForm = {
+// //             ...formData,
+// //             [name]: value
+// //         };
+
+// //         setFormData(updatedForm);
+
+// //         const error = validateField(name, value, updatedForm);
+
+// //         setErrors(prev => ({
+// //             ...prev,
+// //             [name]: error
+// //         }));
+
+// //     };
+
+
+// //     return (
+
+// //         <div className="bg-white border rounded-xl p-6 shadow-sm mt-6">
+
+// //             <div className="text-lg font-semibold mb-4">
+// //                 Identification Details
+// //             </div>
+// //             <form >
+
+// //                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+// //                     {/* Document Type */}
+
+// //                     <div className="flex flex-col">
+
+// //                         <label className="text-sm font-medium mb-1">
+// //                             Document Type *
+// //                         </label>
+
+// //                         <select
+// //                             name="documentType"
+// //                             value={formData.documentType}
+// //                             onChange={handleChange}
+// //                             className={`px-4 py-2 border rounded-lg
+// //                         ${errors.documentType ? "border-red-500" : "border-border"}
+// //                         `}
+// //                         >
+
+// //                             <option value="">Select</option>
+// //                             <option value="passport">Passport</option>
+// //                             <option value="aadhaar">Aadhaar</option>
+// //                             <option value="pan">PAN</option>
+
+// //                         </select>
+
+// //                         {errors.documentType &&
+// //                             <span className="text-red-500 text-sm mt-1">
+// //                                 {errors.documentType}
+// //                             </span>
+// //                         }
+
+// //                     </div>
+
+
+// //                     {/* Document Number */}
+
+// //                     <InputField
+// //                         label="Document Number"
+// //                         name="documentNumber"
+// //                         value={formData.documentNumber}
+// //                         onChange={handleChange}
+// //                         required
+// //                         error={errors.documentNumber}
+// //                     />
+
+
+// //                     <InputField
+// //                         label="Place Of Issue"
+// //                         name="placeOfIssue"
+// //                         value={formData.placeOfIssue}
+// //                         onChange={handleChange}
+// //                     />
+
+
+// //                     <InputField
+// //                         label="Country Of Issue"
+// //                         name="countryOfIssue"
+// //                         value={formData.countryOfIssue}
+// //                         onChange={handleChange}
+// //                     />
+
+
+// //                     <InputField
+// //                         label="Issue Date"
+// //                         name="issueDate"
+// //                         type="date"
+// //                         value={formData.issueDate}
+// //                         onChange={handleChange}
+// //                         required
+// //                         error={errors.issueDate}
+// //                     />
+
+
+// //                     <InputField
+// //                         label="Expiry Date"
+// //                         name="expiryDate"
+// //                         type="date"
+// //                         value={formData.expiryDate}
+// //                         onChange={handleChange}
+// //                         error={errors.expiryDate}
+// //                     />
+
+
+// //                     <div className="md:col-span-2">
+
+// //                         <InputField
+// //                             label="Issuing Authority"
+// //                             name="issuingAuthority"
+// //                             value={formData.issuingAuthority}
+// //                             onChange={handleChange}
+// //                         />
+
+// //                     </div>
+
+
+// //                 </div>
+
+// //                 <input
+// //                     type="submit"
+// //                     value="Save Identification Details"
+// //                     className="mt-6 bg-primary text-white px-6 py-2 rounded-lg cursor-pointer"
+// //                 />
+
+// //             </form>
+// //         </div>
+
+// //     );
+
+// // };
+
+
+
+// // /* ===============================
+// //    Main CIF Form
+// // ================================= */
+
+// // const CIF = () => {
+
+// //     const [functionType, setFunctionType] = useState("");
+
+// //     const [cifNumber, setCifNumber] = useState("");
+
+// //     const [errors, setErrors] = useState({});
+
+// //     const [isAddMode, setIsAddMode] = useState(false);
+
+
+// //     const [identificationDetails, setIdentificationDetails] =
+// //         useState(dataCIFR.IdentificationDetails);
+
+
+// //     /* ========= OPTIONS ========= */
+
+// //     const functionTypeOptions = [
+
+// //         { code: "A", label: "Add" },
+// //         { code: "P", label: "Modify" },
+// //         { code: "B", label: "Bulk Modify" },
+// //         { code: "X", label: "Cancel" },
+// //         { code: "V", label: "Verify" },
+// //         { code: "I", label: "Inquiry" }
+
+// //     ];
+
+
+// //     const cifRequiredTypes = ["P", "B", "X", "V", "I"];
+
+
+// //     /* ========= VALIDATE ========= */
+
+// //     const validate = () => {
+
+// //         let newErrors = {};
+
+// //         if (!functionType)
+// //             newErrors.functionType = "Function Type is required";
+
+// //         if (cifRequiredTypes.includes(functionType)) {
+
+// //             if (!cifNumber)
+// //                 newErrors.cifNumber = "CIF Number is required";
+
+// //             else if (!/^\d{6,}$/.test(cifNumber))
+// //                 newErrors.cifNumber = "Minimum 6 digits required";
+
+// //         }
+
+// //         setErrors(newErrors);
+
+// //         return Object.keys(newErrors).length === 0;
+
+// //     };
+
+
+// //     /* ========= SUBMIT ========= */
+
+// //     const handleSubmit = (e) => {
+
+// //         e.preventDefault();
+
+// //         if (!validate())
+// //             return;
+
+// //         const finalData = {
+
+// //             functionType,
+
+// //             cifNumber,
+
+// //             IdentificationDetails: identificationDetails
+
+// //         };
+
+// //         console.log("FINAL CIF DATA:", finalData);
+
+// //     };
+
+
+// //     /* ========= UI ========= */
+
+// //     return (
+// //         <div className="bg-secondary px-8 pt-8">
+// //             {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
+// //             <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col gap-6">
+
+// //                 <div className="text-2xl font-semibold mb-6">
+// //                     CIFR Form
+// //                 </div>
+// //                 <form onSubmit={handleSubmit}
+// //                     className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+// //                     {/* Function Type */}
+
+// //                     <div>
+
+// //                         <label className="text-sm font-medium mb-1">
+// //                             Function Type
+// //                         </label>
+
+// //                         <select
+// //                             value={functionType}
+// //                             onChange={(e) => {
+
+// //                                 const val = e.target.value;
+
+// //                                 setFunctionType(val);
+
+// //                                 setIsAddMode(val === "A");
+
+// //                                 setErrors({});
+
+// //                             }}
+// //                             className="px-4 py-2 border rounded-lg w-full"
+// //                         >
+
+// //                             <option value="">
+// //                                 Select Function Type
+// //                             </option>
+
+// //                             {functionTypeOptions.map(item => (
+
+// //                                 <option key={item.code} value={item.code}>
+// //                                     {item.code} - {item.label}
+// //                                 </option>
+
+// //                             ))}
+
+// //                         </select>
+
+// //                         {errors.functionType &&
+// //                             <span className="text-red-500 text-sm">
+// //                                 {errors.functionType}
+// //                             </span>
+// //                         }
+
+// //                     </div>
+
+
+// //                     {/* CIF Number */}
+
+// //                     {cifRequiredTypes.includes(functionType) && (
+
+// //                         <InputField
+// //                             label="CIF Number"
+// //                             name="cifNumber"
+// //                             value={cifNumber}
+// //                             onChange={(e) => setCifNumber(e.target.value)}
+// //                             error={errors.cifNumber}
+// //                             required
+// //                         />
+
+// //                     )}
+
+
+// //                     <div className="md:col-span-2">
+
+// //                         <button
+// //                             type="submit"
+// //                             className="bg-primary text-white px-6 py-2 rounded-lg"
+// //                         >
+// //                             Submit
+// //                         </button>
+
+// //                     </div>
+
+
+// //                 </form>
+
+
+// //                 {/* Identification Details */}
+// //                 <div className="overflow-y-auto">
+
+
+// //                     {isAddMode && (
+
+// //                         <IdentificationDetails
+// //                             formData={identificationDetails}
+// //                             setFormData={setIdentificationDetails}
+// //                         />
+
+// //                     )}
+
+// //                 </div>
+
+
+// //             </div>
+
+// //         </div>
+
+// //     );
+
+// // };
+
+
+// // export default CIF;
+
+
+
+// import React, { useState } from "react";
+// import { cifSchema } from "./cifSchema";
+// import DynamicField from "./DynamicField";
+
+
+
+// const CIFForm = () => {
+
+//   const sections = Object.keys(cifSchema);
+
+//   const [step, setStep] = useState(0);
+
+//   const [formData, setFormData] = useState({});
+//   const [errors, setErrors] = useState({});
+
+//   const currentSection = sections[step];
+//   const fields = cifSchema[currentSection];
+
+//   /* ===== VALIDATION ===== */
+// const validateField = (
+//   value,
+//   field,
+//   formSectionData
+// ) => {
+
+//   if (field.required && !value)
+//     return `${field.label} is required`;
+
+//   if (field.minLength && value?.length < field.minLength)
+//     return `${field.label} must be at least ${field.minLength} characters`;
+
+//   if (field.maxLength && value?.length > field.maxLength)
+//     return `${field.label} must be at most ${field.maxLength} characters`;
+
+//   // schema custom validation
+//   if (field.validate) {
+
+//     const customError =
+//       field.validate(value, formSectionData);
+
+//     if (customError)
+//       return customError;
+//   }
+
+//   return "";
+// };
+
+
+//   /* ===== ON CHANGE ===== */
+//   const handleChange = (
+//     section,
+//     name,
+//     value,
+//     field
+//   ) => {
+
+//     setFormData(prev => ({
+//       ...prev,
+//       [section]: {
+//         ...prev[section],
+//         [name]: value
+//       }
+//     }));
+
+//      const error = validateField(
+//     value,
+//     field,
+//     updatedSection
+//   );
+
+//     setErrors(prev => ({
+//       ...prev,
+//       [section]: {
+//         ...prev[section],
+//         [name]: error
+//       }
+//     }));
+//   };
+
+//   /* ===== NEXT ===== */
+//   const handleNext = () => {
+
+//     let hasError = false;
+//     const sectionErrors = {};
+
+//     Object.entries(fields).forEach(
+//       ([name, field]) => {
+
+//         const value =
+//           formData?.[currentSection]?.[name];
+
+//         const error =
+//           validateField(value, field);
+
+//         if (error) hasError = true;
+
+//         sectionErrors[name] = error;
+//       }
+//     );
+
+//     setErrors(prev => ({
+//       ...prev,
+//       [currentSection]: sectionErrors
+//     }));
+
+//     if (!hasError)
+//       setStep(step + 1);
+//   };
+
+//   /* ===== SUBMIT ===== */
+//   const handleSubmit = () => {
+//     console.log(formData);
+//   };
+
+//   return (
+
+//     <div className="max-w-5xl mx-auto p-6 bg-white shadow rounded-xl">
+
+//       {/* Section Title */}
+//       <h2 className="text-xl font-semibold mb-6 capitalize">
+//         {currentSection}
+//       </h2>
+
+//       {/* Fields */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+//         {Object.entries(fields).map(
+//           ([name, field]) => (
+
+//             <DynamicField
+//               key={name}
+//               section={currentSection}
+//               name={name}
+//               field={field}
+//               value={
+//                 formData?.[currentSection]?.[name]
+//               }
+//               error={
+//                 errors?.[currentSection]?.[name]
+//               }
+//               onChange={handleChange}
+//             />
+
+//           )
+//         )}
+
+//       </div>
+
+//       {/* Buttons */}
+//       <div className="flex justify-between mt-8">
+
+//         {step > 0 && (
+//           <button
+//             onClick={() => setStep(step - 1)}
+//             className="px-6 py-2 bg-gray-400 text-white rounded"
+//           >
+//             Previous
+//           </button>
+//         )}
+
+//         {step < sections.length - 1 ? (
+
+//           <button
+//             onClick={handleNext}
+//             className="px-6 py-2 bg-blue-600 text-white rounded"
+//           >
+//             Next
+//           </button>
+
+//         ) : (
+
+//           <button
+//             onClick={handleSubmit}
+//             className="px-6 py-2 bg-green-600 text-white rounded"
+//           >
+//             Submit
+//           </button>
+
+//         )}
+
+//       </div>
+
+//     </div>
+//   );
+// };
+
+// export default CIFForm;
+
+import React, { useState } from "react";
+import DynamicField from "./DynamicField";
+import { CIF_SCHEMA } from "./cifSchema";
+
+const CIFForm = () => {
+    
+const schema = CIF_SCHEMA({ canWrite: true });
+const sections = Object.keys(schema);
+
+    const [step, setStep] = useState(0);
+    const [formData, setFormData] = useState({});
+    const [errors, setErrors] = useState({});
+
+    const currentSectionKey = sections[step];
+    const currentSection =
+        schema[currentSectionKey];
+
+    /* ================= VALIDATION ================= */
+    const validateField = (
+        section,
+        name,
+        value,
+        field
+    ) => {
+
+        if (field.required && !value)
+            return `${field.label} is required`;
+
+        if (field.validate) {
+
+            const sectionData =
+                formData?.[section] || {};
+
+            const error =
+                field.validate(value, sectionData);
+
+            if (error)
+                return error;
+        }
+
+        return "";
+    };
+
+
+    /* ================= HANDLE CHANGE ================= */
+    const handleChange = (
+        section,
+        name,
+        value,
+        field
+    ) => {
+        
+        const updatedSection = {
+            ...formData?.[section],
+            [name]: value
+        };
+
+        const updatedForm = {
+            ...formData,
+            [section]: updatedSection
+        };
+
+        setFormData(updatedForm);
+
+
+        const error = validateField(
+                section,
+                name,
+                value,
+                field
+            );
+
+        setErrors(prev => ({
+            ...prev,
+            [section]: {
+                ...prev?.[section],
+                [name]: error
+            }
+        }));
+
+    };
+
+
+    /* ================= NEXT ================= */
+
+    const handleNext = () => {
+
+        let hasError = false;
+
+        const sectionErrors = {};
+
+        Object.entries(currentSection)
+            .filter(([key]) => key !== "title")
+            .forEach(([name, field]) => {
+
+                const value =
+                    formData?.[currentSectionKey]?.[name];
+
+                const error =
+                    validateField(
+                        currentSectionKey,
+                        name,
+                        value,
+                        field
+                    );
+
+                if (error)
+                    hasError = true;
+
+                sectionErrors[name] = error;
+
+            });
+
+        setErrors(prev => ({
+
+            ...prev,
+
+            [currentSectionKey]:
+                sectionErrors
+
+        }));
+
+        if (!hasError)
+            setStep(step + 1);
+
+    };
+
+
+    /* ================= PREVIOUS ================= */
+
+    const handlePrevious = () => {
+
+        setStep(step - 1);
+
+    };
+
+
+    /* ================= SUBMIT ================= */
+
+    const handleSubmit = () => {
+        console.log("Final Data:", formData);
+        alert("Form submitted successfully");
+    };
+
+
+    return (
+
+        <>
+        
+        
+          <div className="bg-secondary px-8 pt-8">
+            {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
+            <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col gap-6">
+
+            {/* Section Title */}
+            <h2 className="text-xl font-semibold mb-6">
+                {currentSection.title}
+            </h2>
+
+
+            {/* Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {Object.entries(currentSection)
+                    .filter(([key]) => key !== "title")
+                    .map(([name, field]) => (
+
+                        <DynamicField
+                            key={name}
+                            section={currentSectionKey}
+                            name={name}
+                            field={field}
+                            value={
+                                formData?.[currentSectionKey]?.[name]
+                            }
+                            error={
+                                errors?.[currentSectionKey]?.[name]
+                            }
+                            onChange={handleChange}
+                        />
+
+                    ))}
+
+            </div>
+
+
+            {/* Buttons */}
+            <div className="flex justify-between mt-8">
+
+                {step > 0 && (
+
+                    <button
+                        onClick={handlePrevious}
+                        className="px-6 py-2 bg-gray-500 text-white rounded"
+                    >
+                        Previous
+                    </button>
+
+                )}
+
+
+                {step < sections.length - 1 ? (
+
+                    <button
+                        onClick={handleNext}
+                        className="px-6 py-2 bg-blue-600 text-white rounded"
+                    >
+                        Next
+                    </button>
+
+                ) : (
+
+                    <button
+                        onClick={handleSubmit}
+                        className="px-6 py-2 bg-green-600 text-white rounded"
+                    >
+                        Submit
+                    </button>
+
+                )}
+
+            </div>
+
+        </div>
+                </div>
+        </>
+       
+
+    );
+
+};
+
+export default CIFForm;

@@ -15,6 +15,7 @@ import UserConfigurationPage from "./components/user-page/UserConfigurationPage"
 import CreateUser from "./components/user-page/CreateUser";
 import RoleConfigurationPage from "./components/role-page/RoleConfigurationPage";
 import MenuAccessControl from "./components/menu-premission/MenuAccessControl";
+import CIFForm from "./components/cif-form/CIFForm";
 
 /* ---------- PATH → COMPONENT MAP ---------- */
 const COMPONENT_MAP = {
@@ -23,7 +24,7 @@ const COMPONENT_MAP = {
   "create-user": CreateUser,
   "roles": RoleConfigurationPage,
   "menu-access": MenuAccessControl,
-  "ddd": CreateUser
+  "cif-form": CIFForm,
 };
 
 /* ---------- NOT AUTHORIZED ---------- */
@@ -96,6 +97,7 @@ const AppRoutes = () => {
 
         {/* ---------- FALLBACK ---------- */}
         <Route path="*" element={<NotFound />} />
+        <Route path="/forms" element={<CIFForm />} />
 
       </Routes>
     </BrowserRouter>

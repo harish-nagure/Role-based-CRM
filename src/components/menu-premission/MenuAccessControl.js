@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAllRoles, saveMenusByRole, fetchMenusByRole } from "../../api.auth";
+import { fetchAllRoles, saveMenusByRole, fetchMenusByRole } from "../../api/api.auth";
 
 const MenuAccessControl = ({ canWrite = false }) => {
   // const {menus,loading} = useAuth();
