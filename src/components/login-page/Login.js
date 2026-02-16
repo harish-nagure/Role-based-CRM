@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
-import {login} from "../../api/api.auth"
+import { login } from "../../api/api.auth"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -35,6 +35,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
+    // Temporary Navigation (Remove after implementing login logic)
+    navigate("/dashboard/users");
+
+
     if (!validate()) return;
 
     const payload = {
@@ -45,7 +51,6 @@ const Login = () => {
     console.log("Login Payload:", payload);
     try {
       const res = await login(payload);
-      // window.location.href = "/";
 
       console.log(res);
 
@@ -56,10 +61,15 @@ const Login = () => {
       });
 
       navigate("/dashboard/users");
+
     } catch (err) {
+      const message =
+        err.response?.data?.message ||
+        "Something went wrong";
       setErrors({
-        form: err.response?.data?.message || "Invalid credentials",
+        form: message
       });
+      alert(message);
     }
 
   };
@@ -79,6 +89,11 @@ const Login = () => {
           {/* <p className="text-sm text-muted mt-1">
             Secure Access Control Management
           </p> */}
+          {errors.form && (
+            <p className="text-error text-sm mt-1">
+              {errors.form}
+            </p>
+          )}
         </div>
 
         {/* Form */}
