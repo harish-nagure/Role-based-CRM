@@ -5,8 +5,27 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 
+// Important for login navigation: Find the first accessible menu and navigate to it
+const findFirstAccessibleMenu = (menus) => {
+  for (const menu of menus) {
+    if (menu.canRead && menu.path) {
+      return menu;
+    }
+
+    if (menu.children && menu.children.length > 0) {
+      const childMenu = findFirstAccessibleMenu(menu.children);
+      if (childMenu) return childMenu;
+    }
+  }
+
+  // Nothing found
+  return null;
+};
+
+
 const Login = () => {
   const { loginUser } = useAuth();
+  const { menus} = useAuth();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +73,15 @@ const Login = () => {
         roleId: res.roleId,
       });
 
-      navigate("/dashboard/users");
+      alert("Login successful!" + (res.role ? ` Logged in as ${res.role}` : ""));
+      
+      const menuToNavigate = findFirstAccessibleMenu(menus);
+      console.log("First accessible menu:", menuToNavigate);
+      if (menuToNavigate) {
+        navigate(`/dashboard/${menuToNavigate.path}`);
+      } else {
+        alert("No accessible menu found!");
+      }
 
     } catch (err) {
       const message =
@@ -185,12 +212,12 @@ const Login = () => {
         </div> */}
 
         <button
-            type="submit"
-            onClick={()=>{navigate("/dashboard/forms")}}
-            className="w-full py-3 rounded-md bg-primary-light hover:bg-foreground text-inverse font-semibold transition"
-          >
-            CIF FORMS
-          </button>
+          type="submit"
+          onClick={() => { navigate("/dashboard/forms") }}
+          className="w-full py-3 rounded-md bg-primary-light hover:bg-foreground text-inverse font-semibold transition"
+        >
+          CIF FORMS
+        </button>
 
       </div>
     </div>

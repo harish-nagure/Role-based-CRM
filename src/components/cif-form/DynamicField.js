@@ -91,7 +91,8 @@ const DynamicField = ({
   value,
   error,
   onChange,
-  formData
+  formData,
+  hide
 }) => {
 
   const sectionData = formData?.[section] || {};
@@ -122,6 +123,10 @@ const DynamicField = ({
   section === "presentAddress" &&
   name !== "sameAsPermanent" &&
   formData?.presentAddress?.sameAsPermanent === "yes";
+
+  if (field.hide) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-1">

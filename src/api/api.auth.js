@@ -176,3 +176,26 @@ export const deleteUser = async (id) => {
     throw error;
   }
 }
+
+
+
+///CIFR Permissions
+export const saveCIFRPermissions = async (payload) => {
+  try{
+    const res = await api.post(`/cifr/permissions/submit`,payload);
+    return res;
+  }catch(error){
+    console.error("CIFR Permission saving failed");
+     throw error;
+  } 
+}
+
+export const fetchCIFRPermissions = async () => {
+  try{
+    const res = await api.get(`/cifr/permissions/fetch`);
+    return res.data;
+  }catch(error){
+    console.error("CIFR Permission fetching failed");
+     throw error;
+  }
+}

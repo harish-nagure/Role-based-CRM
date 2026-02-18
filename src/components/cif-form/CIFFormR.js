@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DynamicField from "./DynamicField";
-import { CIF_SCHEMA } from "./cifSchema";
+import { CIFR_SCHEMA } from "./cifSchema";
 import SelectType from "./SelectType";
+import { fetchCIFRPermissions } from "../../api/api.auth";
 
-const CIFForm = () => {
+const CIFFormR = () => {
 
     const navigate = useNavigate();
 
-    const schema = CIF_SCHEMA({ canWrite: true });
+    // const schema = CIFR_SCHEMA({ canWrite: true });
+    const [schema, setSchema] = useState({});
 
+    // console.log("Generated Schema:", schema);
+   
     const sections = Object.keys(schema);
 
     const [formData, setFormData] = useState({});
@@ -25,6 +29,23 @@ const CIFForm = () => {
 
     console.log("Form Data:", selectTypeData, formData, errors);
 
+
+    const [permissions, setPermissions] = useState([]);
+
+
+useEffect(() => {
+  const loadPermissions = async () => {
+    try {
+      const perms = await fetchCIFRPermissions();
+      setPermissions(perms.data); // save permissions
+      setSchema(CIFR_SCHEMA({ canWrite: true, permissions: perms.data }));
+      
+    } catch (err) {
+      console.error("Error loading permissions:", err);
+    }
+  };
+  loadPermissions();
+}, [])
     /* ================= SELECT TYPE HANDLER ================= */
 
     const handleSelectType = async (data) => {
@@ -281,25 +302,16 @@ const CIFForm = () => {
     /* ================= UI ================= */
 
     return (
-
-        <div className="bg-secondary px-8 pt-8">
-            {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
-            <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col">
-
-                {!showForm && (
-                    <SelectType onSubmit={handleSelectType} />
-                )}
-                {loading && (
-                    <div className="text-primary font-medium">
-                        Loading CIF data...
-                    </div>
-                )}
-
-
-                <div className="flex items-center justify-between gap-6 px-5">
-                    {showForm && (
+        <>
+        
+    
+         <div className="flex items-center justify-between gap-6 px-8">
+                  {showForm && (
                         <>
-                            <div>
+                        <div className="bg-background rounded-lg shadow-md p-4 w-full flex items-center justify-between px-10">
+              
+                            <div className="flex gap-4 items-center">
+                                {/* <div> */}
                                 <h1 className="text-xl font-semibold text-primary">
                                     CRM-CIF Retail Customer
                                 </h1>
@@ -326,9 +338,30 @@ const CIFForm = () => {
                             >
                                 Go back
                             </button>
+
+                        </div>
                         </>
                     )}
+                
                 </div>
+        
+
+        <div className={`bg-secondary px-8 ${showForm ? "pt-2" : "pt-8"}`}>
+            {/* <div className="bg-secondary px-8 pt-8"> */}
+            {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
+            <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col">
+
+                {!showForm && (
+                    <SelectType onSubmit={handleSelectType} />
+                )}
+                {loading && (
+                    <div className="text-primary font-medium">
+                        Loading CIF data...
+                    </div>
+                )}
+
+
+               {/* placed here */}
 
 
                 {showForm && (
@@ -379,6 +412,7 @@ const CIFForm = () => {
                                                                 }
                                                                 onChange={handleChange}
                                                                 formData={formData}
+                                                                
                                                             />
 
                                                         ))
@@ -419,11 +453,12 @@ const CIFForm = () => {
             </div>
 
         </div>
+        </>
 
     );
 
 };
 
-export default CIFForm;
+export default CIFFormR;
 
 

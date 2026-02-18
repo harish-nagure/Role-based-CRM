@@ -15,7 +15,8 @@ import UserConfigurationPage from "./components/user-page/UserConfigurationPage"
 import CreateUser from "./components/user-page/CreateUser";
 import RoleConfigurationPage from "./components/role-page/RoleConfigurationPage";
 import MenuAccessControl from "./components/menu-premission/MenuAccessControl";
-import CIFForm from "./components/cif-form/CIFForm";
+import CIFFormR from "./components/cif-form/CIFFormR";
+import CIFRFieldAccessControl from "./components/cif-form/CIFRFieldAccessControl";
 
 /* ---------- PATH → COMPONENT MAP ---------- */
 const COMPONENT_MAP = {
@@ -24,7 +25,8 @@ const COMPONENT_MAP = {
   "create-user": CreateUser,
   "roles": RoleConfigurationPage,
   "menu-access": MenuAccessControl,
-  "cif-form": CIFForm,
+  "cifr-form": CIFFormR,
+  "cifr-field-access": CIFRFieldAccessControl
 };
 
 /* ---------- NOT AUTHORIZED ---------- */
@@ -75,7 +77,7 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<DashboardLayout />}>
     
         {/* Demoo */}
-        <Route path="forms" element={<CIFForm />} />
+        <Route path="forms" element={<CIFFormR />} />
 
 
           {flatMenus.map(menu => {

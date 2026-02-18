@@ -194,16 +194,16 @@ const MenuAccessControl = ({ canWrite = false }) => {
             <table className="w-full text-sm">
               <thead className="bg-input sticky top-0 z-10">
                 <tr>
-                  <th className="px-6 py-3 text-left font-medium text-muted">
+                  <th className="px-6 py-3 text-left font-semibold text-primary-dark">
                     Menu
                   </th>
-                  <th className="px-6 py-3 text-center font-medium text-muted">
+                  <th className="px-6 py-3 text-center font-semibold text-primary-dark">
                     Read
                   </th>
-                  <th className="px-6 py-3 text-center font-medium text-muted">
+                  <th className="px-6 py-3 text-center font-semibold text-primary-dark">
                     Write
                   </th>
-                  <th className="px-6 py-3 text-center font-medium text-muted">
+                  <th className="px-6 py-3 text-center font-semibold text-primary-dark">
                     Both
                   </th>
                 </tr>
