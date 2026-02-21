@@ -908,3 +908,197 @@ const sections = Object.keys(schema);
 };
 
 export default CIFForm;
+
+
+
+
+
+
+  nrbAddress: {
+
+      title: "NRB Address",
+
+      addressLine1: {
+        label: "Address Line 1",
+        type: "text",
+        required: true
+      },
+
+      addressLine2: {
+        label: "Address Line 2",
+        type: "text"
+      },
+
+      streetNo: {
+        label: "Street No",
+        type: "text",
+        required: true
+      },
+
+      city: {
+        label: "City",
+        type: "text",
+        required: true
+      },
+
+      countryOfResidence: {
+        label: "Country of Residence",
+        type: "select",
+        required: true,
+        options: [
+          { label: "Select Country", value: "" },
+          { label: "India", value: "india" },
+          { label: "USA", value: "usa" }
+        ]
+      },
+
+      postalCode: {
+        label: "Postal Code",
+        type: "text",
+        required: true,
+        validate: (value) => {
+          if (value.length < 4 || value.length > 7)
+            return "Postal Code must be between 4 and 7 characters";
+        }
+      }
+    },
+
+    phoneDetails: {
+
+      title: "Phone Details",
+
+      primaryPhoneNumber: {
+        label: "Primary Phone Number",
+        type: "text",
+        required: true,
+        validate: (value) => {
+          if (!/^\d{10}$/.test(value))
+            return "Phone number must be 10 digits";
+        }
+      },
+
+      secondaryPhoneNumber: {
+        label: "Secondary Phone Number",
+        type: "text",
+        validate: (value) => {
+          if (value && !/^\d{10}$/.test(value))
+            return "Phone number must be 10 digits";
+        }
+      }
+    },
+
+    emailDetails: {
+
+      title: "Email Details",
+
+      emailId: {
+        label: "Email",
+        type: "text",
+        required: true,
+        validate: (value) => {
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+            return "Invalid email address";
+        }
+      },
+
+      alternateEmailId: {
+        label: "Alternate Email",
+        type: "text",
+        validate: (value) => {
+          if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+            return "Invalid email address";
+        }
+      },
+    },
+
+    generalDetails: {
+
+      title: "General Details",
+      nationality: {
+        label: "Nationality",
+        type: "text",
+        required: true,
+      },
+      martialStatus: {
+        label: "Marital Status",
+        type: "select",
+        required: true,
+        options: [
+          { label: "Select", value: "" },
+          { label: "Single", value: "single" },
+          { label: "Married", value: "married" },
+          { label: "Divorced", value: "divorced" },
+          { label: "Widowed", value: "widowed" }
+        ]
+      },
+      spouseName: {
+        label: "Spouse Name",
+        type: "text",
+        required: (form) => form.martialStatus === "married" ? true : false,
+        validate: (value, form) => {
+          if (form.martialStatus === "married" && !value)
+            return "Spouse Name is required";
+        }
+      },
+      spouseNumber: {
+        label: "Spouse Number",
+        type: "text",
+        required: (form) => form.martialStatus === "married" ? true : false,
+        validate: (value, form) => {
+          if (form.martialStatus === "married") {
+            if (!value) return "Spouse Number is required";
+            if (!/^\d{10}$/.test(value))
+              return "Phone number must be 10 digits";
+          }
+        }
+      },
+    },
+
+    employmentDetails: {
+
+      title: "Employment Details",
+      occupation: {
+        label: "Occupation",
+        type: "text",
+        required: true,
+      },
+      employerName: {
+        label: "Employer Name",
+        type: "text",
+        required: true,
+      },
+      officeAddress: {
+        label: "Office Address",
+        type: "text",
+        required: true,
+      },
+    },
+
+    incomeDetails: {
+
+      title: "Income Details",
+      annualIncome: {
+        label: "Annual Income",
+        type: "text",
+        required: true,
+      },
+      sourceOfIncome: {
+        label: "Source of Income",
+        type: "text",
+        required: true,
+      },
+    },
+
+    BankDetails: {
+      title: "Bank Details",
+      bankName: {
+        label: "Bank Name",
+        type: "text",
+        required: true,
+      },
+      branchName: {
+        label: "Branch Name",
+        type: "text",
+        required: true
+      },
+    },

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { CIFR_SCHEMA } from "./cifSchema";
+import { CIFR_SCHEMA } from "./cifrSchema";
 
-import { saveCIFRPermissions, fetchCIFRPermissions } from "../../api/api.auth";
+import { saveCIFRPermissions, fetchCIFRPermissions } from "../../../api/api.auth";
 
 const buildFieldPermissions = (schema) => {
 

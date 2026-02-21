@@ -15,8 +15,15 @@ import UserConfigurationPage from "./components/user-page/UserConfigurationPage"
 import CreateUser from "./components/user-page/CreateUser";
 import RoleConfigurationPage from "./components/role-page/RoleConfigurationPage";
 import MenuAccessControl from "./components/menu-premission/MenuAccessControl";
-import CIFFormR from "./components/cif-form/CIFFormR";
-import CIFRFieldAccessControl from "./components/cif-form/CIFRFieldAccessControl";
+
+//Retail
+import CIFRForm from "./components/cif-form/retail/CIFRForm";
+import CIFRFieldAccessControl from "./components/cif-form/retail/CIFRFieldAccessControl";
+
+//Corporate
+import CIFCForm from "./components/cif-form/corporate/CIFCForm";
+
+
 
 /* ---------- PATH → COMPONENT MAP ---------- */
 const COMPONENT_MAP = {
@@ -25,8 +32,16 @@ const COMPONENT_MAP = {
   "create-user": CreateUser,
   "roles": RoleConfigurationPage,
   "menu-access": MenuAccessControl,
-  "cifr-form": CIFFormR,
-  "cifr-field-access": CIFRFieldAccessControl
+  // retail
+  "cifr-form": CIFRForm,
+  "cifr-field-access": CIFRFieldAccessControl,
+  "a-add": CIFRForm,
+  "p-modify": CIFRForm,
+  "v-verify": CIFRForm,
+  "x-cancel": CIFRForm,
+  // corporate
+
+  
 };
 
 /* ---------- NOT AUTHORIZED ---------- */
@@ -77,7 +92,7 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<DashboardLayout />}>
     
         {/* Demoo */}
-        <Route path="forms" element={<CIFFormR />} />
+        <Route path="forms" element={<CIFCForm />} />
 
 
           {flatMenus.map(menu => {
