@@ -92,7 +92,8 @@ const DynamicField = ({
   error,
   onChange,
   formData,
-  hide
+  hide,
+  setFormData
 }) => {
 
   const sectionData = formData?.[section] || {};
@@ -120,9 +121,9 @@ const DynamicField = ({
   };
 
   const isDisabled =
-  section === "presentAddress" &&
-  name !== "sameAsPermanent" &&
-  formData?.presentAddress?.sameAsPermanent === "yes";
+    section === "presentAddress" &&
+    name !== "sameAsPermanent" &&
+    formData?.presentAddress?.sameAsPermanent === "yes";
 
   if (field.hide) {
     return null;
@@ -239,6 +240,77 @@ const DynamicField = ({
         </div>
       )}
 
+      {field.type === "checkbox" && (
+        <div className="flex flex-col gap-3 mt-2">
+
+          {(field.options || []).map((opt, i) => {
+
+            const id = `${section}-${name}-${opt.value}`;
+
+            const isChecked = Array.isArray(value)
+              ? value.includes(opt.value)
+              : false;
+
+            return (
+              <label
+                key={i}
+                htmlFor={id}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+
+                <input
+                  id={id}
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => onChange(section, name, opt.value, field)}
+                  className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                />
+
+                <span className="text-sm text-gray-700">
+                  {opt.label}
+                </span>
+
+              </label>
+            );
+          })}
+
+        </div>
+      )}
+
+{field.type === "button" && (
+
+  <div className="flex items-end">
+
+    <button
+      type="button"
+      onClick={() =>
+        field.onClick?.({
+          section,
+          name,
+          formData,
+          setFormData
+        })
+      }
+      className={`
+        px-4 py-2
+        rounded-md
+        text-sm font-medium
+         hover:bg-primary-dark
+        active:scale-95
+        transition-all
+        ${field.variant === "secondary"
+          ? "bg-gray-500 text-white hover:bg-gray-600"
+          : "bg-primary text-white hover:bg-primary-dark"}
+      `}
+    >
+
+      + {field.label}
+
+    </button>
+
+  </div>
+
+)}
       {/* INPUT */}
       {["text", "date", "email", "tel"].includes(field.type) && (
         <input
@@ -250,6 +322,7 @@ const DynamicField = ({
           disabled={isDisabled}
         />
       )}
+
 
       {error && (
         <span className="text-error text-xs">

@@ -24,7 +24,8 @@ const CIFRForm = () => {
     // eslint-disable-next-line
     const [selectTypeData, setSelectTypeData] = useState({
         functionType: "",
-        cifNumber: ""
+        cifNumber: "",
+         customerType:""
     });
 
     const location = useLocation();
@@ -37,7 +38,7 @@ const CIFRForm = () => {
         setShowForm(false);
         handleReset();
     }, [mode]);
- 
+
 
     console.log("Form Data:", selectTypeData, formData, errors);
 
@@ -73,7 +74,8 @@ const CIFRForm = () => {
             meta: {
                 functionType: data.functionType,
                 cifNumber: data.cifNumber,
-                functionTypeName: data.functionTypeName
+                functionTypeName: data.functionTypeName,
+                customerType: data.customerType
             }
         }));
 
@@ -107,7 +109,8 @@ const CIFRForm = () => {
                     meta: {
                         functionType: data.functionType,
                         cifNumber: data.cifNumber,
-                        functionTypeName: data.functionTypeName
+                        functionTypeName: data.functionTypeName,
+                        customerType: data.customerType
                     }
                 }));
                 setShowForm(true);
@@ -329,7 +332,7 @@ const CIFRForm = () => {
                             <div className="flex gap-4 items-center">
                                 {/* <div> */}
                                 <h1 className="text-xl font-semibold text-primary">
-                                    CRM-CIF Retail Customer
+                                    CRM-CIF {selectTypeData.customerType} Customer
                                 </h1>
 
                                 <p className="text-primary font-semibold">

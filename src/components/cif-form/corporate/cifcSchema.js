@@ -423,9 +423,283 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         BenficiaryDetails: {
 
             title: "Beneficiary Details",
+
+            OwnerShipDetails: {
+                title: "Benefical Owner",
+                name: {
+                    label: "Name",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50)
+                            return "Name must be between 4 and 50 characters";
+                    }
+                },
+                desgination: {
+                    label: "Designation",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50)
+                            return "Designation must be between 4 and 50 characters";
+                    }
+                },
+                idNo: {
+                    label: "ID Number",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50)
+                            return "ID Number must be between 4 and 50 characters";
+                    }
+                },
+
+                idIssueCountry: {
+                    label: "ID Issue Country",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50)
+                            return "ID Issue Country must be between 4 and 50 characters";
+                    }
+                },
+
+                dob: {
+                    label: "Date of Birth",
+                    type: "date",
+                    required: true,
+                    validate: (value) => {
+                        if (!value) return;
+
+                        const today = new Date().toISOString().split("T")[0];
+
+                        if (value > today)
+                            return "Date of birth cannot be past date";
+
+                        if (new Date().getFullYear() - new Date(value).getFullYear() < 18)
+                            return "Minimum age should be 18 years";
+                    }
+                },
+
+                currentAddress: {
+                    label: "Current Address",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50)
+                            return "Current Address must be between 4 and 50 characters";
+                    }
+                },
+
+                sourceOfBO: {
+                    label: "Source of BO",
+                    type: "checkbox",
+                    required: true,
+
+                    options: [
+                        { label: "Equity", value: "equity" },
+                        { label: "Effective Control", value: "effective_control" },
+                        { label: "Other", value: "other" }
+                    ],
+
+                    validate: (value) => {
+                        if (!value || value.length === 0)
+                            return "Please select at least one Source of BO";
+                    }
+                },
+
+                delFlag: {
+                    label: "Delete Flag",
+                    type: "checkbox",
+
+                    options: [
+                        { label: "", value: true }
+                    ],
+
+                },
+
+                // add: {
+                //     label: "Add",
+                //     type: "button",
+                //     variant: "primary", // optional
+                //     onClick: ({ formData, setFormData }) => {
+
+                //         // get section safely
+                //         const beneficiary = formData.BenficiaryDetails || {};
+
+                //         // create new owner object
+                //         const newOwner = {
+                //             name: beneficiary.name || "",
+                //             desgination: beneficiary.desgination || "",
+                //             idNo: beneficiary.idNo || "",
+                //             idIssueCountry: beneficiary.idIssueCountry || "",
+                //             dob: beneficiary.dob || "",
+                //             currentAddress: beneficiary.currentAddress || "",
+                //             sourceOfBO: beneficiary.sourceOfBO || [],
+                //             delFlag: beneficiary.delFlag || false
+                //         };
+
+
+                //         // ensure OwnerShipDetails is array
+                //         const owners = Array.isArray(beneficiary.OwnerShipDetails)
+                //             ? beneficiary.OwnerShipDetails
+                //             : [];
+
+                //         // update formData properly
+                //         setFormData({
+                //             ...formData,
+
+                //             BenficiaryDetails: {
+
+                //                 ...beneficiary,
+
+                //                 OwnerShipDetails: [
+                //                     ...owners,
+                //                     newOwner
+                //                 ],
+
+                //                 // clear input fields after add
+                //                 name: "",
+                //                 desgination: "",
+                //                 idNo: "",
+                //                 idIssueCountry: "",
+                //                 dob: "",
+                //                 currentAddress: "",
+                //                 sourceOfBO: [],
+                //                 delFlag: []
+
+                //             }
+
+                //         });
+
+                //     }
+                // }
+
+                add: {
+                    label: "Add",
+                    type: "button",
+                    variant: "primary",
+                    onClick: ({ formData, setFormData }) => {
+
+                        // ✅ Safely get beneficiary section
+                        const beneficiary = formData.BenficiaryDetails || {};
+                        const owners = Array.isArray(beneficiary.OwnerShipDetails) ? beneficiary.OwnerShipDetails : [];
+
+                        // Fields to validate
+                        const fields = ["name", "desgination", "idNo", "idIssueCountry", "dob", "currentAddress", "sourceOfBO"];
+
+                        // Validation rules (same as schema)
+                        // for (let field of fields) {
+                        //     const value = beneficiary[field];
+
+                        //     // Required check
+                        //     if (value === undefined || value === "" || (Array.isArray(value) && value.length === 0)) {
+                        //         alert(`${field} is required`);
+                        //         return;
+                        //     }
+
+                        //     // Custom field validations
+                        //     switch(field) {
+                        //         case "name":
+                        //         case "desgination":
+                        //         case "idNo":
+                        //         case "idIssueCountry":
+                        //         case "currentAddress":
+                        //             if (value.length < 4 || value.length > 50) {
+                        //                 alert(`${field} must be between 4 and 50 characters`);
+                        //                 return;
+                        //             }
+                        //             break;
+
+                        //         case "dob":
+                        //             if (!value) {
+                        //                 alert("Date of Birth is required");
+                        //                 return;
+                        //             }
+                        //             const today = new Date().toISOString().split("T")[0];
+                        //             if (value > today) {
+                        //                 alert("Date of birth cannot be a future date");
+                        //                 return;
+                        //             }
+                        //             if (new Date().getFullYear() - new Date(value).getFullYear() < 18) {
+                        //                 alert("Minimum age should be 18 years");
+                        //                 return;
+                        //             }
+                        //             break;
+
+                        //         case "sourceOfBO":
+                        //             if (!Array.isArray(value) || value.length === 0) {
+                        //                 alert("Please select at least one Source of BO");
+                        //                 return;
+                        //             }
+                        //             break;
+
+                        //         case "delFlag":
+                        //             if (value === undefined || value === null) {
+                        //                 alert("Delete Flag is required");
+                        //                 return;
+                        //             }
+                        //             break;
+                        //     }
+                        // }
+
+                        // ✅ If all validations pass, create new owner
+                        const newOwner = {
+                            name: beneficiary.name || "",
+                            desgination: beneficiary.desgination || "",
+                            idNo: beneficiary.idNo || "",
+                            idIssueCountry: beneficiary.idIssueCountry || "",
+                            dob: beneficiary.dob || "",
+                            currentAddress: beneficiary.currentAddress || "",
+                            sourceOfBO: beneficiary.sourceOfBO || [],
+                            delFlag: beneficiary?.delFlag || false
+                        };
+
+                         const updatedOwners = [...owners, newOwner];
+                         const updatedBeneficiary = {
+    ...beneficiary,
+    OwnerShipDetails: updatedOwners,
+    name: "",
+    desgination: "",
+    idNo: "",
+    idIssueCountry: "",
+    dob: "",
+    currentAddress: "",
+    sourceOfBO: [],
+    delFlag: false
+};
+                        // Update formData with new owner
+                        // setFormData({
+                        //     ...formData,
+                        //     BenficiaryDetails: {
+                        //         ...beneficiary,
+                        //         OwnerShipDetails: updatedOwners,
+
+                        //         // Clear input fields after adding
+                        //         name: "",
+                        //         desgination: "",
+                        //         idNo: "",
+                        //         idIssueCountry: "",
+                        //         dob: "",
+                        //         currentAddress: "",
+                        //         sourceOfBO: [],
+                        //         delFlag: false
+                        //     }
+                        // });
+                        setFormData(prev => ({
+    ...prev,
+    BenficiaryDetails: updatedBeneficiary
+}));
+                         sessionStorage.setItem("BenficiaryDetails", JSON.stringify(updatedBeneficiary));
+                        alert("Beneficial Owner Added Successfully ✅");
+                    }
+                }
+
+            }
+
         },
 
-        DirectorsDetails:{
+        DirectorsDetails: {
             title: "Directors Details",
         }
 

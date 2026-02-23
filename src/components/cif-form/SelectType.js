@@ -23,10 +23,15 @@ const SelectType = ({ onSubmit }) => {
 
 
     const location = useLocation();
-    const mode = location.pathname.split("/").pop();
-    console.log("mode:", mode); 
+    const path = location.pathname
+    const customerType = path.split("/").pop().startsWith("r-") ? "Retail" : "Corporate";
 
-     const ROUTE_MODE_MAP = {
+
+    const mode = path.split(/r-|c-/).pop();
+    console.log("mode:", mode, customerType);
+
+
+    const ROUTE_MODE_MAP = {
         "a-add": { code: "A", label: "Add" },
         "p-modify": { code: "P", label: "Modify" },
         "b-bulk-modify": { code: "B", label: "Bulk Modify" },
@@ -64,11 +69,12 @@ const SelectType = ({ onSubmit }) => {
         if (Object.keys(newErrors).length === 0) {
 
             onSubmit({
-              functionType,
+                functionType,
                 functionTypeName,
                 cifNumber,
-                mode
-             });
+                mode,
+                customerType
+            });
 
         }
 
@@ -82,7 +88,8 @@ const SelectType = ({ onSubmit }) => {
             functionType: "",
             cifNumber: "",
             functionTypeName: "",
-            mode
+            mode,
+            customerType
         });
 
     };
@@ -95,7 +102,7 @@ const SelectType = ({ onSubmit }) => {
 
             {/* Header */}
             <h2 className="text-2xl text-primary font-semibold mb-6 border-b border-primary-light pb-2">
-                CRM-CIF Retail Customer: {mode.toUpperCase()}
+                CRM-CIF {customerType} Customer: {mode.toUpperCase()}
             </h2>
 
 
@@ -147,24 +154,24 @@ const SelectType = ({ onSubmit }) => {
 
                 </div> */}
 
-<div className="flex items-start gap-6">
+                <div className="flex items-start gap-6">
 
-                <div className="flex flex-col w-[260px]">
+                    <div className="flex flex-col w-[260px]">
 
-                    <label className="text-sm font-medium text-gray-700 mb-1">
-                        Function Type
-                    </label>
+                        <label className="text-sm font-medium text-gray-700 mb-1">
+                            Function Type
+                        </label>
 
-                    <input
-                        value={`${functionType} — ${functionTypeName}`}
-                        disabled
-                        className="
+                        <input
+                            value={`${functionType} — ${functionTypeName}`}
+                            disabled
+                            className="
                             w-full h-[42px] px-4 border rounded-lg bg-gray-100
                             border-muted text-gray-700 font-medium
                         "
-                    />
+                        />
 
-                </div>
+                    </div>
 
                 </div>
 

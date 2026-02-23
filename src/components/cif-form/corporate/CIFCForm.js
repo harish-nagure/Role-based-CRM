@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DynamicField from "../DynamicField";
 import { CIFC_SCHEMA } from "./cifcSchema";
 import SelectType from "../SelectType";
@@ -15,34 +15,37 @@ const CIFCForm = () => {
     // const schema = CIFR_SCHEMA({ canWrite: true });
     const [schema, setSchema] = useState({});
 
-    // console.log("Generated Schema:", schema);
+    console.log("Generated Schema:", schema);
 
     const sections = Object.keys(schema);
 
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({
+        BenficiaryDetails: {},
+    });
     const [errors, setErrors] = useState({});
 
-    const [showForm, setShowForm] = useState(true);
+    const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
     // eslint-disable-next-line
     const [selectTypeData, setSelectTypeData] = useState({
         functionType: "",
-        cifNumber: ""
+        cifNumber: "",
+        customerType: ""
     });
 
     console.log("Form Data:", selectTypeData, formData, errors);
-    // const location = useLocation();
 
-    // const mode = location.pathname.split("/").pop();
 
-    // console.log("mode:", mode);
+    const location = useLocation();
+    const mode = location.pathname.split("/").pop();
+    console.log("mode:", mode);
 
-    // useEffect(() => {
-    //     setShowForm(false);
-    //     handleReset();
-    // }, [mode]);
+    useEffect(() => {
+        setShowForm(false);
+        handleReset();
+    }, [mode]);
 
-    //
+
     const [permissions, setPermissions] = useState([]);
 
 
@@ -51,7 +54,7 @@ const CIFCForm = () => {
             try {
                 const perms = await fetchCIFRPermissions();
                 setPermissions(perms.data); // save permissions
-                setSchema(CIFC_SCHEMA({ canWrite: true, permissions: perms.data }));
+                setSchema(CIFC_SCHEMA({ canWrite: true, permissions: [] }));
 
             } catch (err) {
                 console.error("Error loading permissions:", err);
@@ -61,6 +64,29 @@ const CIFCForm = () => {
         };
         loadPermissions();
     }, [])
+
+
+    useEffect(() => {
+        const savedBeneficiary = sessionStorage.getItem("BenficiaryDetails");
+        if (savedBeneficiary) {
+            const parsed = JSON.parse(savedBeneficiary);
+            setFormData(prev => ({
+                ...prev,
+                BenficiaryDetails: {
+                    ...parsed,
+                    OwnerShipDetails: parsed.OwnerShipDetails || [],
+                }
+            }));
+            if(parsed.OwnerShipDetails && parsed.OwnerShipDetails.length > 0){
+                setShowForm(true);
+            }
+        }
+    }, []);
+
+    // Log whenever formData changes
+    useEffect(() => {
+        console.log("Updated formData:", formData);
+    }, [formData]);
     /* ================= SELECT TYPE HANDLER ================= */
 
     const handleSelectType = async (data) => {
@@ -72,7 +98,8 @@ const CIFCForm = () => {
             meta: {
                 functionType: data.functionType,
                 cifNumber: data.cifNumber,
-                functionTypeName: data.functionTypeName
+                functionTypeName: data.functionTypeName,
+                customerType: data.customerType
             }
         }));
 
@@ -106,7 +133,8 @@ const CIFCForm = () => {
                     meta: {
                         functionType: data.functionType,
                         cifNumber: data.cifNumber,
-                        functionTypeName: data.functionTypeName
+                        functionTypeName: data.functionTypeName,
+                        customerType: data.customerType
                     }
                 }));
                 setShowForm(true);
@@ -162,7 +190,24 @@ const CIFCForm = () => {
         value,
         field
     ) => {
+        let updatedValue;
+        if (field.type === "checkbox") {
 
+            const currentValues = Array.isArray(formData?.[section]?.[name])
+                ? formData[section][name]
+                : [];
+
+            if (currentValues.includes(value)) {
+                // remove
+                updatedValue = currentValues.filter(v => v !== value);
+                value = updatedValue;
+            } else {
+                // add
+                updatedValue = [...currentValues, value];
+                value = updatedValue;
+            }
+
+        }
         const updatedSection = {
             ...formData?.[section],
             [name]: value
@@ -172,6 +217,8 @@ const CIFCForm = () => {
             ...formData,
             [section]: updatedSection
         };
+
+        console.log("updatedForm:", updatedForm);
 
 
         //Address Sync
@@ -226,6 +273,7 @@ const CIFCForm = () => {
             };
 
         }
+
 
         setFormData(updatedForm);
 
@@ -321,6 +369,8 @@ const CIFCForm = () => {
         setErrors({});
     };
 
+
+
     /* ================= UI ================= */
 
     return (
@@ -335,7 +385,7 @@ const CIFCForm = () => {
                             <div className="flex gap-4 items-center">
                                 {/* <div> */}
                                 <h1 className="text-xl font-semibold text-primary">
-                                    CRM-CIF Retail Customer
+                                    CRM-CIF {selectTypeData.customerType} Customer
                                 </h1>
 
                                 <p className="text-primary font-semibold">
@@ -478,6 +528,7 @@ const CIFCForm = () => {
                                                                                 }
                                                                                 onChange={handleChange}
                                                                                 formData={formData}
+                                                                                setFormData={setFormData}
 
                                                                             />
 
@@ -485,42 +536,164 @@ const CIFCForm = () => {
 
                                                                 }
 
-                                                            </div>
-                                                        </div>
 
-                                                    ))}
+
+                                                            </div>
+                                                            {sectionKey === "BenficiaryDetails" && formData?.BenficiaryDetails?.OwnerShipDetails?.length > 0 && (
+
+                                                                <div className="mt-6 border rounded-lg p-4 bg-gray-50">
+
+                                                                    <h3 className="text-lg font-semibold mb-3">
+                                                                        Beneficial Owners List
+                                                                    </h3>
+
+                                                                    <table className="w-full border-collapse border border-gray-300">
+
+                                                                        <thead>
+                                                                            <tr className="bg-gray-200">
+                                                                                <th className="border p-2">Name</th>
+                                                                                <th className="border p-2">Designation</th>
+                                                                                <th className="border p-2">ID No</th>
+                                                                                <th className="border p-2">Country</th>
+                                                                                <th className="border p-2">DOB</th>
+                                                                                <th className="border p-2">Address</th>
+                                                                                <th className="border p-2">Source</th>
+                                                                                <th className="border p-2">Delete Flag</th>
+
+                                                                                <th className="border p-2">Actions</th>
+
+                                                                            </tr>
+                                                                        </thead>
+
+                                                                        <tbody>
+
+                                                                            {formData.BenficiaryDetails.OwnerShipDetails.map((owner, index) => (
+
+                                                                                <tr key={index} className="text-center">
+
+                                                                                    <td className="border p-2">{owner.name}</td>
+                                                                                    <td className="border p-2">{owner.desgination}</td>
+                                                                                    <td className="border p-2">{owner.idNo}</td>
+                                                                                    <td className="border p-2">{owner.idIssueCountry}</td>
+                                                                                    <td className="border p-2">{owner.dob}</td>
+                                                                                    <td className="border p-2">{owner.currentAddress}</td>
+                                                                                    <td className="border p-2">
+                                                                                        {owner.sourceOfBO?.join(", ")}
+                                                                                    </td>
+                                                                                    <td className="border p-2">
+                                                                                        {owner.delFlag ? "Yes" : "No"}
+                                                                                    </td>
+                                                                                    <td className="border p-2">
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => {
+                                                                                                const updatedOwners = [...formData.BenficiaryDetails.OwnerShipDetails];
+                                                                                                const owner = updatedOwners[index];
+                                                                                                // Pre-fill this owner data into a form
+                                                                                                setFormData(prev => ({
+                                                                                                    ...prev,
+                                                                                                    BenficiaryDetails: {
+                                                                                                        ...prev.BenficiaryDetails,
+                                                                                                        ...owner,
+                                                                                                        editingOwnerIndex: index,
+
+                                                                                                    },
+                                                                                                }));
+
+
+
+                                                                                                // Optional: scroll to a form or open a modal
+                                                                                                scrollToSection("BenficiaryDetails");
+
+                                                                                                updatedOwners.splice(index, 1);
+                                                                                                setFormData(prev => ({
+                                                                                                    ...prev,
+                                                                                                    BenficiaryDetails: {
+                                                                                                        ...prev.BenficiaryDetails,
+                                                                                                        OwnerShipDetails: updatedOwners
+                                                                                                    }
+                                                                                                }));
+                                                                                            }}
+                                                                                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs"
+                                                                                        >
+                                                                                            Edit
+                                                                                        </button>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => {
+                                                                                                // Remove the owner at this index
+                                                                                                const updatedOwners = [...formData.BenficiaryDetails.OwnerShipDetails];
+                                                                                                updatedOwners.splice(index, 1);
+                                                                                                setFormData(prev => ({
+                                                                                                    ...prev,
+                                                                                                    BenficiaryDetails: {
+                                                                                                        ...prev.BenficiaryDetails,
+                                                                                                        OwnerShipDetails: updatedOwners
+                                                                                                    }
+                                                                                                }));
+
+                                                                                                const updatedSessionData = {
+                                                                                                    ...JSON.parse(sessionStorage.getItem("BenficiaryDetails")),
+                                                                                                    OwnerShipDetails: updatedOwners
+                                                                                                };
+                                                                                                sessionStorage.setItem("BenficiaryDetails", JSON.stringify(updatedSessionData));
+                                                                                            
+                                                                                            }}
+                                                                                        className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
+                                                                                        >
+                                                                                        Delete
+                                                                                    </button>
+
+
+                                                                                </td>
+
+                                                                                </tr>
+
+                                                                            ))}
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                                </div>
+
+                                                    )}
+
                                             </div>
 
-                                        );
+                                        ))}
+                            </div>
+
+                            );
 
                                     })
 
                                 }
 
 
-                                {/* Submit Button */}
+                            {/* Submit Button */}
 
-                                <div className="flex justify-start mt-6">
+                            <div className="flex justify-start mt-6">
 
-                                    <button
-                                        onClick={handleSubmit}
-                                        className="px-6 py-2 bg-primary-light text-white rounded hover:bg-primary transition"
-                                    >
-                                        Submit
-                                    </button>
-                                    <button
-                                        onClick={handleReset}
-                                        className="px-6 py-2 bg-muted text-white rounded hover:bg-gray-600 ml-4"
-                                    >
-                                        Reset
-                                    </button>
-                                </div>
+                                <button
+                                    onClick={handleSubmit}
+                                    className="px-6 py-2 bg-primary-light text-white rounded hover:bg-primary transition"
+                                >
+                                    Submit
+                                </button>
+                                <button
+                                    onClick={handleReset}
+                                    className="px-6 py-2 bg-muted text-white rounded hover:bg-gray-600 ml-4"
+                                >
+                                    Reset
+                                </button>
                             </div>
-                        </>
+                        </div>
+                </>
                     )}
-                </div>
-
             </div>
+
+        </div >
         </>
 
     );

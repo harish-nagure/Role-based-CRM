@@ -35,12 +35,12 @@ const COMPONENT_MAP = {
   // retail
   "cifr-form": CIFRForm,
   "cifr-field-access": CIFRFieldAccessControl,
-  "a-add": CIFRForm,
-  "p-modify": CIFRForm,
-  "v-verify": CIFRForm,
-  "x-cancel": CIFRForm,
+  "r-a-add": CIFRForm,
+  "r-p-modify": CIFRForm,
+  "r-v-verify": CIFRForm,
+  "r-x-cancel": CIFRForm,
   // corporate
-
+  "c-a-add":CIFCForm,
   
 };
 
