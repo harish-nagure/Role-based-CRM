@@ -86,6 +86,7 @@ import { Upload } from "lucide-react";
 
 const DynamicField = ({
   section,
+  subSection,
   name,
   field,
   value,
@@ -95,6 +96,8 @@ const DynamicField = ({
   hide,
   setFormData
 }) => {
+
+  // console.log("Dynamic Field:", section, name, field, value, error);
 
   const sectionData = formData?.[section] || {};
 
@@ -117,14 +120,13 @@ const DynamicField = ({
         ? e.target.files[0]
         : e.target.value;
 
-    onChange(section, name, val, field);
+    onChange(section, subSection, name, val, field);
   };
 
-  const isDisabled =
-    section === "presentAddress" &&
-    name !== "sameAsPermanent" &&
-    formData?.presentAddress?.sameAsPermanent === "yes";
-
+const isDisabled =
+  subSection === "presentAddress" &&
+  name !== "sameAsPermanent" &&
+  formData?.[section]?.presentAddress?.sameAsPermanent === "yes";
   if (field.hide) {
     return null;
   }
@@ -139,7 +141,7 @@ const DynamicField = ({
         )}
       </label> */}
       <label className="text-sm font-medium">
-        {field.label}
+        {field.type ==="button"?"":field.label}
         {isRequired && (
           <span className="text-error ml-1">*</span>
         )}
@@ -169,14 +171,14 @@ const DynamicField = ({
           <input
             type="file"
             accept={field.accept}
-            id={`${section}-${name}`}
+            id={`${section}-${subSection}-${name}`}
             className="hidden"
             onChange={handleChange}
           />
 
           {/* Custom UI */}
           <label
-            htmlFor={`${section}-${name}`}
+            htmlFor={`${section}-${subSection}-${name}`}
             className={`${commonClass} flex items-center justify-between cursor-pointer transition`}
           >
 
@@ -262,7 +264,7 @@ const DynamicField = ({
                   id={id}
                   type="checkbox"
                   checked={isChecked}
-                  onChange={() => onChange(section, name, opt.value, field)}
+                  onChange={() => onChange(section, subSection, name, opt.value, field)}
                   className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                 />
 
@@ -292,9 +294,9 @@ const DynamicField = ({
         })
       }
       className={`
-        px-4 py-2
+        px-8 py-2
         rounded-md
-        text-sm font-medium
+        text-base font-medium
          hover:bg-primary-dark
         active:scale-95
         transition-all
@@ -304,7 +306,7 @@ const DynamicField = ({
       `}
     >
 
-      + {field.label}
+      {field.label}
 
     </button>
 

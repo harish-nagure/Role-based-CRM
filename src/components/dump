@@ -912,193 +912,997 @@ export default CIFForm;
 
 
 
+// {
 
 
-  nrbAddress: {
 
-      title: "NRB Address",
+//   nrbAddress: {
 
-      addressLine1: {
-        label: "Address Line 1",
-        type: "text",
-        required: true
-      },
+//       title: "NRB Address",
 
-      addressLine2: {
-        label: "Address Line 2",
-        type: "text"
-      },
+//       addressLine1: {
+//         label: "Address Line 1",
+//         type: "text",
+//         required: true
+//       },
 
-      streetNo: {
-        label: "Street No",
-        type: "text",
-        required: true
-      },
+//       addressLine2: {
+//         label: "Address Line 2",
+//         type: "text"
+//       },
 
-      city: {
-        label: "City",
-        type: "text",
-        required: true
-      },
+//       streetNo: {
+//         label: "Street No",
+//         type: "text",
+//         required: true
+//       },
 
-      countryOfResidence: {
-        label: "Country of Residence",
-        type: "select",
-        required: true,
-        options: [
-          { label: "Select Country", value: "" },
-          { label: "India", value: "india" },
-          { label: "USA", value: "usa" }
-        ]
-      },
+//       city: {
+//         label: "City",
+//         type: "text",
+//         required: true
+//       },
 
-      postalCode: {
-        label: "Postal Code",
-        type: "text",
-        required: true,
-        validate: (value) => {
-          if (value.length < 4 || value.length > 7)
-            return "Postal Code must be between 4 and 7 characters";
+//       countryOfResidence: {
+//         label: "Country of Residence",
+//         type: "select",
+//         required: true,
+//         options: [
+//           { label: "Select Country", value: "" },
+//           { label: "India", value: "india" },
+//           { label: "USA", value: "usa" }
+//         ]
+//       },
+
+//       postalCode: {
+//         label: "Postal Code",
+//         type: "text",
+//         required: true,
+//         validate: (value) => {
+//           if (value.length < 4 || value.length > 7)
+//             return "Postal Code must be between 4 and 7 characters";
+//         }
+//       }
+//     },
+
+//     phoneDetails: {
+
+//       title: "Phone Details",
+
+//       primaryPhoneNumber: {
+//         label: "Primary Phone Number",
+//         type: "text",
+//         required: true,
+//         validate: (value) => {
+//           if (!/^\d{10}$/.test(value))
+//             return "Phone number must be 10 digits";
+//         }
+//       },
+
+//       secondaryPhoneNumber: {
+//         label: "Secondary Phone Number",
+//         type: "text",
+//         validate: (value) => {
+//           if (value && !/^\d{10}$/.test(value))
+//             return "Phone number must be 10 digits";
+//         }
+//       }
+//     },
+
+//     emailDetails: {
+
+//       title: "Email Details",
+
+//       emailId: {
+//         label: "Email",
+//         type: "text",
+//         required: true,
+//         validate: (value) => {
+//           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+//             return "Invalid email address";
+//         }
+//       },
+
+//       alternateEmailId: {
+//         label: "Alternate Email",
+//         type: "text",
+//         validate: (value) => {
+//           if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+//             return "Invalid email address";
+//         }
+//       },
+//     },
+
+//     generalDetails: {
+
+//       title: "General Details",
+//       nationality: {
+//         label: "Nationality",
+//         type: "text",
+//         required: true,
+//       },
+//       martialStatus: {
+//         label: "Marital Status",
+//         type: "select",
+//         required: true,
+//         options: [
+//           { label: "Select", value: "" },
+//           { label: "Single", value: "single" },
+//           { label: "Married", value: "married" },
+//           { label: "Divorced", value: "divorced" },
+//           { label: "Widowed", value: "widowed" }
+//         ]
+//       },
+//       spouseName: {
+//         label: "Spouse Name",
+//         type: "text",
+//         required: (form) => form.martialStatus === "married" ? true : false,
+//         validate: (value, form) => {
+//           if (form.martialStatus === "married" && !value)
+//             return "Spouse Name is required";
+//         }
+//       },
+//       spouseNumber: {
+//         label: "Spouse Number",
+//         type: "text",
+//         required: (form) => form.martialStatus === "married" ? true : false,
+//         validate: (value, form) => {
+//           if (form.martialStatus === "married") {
+//             if (!value) return "Spouse Number is required";
+//             if (!/^\d{10}$/.test(value))
+//               return "Phone number must be 10 digits";
+//           }
+//         }
+//       },
+//     },
+
+//     employmentDetails: {
+
+//       title: "Employment Details",
+//       occupation: {
+//         label: "Occupation",
+//         type: "text",
+//         required: true,
+//       },
+//       employerName: {
+//         label: "Employer Name",
+//         type: "text",
+//         required: true,
+//       },
+//       officeAddress: {
+//         label: "Office Address",
+//         type: "text",
+//         required: true,
+//       },
+//     },
+
+//     incomeDetails: {
+
+//       title: "Income Details",
+//       annualIncome: {
+//         label: "Annual Income",
+//         type: "text",
+//         required: true,
+//       },
+//       sourceOfIncome: {
+//         label: "Source of Income",
+//         type: "text",
+//         required: true,
+//       },
+//     },
+
+//     BankDetails: {
+//       title: "Bank Details",
+//       bankName: {
+//         label: "Bank Name",
+//         type: "text",
+//         required: true,
+//       },
+//       branchName: {
+//         label: "Branch Name",
+//         type: "text",
+//         required: true
+//       },
+//     },
+
+//   }
+
+
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import DynamicField from "../DynamicField";
+import { CIFC_SCHEMA } from "./cifcSchema";
+import SelectType from "../SelectType";
+import { fetchCIFRPermissions } from "../../../api/api.auth";
+
+const CIFCForm = () => {
+
+    const sectionRefs = useRef({});
+
+
+    const navigate = useNavigate();
+
+    // const schema = CIFR_SCHEMA({ canWrite: true });
+    const [schema, setSchema] = useState({});
+
+    console.log("Generated Schema:", schema);
+
+    const sections = Object.keys(schema);
+
+    const [formData, setFormData] = useState({
+        BenficiaryDetails: {},
+    });
+    const [errors, setErrors] = useState({});
+
+    const [showForm, setShowForm] = useState(false);
+    const [loading, setLoading] = useState(false);
+    // eslint-disable-next-line
+    const [selectTypeData, setSelectTypeData] = useState({
+        functionType: "",
+        cifNumber: "",
+        customerType: ""
+    });
+
+    console.log("Form Data:", selectTypeData, formData, errors);
+
+
+    const location = useLocation();
+    const mode = location.pathname.split("/").pop();
+    console.log("mode:", mode);
+
+    useEffect(() => {
+        setShowForm(false);
+        handleReset();
+    }, [mode]);
+
+
+    const [permissions, setPermissions] = useState([]);
+
+
+    useEffect(() => {
+        const loadPermissions = async () => {
+            try {
+                const perms = await fetchCIFRPermissions();
+                setPermissions(perms.data); // save permissions
+                setSchema(CIFC_SCHEMA({ canWrite: true, permissions: [] }));
+
+            } catch (err) {
+                console.error("Error loading permissions:", err);
+
+                setSchema(CIFC_SCHEMA({ canWrite: true, permissions: [] }));
+            }
+        };
+        loadPermissions();
+    }, [])
+
+
+    useEffect(() => {
+        const savedBeneficiary = sessionStorage.getItem("BenficiaryDetails");
+        if (savedBeneficiary) {
+            const parsed = JSON.parse(savedBeneficiary);
+            setFormData(prev => ({
+                ...prev,
+                BenficiaryDetails: {
+                    ...parsed,
+                    OwnerShipDetails: parsed.OwnerShipDetails || [],
+                }
+            }));
+            if(parsed.OwnerShipDetails && parsed.OwnerShipDetails.length > 0){
+                setShowForm(true);
+            }
         }
-      }
-    },
+    }, []);
 
-    phoneDetails: {
+    // Log whenever formData changes
+    useEffect(() => {
+        console.log("Updated formData:", formData);
+    }, [formData]);
+    /* ================= SELECT TYPE HANDLER ================= */
 
-      title: "Phone Details",
+    const handleSelectType = async (data) => {
 
-      primaryPhoneNumber: {
-        label: "Primary Phone Number",
-        type: "text",
-        required: true,
-        validate: (value) => {
-          if (!/^\d{10}$/.test(value))
-            return "Phone number must be 10 digits";
+        setSelectTypeData(data);
+
+        setFormData(prev => ({
+            ...prev,
+            meta: {
+                functionType: data.functionType,
+                cifNumber: data.cifNumber,
+                functionTypeName: data.functionTypeName,
+                customerType: data.customerType
+            }
+        }));
+
+        if (data.functionType === "") {
+            setFormData({});
+            setShowForm(false);
+            return;
         }
-      },
 
-      secondaryPhoneNumber: {
-        label: "Secondary Phone Number",
-        type: "text",
-        validate: (value) => {
-          if (value && !/^\d{10}$/.test(value))
-            return "Phone number must be 10 digits";
+        // ADD MODE
+        if (data.functionType.startsWith("A")) {
+            setFormData({});
+            setShowForm(true);
+            return;
         }
-      }
-    },
 
-    emailDetails: {
+        // OTHER MODES → NEED CIF
+        if (data.cifNumber) {
+            try {
+                setLoading(true);
 
-      title: "Email Details",
+                // Example API call
+                // const res = await fetch(`/api/cif/${data.cifNumber}`);
+                // const apiData = await res.json();
 
-      emailId: {
-        label: "Email",
-        type: "text",
-        required: true,
-        validate: (value) => {
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-            return "Invalid email address";
+                const apiData = {};
+
+                setFormData(prev => ({
+                    ...prev,
+                    ...apiData,
+                    meta: {
+                        functionType: data.functionType,
+                        cifNumber: data.cifNumber,
+                        functionTypeName: data.functionTypeName,
+                        customerType: data.customerType
+                    }
+                }));
+                setShowForm(true);
+
+            } catch (err) {
+                alert("Invalid CIF or not found");
+                setShowForm(false);
+            } finally {
+                setLoading(false);
+            }
         }
-      },
+    };
 
-      alternateEmailId: {
-        label: "Alternate Email",
-        type: "text",
-        validate: (value) => {
-          if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-            return "Invalid email address";
+
+    const validateField = (
+        section,
+        name,
+        value,
+        field
+    ) => {
+        const sectionData = formData?.[section] || {};
+
+        const isRequired =
+            typeof field.required === "function"
+                ? field.required(sectionData)
+                : field.required;
+
+        if (isRequired && !value) {
+            return `${field.label} is required`;
         }
-      },
-    },
+        if (field.validate) {
 
-    generalDetails: {
+            const sectionData =
+                formData?.[section] || {};
 
-      title: "General Details",
-      nationality: {
-        label: "Nationality",
-        type: "text",
-        required: true,
-      },
-      martialStatus: {
-        label: "Marital Status",
-        type: "select",
-        required: true,
-        options: [
-          { label: "Select", value: "" },
-          { label: "Single", value: "single" },
-          { label: "Married", value: "married" },
-          { label: "Divorced", value: "divorced" },
-          { label: "Widowed", value: "widowed" }
-        ]
-      },
-      spouseName: {
-        label: "Spouse Name",
-        type: "text",
-        required: (form) => form.martialStatus === "married" ? true : false,
-        validate: (value, form) => {
-          if (form.martialStatus === "married" && !value)
-            return "Spouse Name is required";
+            const error =
+                field.validate(value, sectionData);
+
+            if (error)
+                return error;
         }
-      },
-      spouseNumber: {
-        label: "Spouse Number",
-        type: "text",
-        required: (form) => form.martialStatus === "married" ? true : false,
-        validate: (value, form) => {
-          if (form.martialStatus === "married") {
-            if (!value) return "Spouse Number is required";
-            if (!/^\d{10}$/.test(value))
-              return "Phone number must be 10 digits";
-          }
+
+        return "";
+
+    };
+
+
+    /* ================= HANDLE CHANGE ================= */
+
+    const handleChange = (
+        section,
+        name,
+        value,
+        field
+    ) => {
+        let updatedValue;
+        if (field.type === "checkbox") {
+
+            const currentValues = Array.isArray(formData?.[section]?.[name])
+                ? formData[section][name]
+                : [];
+
+            if (currentValues.includes(value)) {
+                // remove
+                updatedValue = currentValues.filter(v => v !== value);
+                value = updatedValue;
+            } else {
+                // add
+                updatedValue = [...currentValues, value];
+                value = updatedValue;
+            }
+
         }
-      },
-    },
+        const updatedSection = {
+            ...formData?.[section],
+            [name]: value
+        };
 
-    employmentDetails: {
+        const updatedForm = {
+            ...formData,
+            [section]: updatedSection
+        };
 
-      title: "Employment Details",
-      occupation: {
-        label: "Occupation",
-        type: "text",
-        required: true,
-      },
-      employerName: {
-        label: "Employer Name",
-        type: "text",
-        required: true,
-      },
-      officeAddress: {
-        label: "Office Address",
-        type: "text",
-        required: true,
-      },
-    },
+        console.log("updatedForm:", updatedForm);
 
-    incomeDetails: {
 
-      title: "Income Details",
-      annualIncome: {
-        label: "Annual Income",
-        type: "text",
-        required: true,
-      },
-      sourceOfIncome: {
-        label: "Source of Income",
-        type: "text",
-        required: true,
-      },
-    },
+        //Address Sync
+        if (section === "presentAddress" && name === "sameAsPermanent") {
 
-    BankDetails: {
-      title: "Bank Details",
-      bankName: {
-        label: "Bank Name",
-        type: "text",
-        required: true,
-      },
-      branchName: {
-        label: "Branch Name",
-        type: "text",
-        required: true
-      },
-    },
+            if (value === "yes") {
+
+                const permanent = formData?.permanentAddress || {};
+
+                updatedForm.presentAddress = {
+                    ...updatedForm.presentAddress,
+                    sameAsPermanent: "yes",
+                    addressLine1: permanent.addressLine1 || "",
+                    addressLine2: permanent.addressLine2 || "",
+                    houseNo: permanent.houseNo || "",
+                    city: permanent.city || "",
+                    stateProvinceRegion:
+                        permanent.stateProvinceRegion || "",
+                    countryOfResidence:
+                        permanent.countryOfResidence || "",
+                    postalCode: permanent.postalCode || ""
+                };
+            }
+            else {
+                updatedForm.presentAddress = {
+                    sameAsPermanent: "no"
+                };
+
+            }
+
+        }
+
+        if (section === "permanentAddress" && formData?.presentAddress?.sameAsPermanent === "yes") {
+
+            const permanent = {
+                ...formData.permanentAddress,
+                [name]: value
+            };
+
+            updatedForm.presentAddress = {
+                sameAsPermanent: "yes",
+
+                addressLine1: permanent.addressLine1 || "",
+                addressLine2: permanent.addressLine2 || "",
+                houseNo: permanent.houseNo || "",
+                city: permanent.city || "",
+                stateProvinceRegion:
+                    permanent.stateProvinceRegion || "",
+                countryOfResidence:
+                    permanent.countryOfResidence || "",
+                postalCode: permanent.postalCode || ""
+            };
+
+        }
+
+
+        setFormData(updatedForm);
+
+        const error =
+            validateField(
+                section,
+                name,
+                value,
+                field
+            );
+
+        setErrors(prev => ({
+            ...prev,
+            [section]: {
+                ...prev?.[section],
+                [name]: error
+            }
+        }));
+
+    };
+    const scrollToSection = (sectionKey) => {
+        console.log("Scrolling to section:", sectionKey);
+        sectionRefs.current[sectionKey]?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    };
+
+
+    /* ================= SUBMIT ================= */
+
+    const handleSubmit = () => {
+
+        let hasError = false;
+
+        const allErrors = {};
+
+        sections.forEach(sectionKey => {
+
+            const section = schema[sectionKey];
+
+            const sectionErrors = {};
+
+            Object.entries(section)
+                .filter(([key]) => key !== "title")
+                .forEach(([name, field]) => {
+
+                    const value =
+                        formData?.[sectionKey]?.[name];
+
+                    const error =
+                        validateField(
+                            sectionKey,
+                            name,
+                            value,
+                            field
+                        );
+
+                    if (error)
+                        hasError = true;
+
+                    sectionErrors[name] = error;
+
+                });
+
+            allErrors[sectionKey] =
+                sectionErrors;
+
+        });
+
+        setErrors(allErrors);
+
+        if (!hasError) {
+
+            console.log(
+                "Complete CIF Data:",
+                formData
+            );
+
+            navigate(
+                "/identification",
+                {
+                    state: formData
+                }
+            );
+
+        }
+
+    };
+
+    const handleReset = () => {
+        setFormData({});
+        setErrors({});
+    };
+
+
+
+    /* ================= UI ================= */
+
+    return (
+        <>
+
+
+            <div className="flex items-center justify-between gap-6 px-8">
+                {showForm && (
+                    <>
+                        <div className="bg-background rounded-lg shadow-md p-4 w-full flex items-center justify-between px-10">
+
+                            <div className="flex gap-4 items-center">
+                                {/* <div> */}
+                                <h1 className="text-xl font-semibold text-primary">
+                                    CRM-CIF {selectTypeData.customerType} Customer
+                                </h1>
+
+                                <p className="text-primary font-semibold">
+                                    Function Type: <span className="font-medium">{selectTypeData.functionType} - {selectTypeData.functionTypeName}</span>
+                                </p>
+
+                                {selectTypeData.cifNumber && (
+                                    <p className="text-primary font-semibold">
+                                        CIF Number: <span className="font-medium">{selectTypeData.cifNumber}</span>
+                                    </p>
+                                )}
+                            </div>
+
+                            <button
+                                onClick={() => {
+                                    setShowForm(false);
+                                    setFormData({});
+                                    setErrors({});
+                                    setSelectTypeData({ functionType: "", cifNumber: "", functionTypeName: "" });
+                                }}
+                                className="px-4 py-2 bg-muted text-white rounded hover:bg-gray-600 transition"
+                            >
+                                Go back
+                            </button>
+
+                        </div>
+                    </>
+                )}
+
+            </div>
+
+
+            <div className={`bg-secondary px-8 ${showForm ? "pt-2" : "pt-8"}`}>
+                {/* <div className="bg-secondary px-8 pt-8"> */}
+                {/* <div className="min-h-[85vh] bg-background rounded-lg shadow-lg p-8 space-y-6"> */}
+                <div className="h-[85vh] bg-background rounded-lg shadow-lg p-8 flex flex-col">
+
+                    {!showForm && (
+                        <SelectType onSubmit={handleSelectType} />
+                    )}
+                    {loading && (
+                        <div className="text-primary font-medium">
+                            Loading CIF data...
+                        </div>
+                    )}
+
+
+                    {/* placed here */}
+
+
+                    {showForm && (
+                        <>
+                            {/* <div className="bg-background rounded-lg shadow-lg p-8 flex flex-col gap-8 "> */}
+                            <div className="overflow-y-auto pr-2 pl-1 custom-scrollbar scroll-smooth">
+                                {/* HEADER BAR */}
+                                {showForm && (
+
+                                    <div>
+
+                                        {/* CLICKABLE SECTION NAV */}
+                                        <div className="flex justify-between gap-0.5 w-full">
+
+                                            {sections.map(sectionKey => (
+
+                                                <button
+                                                    key={sectionKey}
+                                                    onClick={() => scrollToSection(sectionKey)}
+                                                    className="px-4 py-2 bg-primary-light w-full text-white rounded hover:bg-primary transition"
+                                                >
+                                                    {schema[sectionKey].title}
+                                                </button>
+
+                                            ))}
+
+                                        </div>
+
+                                    </div>
+
+                                )}
+
+
+                                {
+
+
+
+                                    sections.map(sectionKey => {
+
+                                        const section = schema[sectionKey];
+
+                                        return (
+
+                                            <div key={sectionKey}
+
+                                                ref={(el) => sectionRefs.current[sectionKey] = el}
+                                                className="pt-5">
+
+                                                {/* Header Nav Title */}
+
+
+                                                <h2 className="text-xl font-semibold mb-4">
+                                                    {/* <h2 className="text-2xl text-primary font-semibold mb-6 border-b border-primary-light pb-2"> */}
+
+                                                    {section.title}
+
+                                                </h2>
+
+
+                                                {/* Fields */}
+
+                                                {Object.entries(section)
+                                                    .filter(([key]) => key !== "title")
+                                                    .map(([innerKey, innerSection]) => (
+
+                                                        <div key={innerKey} className="mb-8">
+
+                                                            {/* <h2 className="text-xl font-semibold mb-4"> */}
+
+                                                            <h2 className="text-2xl text-primary font-semibold mb-6 border-b border-primary-light pb-2">
+                                                                {innerSection.title}
+                                                            </h2>
+
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                                                {
+
+                                                                    Object.entries(innerSection)
+                                                                        .filter(([key]) => key !== "title")
+                                                                        .map(([name, field]) => (
+
+                                                                            <DynamicField
+                                                                                key={name}
+                                                                                section={sectionKey}
+                                                                                name={name}
+                                                                                field={field}
+                                                                                value={
+                                                                                    formData?.[sectionKey]?.[name]
+                                                                                }
+                                                                                error={
+                                                                                    errors?.[sectionKey]?.[name]
+                                                                                }
+                                                                                onChange={handleChange}
+                                                                                formData={formData}
+                                                                                setFormData={setFormData}
+
+                                                                            />
+
+                                                                        ))
+
+                                                                }
+
+
+
+                                                            </div>
+                                                            {sectionKey === "BenficiaryDetails" && formData?.BenficiaryDetails?.OwnerShipDetails?.length > 0 && (
+
+                                                                <div className="mt-6 border rounded-lg p-4 bg-gray-50">
+
+                                                                    <h3 className="text-lg font-semibold mb-3">
+                                                                        Beneficial Owners List
+                                                                    </h3>
+
+                                                                    <table className="w-full border-collapse border border-gray-300">
+
+                                                                        <thead>
+                                                                            <tr className="bg-gray-200">
+                                                                                <th className="border p-2">Name</th>
+                                                                                <th className="border p-2">Designation</th>
+                                                                                <th className="border p-2">ID No</th>
+                                                                                <th className="border p-2">Country</th>
+                                                                                <th className="border p-2">DOB</th>
+                                                                                <th className="border p-2">Address</th>
+                                                                                <th className="border p-2">Source</th>
+                                                                                <th className="border p-2">Delete Flag</th>
+
+                                                                                <th className="border p-2">Actions</th>
+
+                                                                            </tr>
+                                                                        </thead>
+
+                                                                        <tbody>
+
+                                                                            {formData.BenficiaryDetails.OwnerShipDetails.map((owner, index) => (
+
+                                                                                <tr key={index} className="text-center">
+
+                                                                                    <td className="border p-2">{owner.name}</td>
+                                                                                    <td className="border p-2">{owner.desgination}</td>
+                                                                                    <td className="border p-2">{owner.idNo}</td>
+                                                                                    <td className="border p-2">{owner.idIssueCountry}</td>
+                                                                                    <td className="border p-2">{owner.dob}</td>
+                                                                                    <td className="border p-2">{owner.currentAddress}</td>
+                                                                                    <td className="border p-2">
+                                                                                        {owner.sourceOfBO?.join(", ")}
+                                                                                    </td>
+                                                                                    <td className="border p-2">
+                                                                                        {owner.delFlag ? "Yes" : "No"}
+                                                                                    </td>
+                                                                                    <td className="border p-2">
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => {
+                                                                                                const updatedOwners = [...formData.BenficiaryDetails.OwnerShipDetails];
+                                                                                                const owner = updatedOwners[index];
+                                                                                                // Pre-fill this owner data into a form
+                                                                                                setFormData(prev => ({
+                                                                                                    ...prev,
+                                                                                                    BenficiaryDetails: {
+                                                                                                        ...prev.BenficiaryDetails,
+                                                                                                        ...owner,
+                                                                                                        editingOwnerIndex: index,
+
+                                                                                                    },
+                                                                                                }));
+
+
+
+                                                                                                // Optional: scroll to a form or open a modal
+                                                                                                scrollToSection("BenficiaryDetails");
+
+                                                                                                updatedOwners.splice(index, 1);
+                                                                                                setFormData(prev => ({
+                                                                                                    ...prev,
+                                                                                                    BenficiaryDetails: {
+                                                                                                        ...prev.BenficiaryDetails,
+                                                                                                        OwnerShipDetails: updatedOwners
+                                                                                                    }
+                                                                                                }));
+                                                                                            }}
+                                                                                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs"
+                                                                                        >
+                                                                                            Edit
+                                                                                        </button>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => {
+                                                                                                // Remove the owner at this index
+                                                                                                const updatedOwners = [...formData.BenficiaryDetails.OwnerShipDetails];
+                                                                                                updatedOwners.splice(index, 1);
+                                                                                                setFormData(prev => ({
+                                                                                                    ...prev,
+                                                                                                    BenficiaryDetails: {
+                                                                                                        ...prev.BenficiaryDetails,
+                                                                                                        OwnerShipDetails: updatedOwners
+                                                                                                    }
+                                                                                                }));
+
+                                                                                                const updatedSessionData = {
+                                                                                                    ...JSON.parse(sessionStorage.getItem("BenficiaryDetails")),
+                                                                                                    OwnerShipDetails: updatedOwners
+                                                                                                };
+                                                                                                sessionStorage.setItem("BenficiaryDetails", JSON.stringify(updatedSessionData));
+                                                                                            
+                                                                                            }}
+                                                                                        className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
+                                                                                        >
+                                                                                        Delete
+                                                                                    </button>
+
+
+                                                                                </td>
+
+                                                                                </tr>
+
+                                                                            ))}
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                                </div>
+
+                                                    )}
+
+
+
+                                            </div>
+
+                                        ))}
+                            </div>
+
+                            );
+
+                                    })
+
+                                }
+
+
+                            {/* Submit Button */}
+
+            {/* Buttons */}
+            <div className="flex justify-between mt-8">
+
+                {step > 0 && (
+
+                    <button
+                        onClick={handlePrevious}
+                        className="px-6 py-2 bg-gray-500 text-white rounded"
+                    >
+                        Previous
+                    </button>
+
+                )}
+
+
+                {step < sections.length - 1 ? (
+
+                    <button
+                        onClick={handleNext}
+                        className="px-6 py-2 bg-blue-600 text-white rounded"
+                    >
+                        Next
+                    </button>
+
+                ) : (
+
+                    <button
+                        onClick={handleSubmit}
+                        className="px-6 py-2 bg-green-600 text-white rounded"
+                    >
+                        Submit
+                    </button>
+
+                )}
+
+            </div>
+                            <div className="flex justify-start mt-6">
+
+                                <button
+                                    onClick={handleSubmit}
+                                    className="px-6 py-2 bg-primary-light text-white rounded hover:bg-primary transition"
+                                >
+                                    Submit
+                                </button>
+                                <button
+                                    onClick={handleReset}
+                                    className="px-6 py-2 bg-muted text-white rounded hover:bg-gray-600 ml-4"
+                                >
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                </>
+                    )}
+            </div>
+
+        </div >
+        </>
+
+    );
+
+};
+
+export default CIFCForm;
+
+
+    const [step, setStep] = useState(0);
+
+    const currentSectionKey = sections[step];
+    const currentSection = schema[currentSectionKey];
+ const handleNext = () => {
+
+        const isValid = validateCurrentSection();
+
+        if (!isValid) return;
+
+        setStep(prev => prev + 1);
+    };
+
+    const handlePrevious = () => {
+
+        setStep(prev => prev - 1);
+    };
+
+     <div className="flex justify-between mt-10">
+
+                    {step > 0 ? (
+                        <button
+                            type="button"
+                            onClick={handlePrevious}
+                            className="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                        >
+                            Previous
+                        </button>
+                    ) : (
+                        <div />
+                    )}
+
+                    {step < sections.length - 1 ? (
+
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        >
+                            Next
+                        </button>
+
+                    ) : (
+
+                        <button
+                            type="button"
+                            onClick={handleSubmit}
+                            className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                        >
+                            Submit
+                        </button>
+
+                    )}
+
+                </div>

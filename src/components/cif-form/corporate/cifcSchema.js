@@ -24,7 +24,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     hide: getHideValue("IdentificationDetails", "documentType"),
                     label: "Document Type",
                     type: "select",
-                    required: true,
+                    required: true && !getHideValue("IdentificationDetails", "documentType"),
                     placeholder: "Select Document",
                     options: [
                         { label: "Select Document", value: "" },
@@ -126,7 +126,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     hide: getHideValue("IdentificationDetails", "issuingAuthority"),
                     label: "Issuing Authority",
                     type: "text",
-                    required: true
+                    required: true && !getHideValue("IdentificationDetails", "issuingAuthority"),
                 },
 
                 documentFile: {
@@ -291,133 +291,133 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
             permanentAddress: {
 
-                title: "Permanent Address",
+      title: "Permanent Address",
 
-                addressLine1: {
-                    label: "Address Line 1",
-                    type: "text",
-                    required: true
-                },
+      addressLine1: {
+        label: "Address Line 1",
+        type: "text",
+        required: true
+      },
 
-                addressLine2: {
-                    label: "Address Line 2",
-                    type: "text"
-                },
+      addressLine2: {
+        label: "Address Line 2",
+        type: "text"
+      },
 
-                houseNo: {
-                    label: "House No",
-                    type: "text",
-                    required: true
-                },
+      houseNo: {
+        label: "House No",
+        type: "text",
+        required: true
+      },
 
-                city: {
-                    label: "City",
-                    type: "text",
-                    required: true
-                },
+      city: {
+        label: "City",
+        type: "text",
+        required: true
+      },
 
-                stateProvinceRegion: {
-                    label: "State/Province/Region",
-                    type: "text",
-                    required: true
-                },
+      stateProvinceRegion: {
+        label: "State/Province/Region",
+        type: "text",
+        required: true
+      },
 
 
 
-                countryOfResidence: {
-                    label: "Country of Residence",
-                    type: "select",
-                    required: true,
-                    options: [
-                        { label: "Select Country", value: "" },
-                        { label: "India", value: "india" },
-                        { label: "USA", value: "usa" }
-                    ]
-                },
+      countryOfResidence: {
+        label: "Country of Residence",
+        type: "select",
+        required: true,
+        options: [
+          { label: "Select Country", value: "" },
+          { label: "India", value: "india" },
+          { label: "USA", value: "usa" }
+        ]
+      },
 
-                postalCode: {
-                    label: "Postal Code",
-                    type: "text",
-                    required: true,
-                    validate: (value) => {
-                        if (value.length < 4 || value.length > 7)
-                            return "Postal Code must be between 4 and 7 characters";
-                    }
-                }
-            },
+      postalCode: {
+        label: "Postal Code",
+        type: "text",
+        required: true,
+        validate: (value) => {
+          if (value.length < 4 || value.length > 7)
+            return "Postal Code must be between 4 and 7 characters";
+        }
+      }
+    },
 
-            presentAddress: {
+    presentAddress: {
 
-                title: "Present Address",
+      title: "Present Address",
 
-                sameAsPermanent: {
-                    label: "Same as Permanent Address",
-                    type: "radio",
-                    required: true,
-                    options: [
-                        { label: "Select", value: "" },
-                        { label: "Yes", value: "yes" },
-                        { label: "No", value: "no" }
-                    ]
-                },
+      sameAsPermanent: {
+        label: "Same as Permanent Address",
+        type: "radio",
+        required: true,
+        options: [
+          { label: "Select", value: "" },
+          { label: "Yes", value: "yes" },
+          { label: "No", value: "no" }
+        ]
+      },
 
-                blank: {
-                    label: "",
-                    type: "blank"
-                },
+      blank: {
+        label: "",
+        type: "blank"
+      },
 
-                addressLine1: {
-                    label: "Address Line 1",
-                    type: "text",
-                    required: true
-                },
+      addressLine1: {
+        label: "Address Line 1",
+        type: "text",
+        required: true
+      },
 
-                addressLine2: {
-                    label: "Address Line 2",
-                    type: "text",
-                    required: true
-                },
+      addressLine2: {
+        label: "Address Line 2",
+        type: "text",
+        required: true
+      },
 
-                houseNo: {
-                    label: "House No",
-                    type: "text",
-                    require: true
-                },
+      houseNo: {
+        label: "House No",
+        type: "text",
+        require: true
+      },
 
-                city: {
-                    label: "City",
-                    type: "text",
-                    required: true
-                },
+      city: {
+        label: "City",
+        type: "text",
+        required: true
+      },
 
-                stateProvinceRegion: {
-                    label: "State/Province/Region",
-                    type: "text",
-                    required: true
-                },
+      stateProvinceRegion: {
+        label: "State/Province/Region",
+        type: "text",
+        required: true
+      },
 
-                countryOfResidence: {
-                    label: "Country of Residence",
-                    type: "select",
-                    required: true,
-                    options: [
-                        { label: "Select Country", value: "" },
-                        { label: "India", value: "india" },
-                        { label: "USA", value: "usa" }
-                    ]
-                },
+      countryOfResidence: {
+        label: "Country of Residence",
+        type: "select",
+        required: true,
+        options: [
+          { label: "Select Country", value: "" },
+          { label: "India", value: "india" },
+          { label: "USA", value: "usa" }
+        ]
+      },
 
-                postalCode: {
-                    label: "Postal Code",
-                    type: "text",
-                    required: true,
-                    validate: (value) => {
-                        if (value.length < 4 || value.length > 7)
-                            return "Postal Code must be between 4 and 7 characters";
-                    }
-                }
+      postalCode: {
+        label: "Postal Code",
+        type: "text",
+        required: true,
+        validate: (value) => {
+          if (value.length < 4 || value.length > 7)
+            return "Postal Code must be between 4 and 7 characters";
+        }
+      }
 
-            },
+    },
         },
 
         BenficiaryDetails: {
@@ -509,11 +509,11 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 delFlag: {
-                    label: "Delete Flag",
+                    label: "",
                     type: "checkbox",
 
                     options: [
-                        { label: "", value: true }
+                        { label: "Delete Flag", value: true }
                     ],
 
                 },
@@ -589,59 +589,59 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                         const fields = ["name", "desgination", "idNo", "idIssueCountry", "dob", "currentAddress", "sourceOfBO"];
 
                         // Validation rules (same as schema)
-                        // for (let field of fields) {
-                        //     const value = beneficiary[field];
+                        for (let field of fields) {
+                            const value = beneficiary[field];
 
-                        //     // Required check
-                        //     if (value === undefined || value === "" || (Array.isArray(value) && value.length === 0)) {
-                        //         alert(`${field} is required`);
-                        //         return;
-                        //     }
+                            // Required check
+                            if (value === undefined || value === "" || (Array.isArray(value) && value.length === 0)) {
+                                alert(`${field} is required`);
+                                return;
+                            }
 
-                        //     // Custom field validations
-                        //     switch(field) {
-                        //         case "name":
-                        //         case "desgination":
-                        //         case "idNo":
-                        //         case "idIssueCountry":
-                        //         case "currentAddress":
-                        //             if (value.length < 4 || value.length > 50) {
-                        //                 alert(`${field} must be between 4 and 50 characters`);
-                        //                 return;
-                        //             }
-                        //             break;
+                            // Custom field validations
+                            switch (field) {
+                                case "name":
+                                case "desgination":
+                                case "idNo":
+                                case "idIssueCountry":
+                                case "currentAddress":
+                                    if (value.length < 4 || value.length > 50) {
+                                        alert(`${field} must be between 4 and 50 characters`);
+                                        return;
+                                    }
+                                    break;
 
-                        //         case "dob":
-                        //             if (!value) {
-                        //                 alert("Date of Birth is required");
-                        //                 return;
-                        //             }
-                        //             const today = new Date().toISOString().split("T")[0];
-                        //             if (value > today) {
-                        //                 alert("Date of birth cannot be a future date");
-                        //                 return;
-                        //             }
-                        //             if (new Date().getFullYear() - new Date(value).getFullYear() < 18) {
-                        //                 alert("Minimum age should be 18 years");
-                        //                 return;
-                        //             }
-                        //             break;
+                                case "dob":
+                                    if (!value) {
+                                        alert("Date of Birth is required");
+                                        return;
+                                    }
+                                    const today = new Date().toISOString().split("T")[0];
+                                    if (value > today) {
+                                        alert("Date of birth cannot be a future date");
+                                        return;
+                                    }
+                                    if (new Date().getFullYear() - new Date(value).getFullYear() < 18) {
+                                        alert("Minimum age should be 18 years");
+                                        return;
+                                    }
+                                    break;
 
-                        //         case "sourceOfBO":
-                        //             if (!Array.isArray(value) || value.length === 0) {
-                        //                 alert("Please select at least one Source of BO");
-                        //                 return;
-                        //             }
-                        //             break;
+                                case "sourceOfBO":
+                                    if (!Array.isArray(value) || value.length === 0) {
+                                        alert("Please select at least one Source of BO");
+                                        return;
+                                    }
+                                    break;
 
-                        //         case "delFlag":
-                        //             if (value === undefined || value === null) {
-                        //                 alert("Delete Flag is required");
-                        //                 return;
-                        //             }
-                        //             break;
-                        //     }
-                        // }
+                                case "delFlag":
+                                    if (value === undefined || value === null) {
+                                        alert("Delete Flag is required");
+                                        return;
+                                    }
+                                    break;
+                            }
+                        }
 
                         // ✅ If all validations pass, create new owner
                         const newOwner = {
@@ -655,42 +655,25 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                             delFlag: beneficiary?.delFlag || false
                         };
 
-                         const updatedOwners = [...owners, newOwner];
-                         const updatedBeneficiary = {
-    ...beneficiary,
-    OwnerShipDetails: updatedOwners,
-    name: "",
-    desgination: "",
-    idNo: "",
-    idIssueCountry: "",
-    dob: "",
-    currentAddress: "",
-    sourceOfBO: [],
-    delFlag: false
-};
-                        // Update formData with new owner
-                        // setFormData({
-                        //     ...formData,
-                        //     BenficiaryDetails: {
-                        //         ...beneficiary,
-                        //         OwnerShipDetails: updatedOwners,
+                        const updatedOwners = [...owners, newOwner];
+                        const updatedBeneficiary = {
+                            ...beneficiary,
+                            OwnerShipDetails: updatedOwners,
+                            name: "",
+                            desgination: "",
+                            idNo: "",
+                            idIssueCountry: "",
+                            dob: "",
+                            currentAddress: "",
+                            sourceOfBO: [],
+                            delFlag: false
+                        };
 
-                        //         // Clear input fields after adding
-                        //         name: "",
-                        //         desgination: "",
-                        //         idNo: "",
-                        //         idIssueCountry: "",
-                        //         dob: "",
-                        //         currentAddress: "",
-                        //         sourceOfBO: [],
-                        //         delFlag: false
-                        //     }
-                        // });
                         setFormData(prev => ({
-    ...prev,
-    BenficiaryDetails: updatedBeneficiary
-}));
-                         sessionStorage.setItem("BenficiaryDetails", JSON.stringify(updatedBeneficiary));
+                            ...prev,
+                            BenficiaryDetails: updatedBeneficiary
+                        }));
+                        sessionStorage.setItem("BenficiaryDetails", JSON.stringify(updatedBeneficiary));
                         alert("Beneficial Owner Added Successfully ✅");
                     }
                 }
@@ -701,6 +684,161 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
         DirectorsDetails: {
             title: "Directors Details",
+
+
+            ListOfDirectorsDetails: {
+
+                title: "List of Directors Details",
+                name: {
+                    label: "Name",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50) {
+                            return "Name must be between 4 and 50 characters";
+                        }
+                    }
+                },
+
+                idNo: {
+                    label: "ID No",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50) {
+                            return "ID No must be between 4 and 50 characters";
+                        }
+                    }
+                },
+
+                desgination: {
+                    label: "Designation",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50) {
+                            return "Designation must be between 4 and 50 characters";
+                        }
+                    }
+                },
+                currentAddress: {
+                    label: "Current Address",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 50) {
+                            return "Current Address must be between 4 and 50 characters";
+                        }
+                    }
+                },
+
+                pepIndicator: {
+                    label: "PEP Indicator",
+                    type: "radio",
+                    options: [
+                        { label: "Yes", value: "yes" },
+                        { label: "No", value: "no" }
+                    ],
+                },
+
+                delFlag: {
+                    label: "",
+                    type: "checkbox",
+                    options: [
+                        { label: "Delete Flag", value: true }
+                    ]
+                },
+
+                add: {
+                    label: "Add",
+                    type: "button",
+                    variant: "primary",
+
+                    onClick: ({ formData, setFormData }) => {
+
+                        // ✅ Safely get Directors section
+                        const directorsSection = formData.DirectorsDetails || {};
+
+                        // ✅ Get existing director list
+                        const directorList =
+                            Array.isArray(directorsSection.ListOfDirectorsDetails)
+                                ? directorsSection.ListOfDirectorsDetails
+                                : [];
+
+                        // Fields to validate
+                        const fields = [
+                            "name",
+                            "idNo",
+                            "desgination",
+                            "currentAddress",
+                            "pepIndicator"
+                        ];
+
+                        // ✅ Validation
+                        for (let field of fields) {
+
+                            const value = directorsSection[field];
+
+                            if (!value || (Array.isArray(value) && value.length === 0)) {
+                                alert(`${field} is required`);
+                                return;
+                            }
+
+                            if (
+                                ["name", "idNo", "desgination", "currentAddress"].includes(field)
+                            ) {
+                                if (value.length < 4 || value.length > 50) {
+                                    alert(`${field} must be between 4 and 50 characters`);
+                                    return;
+                                }
+                            }
+                        }
+
+                        // ✅ Create new director object
+                        const newDirector = {
+                            name: directorsSection.name || "",
+                            idNo: directorsSection.idNo || "",
+                            desgination: directorsSection.desgination || "",
+                            currentAddress: directorsSection.currentAddress || "",
+                            pepIndicator: directorsSection.pepIndicator || "",
+                            delFlag: directorsSection?.delFlag || false
+                        };
+
+                        // ✅ Add to ListOfDirectorsDetails array
+                        const updatedList = [...directorList, newDirector];
+
+                        const updatedDirectorsSection = {
+
+                            ...directorsSection,
+
+                            ListOfDirectorsDetails: updatedList,
+
+                            // Reset fields after add
+                            name: "",
+                            idNo: "",
+                            desgination: "",
+                            currentAddress: "",
+                            pepIndicator: "",
+                            delFlag: false
+
+                        };
+
+                        // ✅ Update state
+                        setFormData(prev => ({
+                            ...prev,
+                            DirectorsDetails: updatedDirectorsSection
+                        }));
+
+                        // ✅ Save to sessionStorage
+                        sessionStorage.setItem(
+                            "DirectorsDetails",
+                            JSON.stringify(updatedDirectorsSection)
+                        );
+
+                        alert("Director Added Successfully ✅");
+                    }
+                }
+            }
         }
 
 
