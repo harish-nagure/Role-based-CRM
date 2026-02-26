@@ -6,7 +6,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
             (p) => p.section === section && p.field === field
         );
 
-        console.log(`Checking hide for ${section} - ${field}:`, perm);
+        // console.log(`Checking hide for ${section} - ${field}:`, perm);
         return perm ? perm.hide : false; // default false if not found
     };
 
@@ -291,133 +291,133 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
             permanentAddress: {
 
-      title: "Permanent Address",
+                title: "Permanent Address",
 
-      addressLine1: {
-        label: "Address Line 1",
-        type: "text",
-        required: true
-      },
+                addressLine1: {
+                    label: "Address Line 1",
+                    type: "text",
+                    required: true
+                },
 
-      addressLine2: {
-        label: "Address Line 2",
-        type: "text"
-      },
+                addressLine2: {
+                    label: "Address Line 2",
+                    type: "text"
+                },
 
-      houseNo: {
-        label: "House No",
-        type: "text",
-        required: true
-      },
+                houseNo: {
+                    label: "House No",
+                    type: "text",
+                    required: true
+                },
 
-      city: {
-        label: "City",
-        type: "text",
-        required: true
-      },
+                city: {
+                    label: "City",
+                    type: "text",
+                    required: true
+                },
 
-      stateProvinceRegion: {
-        label: "State/Province/Region",
-        type: "text",
-        required: true
-      },
+                stateProvinceRegion: {
+                    label: "State/Province/Region",
+                    type: "text",
+                    required: true
+                },
 
 
 
-      countryOfResidence: {
-        label: "Country of Residence",
-        type: "select",
-        required: true,
-        options: [
-          { label: "Select Country", value: "" },
-          { label: "India", value: "india" },
-          { label: "USA", value: "usa" }
-        ]
-      },
+                countryOfResidence: {
+                    label: "Country of Residence",
+                    type: "select",
+                    required: true,
+                    options: [
+                        { label: "Select Country", value: "" },
+                        { label: "India", value: "india" },
+                        { label: "USA", value: "usa" }
+                    ]
+                },
 
-      postalCode: {
-        label: "Postal Code",
-        type: "text",
-        required: true,
-        validate: (value) => {
-          if (value.length < 4 || value.length > 7)
-            return "Postal Code must be between 4 and 7 characters";
-        }
-      }
-    },
+                postalCode: {
+                    label: "Postal Code",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 7)
+                            return "Postal Code must be between 4 and 7 characters";
+                    }
+                }
+            },
 
-    presentAddress: {
+            presentAddress: {
 
-      title: "Present Address",
+                title: "Present Address",
 
-      sameAsPermanent: {
-        label: "Same as Permanent Address",
-        type: "radio",
-        required: true,
-        options: [
-          { label: "Select", value: "" },
-          { label: "Yes", value: "yes" },
-          { label: "No", value: "no" }
-        ]
-      },
+                sameAsPermanent: {
+                    label: "Same as Permanent Address",
+                    type: "radio",
+                    required: true,
+                    options: [
+                        { label: "Select", value: "" },
+                        { label: "Yes", value: "yes" },
+                        { label: "No", value: "no" }
+                    ]
+                },
 
-      blank: {
-        label: "",
-        type: "blank"
-      },
+                blank: {
+                    label: "",
+                    type: "blank"
+                },
 
-      addressLine1: {
-        label: "Address Line 1",
-        type: "text",
-        required: true
-      },
+                addressLine1: {
+                    label: "Address Line 1",
+                    type: "text",
+                    required: true
+                },
 
-      addressLine2: {
-        label: "Address Line 2",
-        type: "text",
-        required: true
-      },
+                addressLine2: {
+                    label: "Address Line 2",
+                    type: "text",
+                    required: true
+                },
 
-      houseNo: {
-        label: "House No",
-        type: "text",
-        require: true
-      },
+                houseNo: {
+                    label: "House No",
+                    type: "text",
+                    require: true
+                },
 
-      city: {
-        label: "City",
-        type: "text",
-        required: true
-      },
+                city: {
+                    label: "City",
+                    type: "text",
+                    required: true
+                },
 
-      stateProvinceRegion: {
-        label: "State/Province/Region",
-        type: "text",
-        required: true
-      },
+                stateProvinceRegion: {
+                    label: "State/Province/Region",
+                    type: "text",
+                    required: true
+                },
 
-      countryOfResidence: {
-        label: "Country of Residence",
-        type: "select",
-        required: true,
-        options: [
-          { label: "Select Country", value: "" },
-          { label: "India", value: "india" },
-          { label: "USA", value: "usa" }
-        ]
-      },
+                countryOfResidence: {
+                    label: "Country of Residence",
+                    type: "select",
+                    required: true,
+                    options: [
+                        { label: "Select Country", value: "" },
+                        { label: "India", value: "india" },
+                        { label: "USA", value: "usa" }
+                    ]
+                },
 
-      postalCode: {
-        label: "Postal Code",
-        type: "text",
-        required: true,
-        validate: (value) => {
-          if (value.length < 4 || value.length > 7)
-            return "Postal Code must be between 4 and 7 characters";
-        }
-      }
+                postalCode: {
+                    label: "Postal Code",
+                    type: "text",
+                    required: true,
+                    validate: (value) => {
+                        if (value.length < 4 || value.length > 7)
+                            return "Postal Code must be between 4 and 7 characters";
+                    }
+                }
 
-    },
+            },
         },
 
         BenficiaryDetails: {
@@ -597,8 +597,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                                 alert(`${field} is required`);
                                 return;
                             }
-
-                            // Custom field validations
+                            // eslint-disable-next-line
                             switch (field) {
                                 case "name":
                                 case "desgination":

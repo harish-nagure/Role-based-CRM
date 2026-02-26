@@ -3,7 +3,7 @@ import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { login } from "../../api/api.auth"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
+import { fetchMenusByRole } from "../../api/api.auth";  
 
 // Important for login navigation: Find the first accessible menu and navigate to it
 const findFirstAccessibleMenu = (menus) => {
@@ -25,7 +25,7 @@ const findFirstAccessibleMenu = (menus) => {
 
 const Login = () => {
   const { loginUser } = useAuth();
-  const { menus} = useAuth();
+  const { menus } = useAuth();
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -74,14 +74,22 @@ const Login = () => {
       });
 
       alert("Login successful!" + (res.role ? ` Logged in as ${res.role}` : ""));
-      
-      const menuToNavigate = findFirstAccessibleMenu(menus);
-      console.log("First accessible menu:", menuToNavigate);
-      if (menuToNavigate) {
-        navigate(`/dashboard/${menuToNavigate.path}`);
-      } else {
-        alert("No accessible menu found!");
+
+      try {
+
+        const response = await fetchMenusByRole(res.roleId);
+        console.log(response.data);
+        const menuToNavigate = findFirstAccessibleMenu(response.data || menus);
+        console.log("First accessible menu:", menuToNavigate);
+        if (menuToNavigate) {
+          navigate(`/dashboard/${menuToNavigate.path}`);
+        } else {
+          alert("No accessible menu found!");
+        }
+      } catch (error) {
+        console.log(error);
       }
+
 
     } catch (err) {
       const message =

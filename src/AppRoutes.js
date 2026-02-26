@@ -22,7 +22,7 @@ import CIFRFieldAccessControl from "./components/cif-form/retail/CIFRFieldAccess
 
 //Corporate
 import CIFCForm from "./components/cif-form/corporate/CIFCForm";
-
+import CIFCFieldAccessControl from "./components/cif-form/corporate/CIFCFieldAccessControl";
 
 
 /* ---------- PATH → COMPONENT MAP ---------- */
@@ -37,10 +37,20 @@ const COMPONENT_MAP = {
   "cifr-field-access": CIFRFieldAccessControl,
   "r-a-add": CIFRForm,
   "r-p-modify": CIFRForm,
+  "r-b-modify":CIFRForm,
   "r-v-verify": CIFRForm,
   "r-x-cancel": CIFRForm,
+  "r-i-inquire":CIFRForm,
+
   // corporate
+  "cifc-field-access":CIFCFieldAccessControl,
   "c-a-add":CIFCForm,
+  "c-p-modify":CIFCForm,
+  "c-b-modify":CIFCForm,
+  "c-v-verify":CIFCForm,
+  "c-x-cancel":CIFCForm,
+  "c-i-inquiry":CIFCForm,
+
   
 };
 

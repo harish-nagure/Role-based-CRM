@@ -199,3 +199,25 @@ export const fetchCIFRPermissions = async () => {
      throw error;
   }
 }
+
+
+//CIRC Premissions
+export const saveCIFCPermissions = async (payload) => {
+  try{
+    const res = await api.post(`/cifc/permissions/submit`,payload);
+    return res;
+  }catch(error){
+    console.error("CIRC Permission saving failed");
+     throw error;
+  } 
+}
+
+export const fetchCIFCPermissions = async () => {
+  try{
+    const res = await api.get(`/cifc/permissions/fetch`);
+    return res.data;
+  }catch(error){
+    console.error("CIRC Permission fetching failed");
+     throw error;
+  }
+}
