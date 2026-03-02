@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FIXML xsi:schemaLocation="http://www.finacle.com/fixml executeFinacleScript.xsd" xmlns="http://www.finacle.com/fixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Header>
+        <RequestHeader>
+            <MessageKey>
+                <RequestUUID>cusst_ggfgg_07788 
+                </RequestUUID>
+                <ServiceRequestId>executeFinacleScript</ServiceRequestId>
+                <ServiceRequestVersion>10.2</ServiceRequestVersion>
+                <ChannelId>COR</ChannelId>
+                <UserApplId></UserApplId>
+                <AccessToken>4135bda20f6e60c6ead173db83f8b6ef</AccessToken>
+                <LanguageId></LanguageId>
+            </MessageKey>
+            <RequestMessageInfo>
+                <BankId></BankId>
+                <TimeZone></TimeZone>
+                <EntityId></EntityId>
+                <EntityType></EntityType>
+                <ArmCorrelationId></ArmCorrelationId>
+                <MessageDateTime>2026-02-23T16:59:43.918</MessageDateTime>
+            </RequestMessageInfo>
+            <Security>
+                <Token>
+                    <PasswordToken>
+                        <UserId></UserId>
+                        <Password></Password>
+                    </PasswordToken>
+                </Token>
+                <FICertToken></FICertToken>
+                <RealUserLoginSessionId></RealUserLoginSessionId>
+                <RealUser></RealUser>
+                <RealUserPwd></RealUserPwd>
+                <SSOTransferToken></SSOTransferToken>
+            </Security>
+        </RequestHeader>
+    </Header>
+    <Body>
+        <executeFinacleScriptRequest>
+            <ExecuteFinacleScriptInputVO>
+                <requestId>cust_retailcif_searcher.scr</requestId>
+            </ExecuteFinacleScriptInputVO>
+            <executeFinacleScript_CustomData>
+            
+                <!-- <custinp>city</custinp>
+                 -->
+                
+                 <custinp>{{custinp}}</custinp>
+                <chrgCode></chrgCode>
+                <servOut></servOut>
+                <occuation></occuation>
+                <acType></acType>
+                <city></city>
+                <state></state>
+                <designation></designation>
+                <currency></currency>
+                <regn></regn>
+                <nationality></nationality>
+                <country></country>
+                <Segment></Segment>
+                <SubSeg></SubSeg>
+                <TaxDed></TaxDed>
+                <PrefLc></PrefLc>
+                <freeCode3></freeCode3>
+                <freeCode4></freeCode4>
+                <freeCode5></freeCode5>
+                <freeCode8></freeCode8>
+                <freeCode9></freeCode9>
+                <freeCode10></freeCode10>
+                <sectCode></sectCode>
+                <subSect></subSect>
+                <conLang></conLang>
+                <busType></busType>
+                <Title></Title>
+                <consCode></consCode>
+                <cusStatus></cusStatus>
+                <resStatus></resStatus>
+                <indType></indType>
+                <prIdent></prIdent>
+            
+            </executeFinacleScript_CustomData>
+        </executeFinacleScriptRequest>  
+    </Body>
+</FIXML>

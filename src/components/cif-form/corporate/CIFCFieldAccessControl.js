@@ -3,6 +3,8 @@ import { CIFC_SCHEMA } from "./cifcSchema";
 
 import { saveCIFCPermissions, fetchCIFCPermissions } from "../../../api/api.auth";
 
+
+
 const buildFieldPermissions = (schema) => {
 
     const permissions = [];

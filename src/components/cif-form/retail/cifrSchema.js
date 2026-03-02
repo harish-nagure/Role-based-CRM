@@ -61,8 +61,9 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
       placeOfIssue: {
         hide: getHideValue("IdentificationDetails", "placeOfIssue"),
         label: "Place Of Issue",
-        type: "text",
+        type: "search",
         required: true,
+         searchValue: "place_of_issue",
         validate: (value) => {
           if (!value) return;
           if (value.length < 3)
@@ -73,7 +74,8 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
       countryOfIssue: {
         hide: getHideValue("IdentificationDetails", "countryOfIssue"),
         label: "Country Of Issue",
-        type: "text",
+        type: "search",
+        searchValue: "city",
         required: true,
         validate: (value) => {
           if (!value) return;
@@ -123,7 +125,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         hide: getHideValue("IdentificationDetails", "issuingAuthority"),
         label: "Issuing Authority",
         type: "text",
-        required: true
+        required: true && !getHideValue("IdentificationDetails", "issuingAuthority"),
       },
 
       documentFile: {

@@ -11,6 +11,7 @@ const CIFRForm = () => {
 
     // const schema = CIFR_SCHEMA({ canWrite: true });
     const [schema, setSchema] = useState({});
+    const [searchResults, setSearchResults] = useState({});
 
     // console.log("Generated Schema:", schema);
 
@@ -25,7 +26,7 @@ const CIFRForm = () => {
     const [selectTypeData, setSelectTypeData] = useState({
         functionType: "",
         cifNumber: "",
-         customerType:""
+        customerType: ""
     });
 
     const location = useLocation();
@@ -45,7 +46,7 @@ const CIFRForm = () => {
     //eslint-disable-next-line
     const [permissions, setPermissions] = useState([]);
 
-
+    //permissions loader
     useEffect(() => {
         const loadPermissions = async () => {
             try {
@@ -59,11 +60,11 @@ const CIFRForm = () => {
         };
         loadPermissions();
     }, [])
+
+
+
     /* ================= SELECT TYPE HANDLER ================= */
-
-
-
-
+    //Forms display
     const handleSelectType = async (data) => {
 
 
@@ -124,7 +125,7 @@ const CIFRForm = () => {
         }
     };
 
-
+    //Validation
     const validateField = (
         section,
         name,
@@ -159,7 +160,6 @@ const CIFRForm = () => {
 
 
     /* ================= HANDLE CHANGE ================= */
-
     const handleChange = (
         section,
         name,
@@ -253,7 +253,6 @@ const CIFRForm = () => {
 
 
     /* ================= SUBMIT ================= */
-
     const handleSubmit = () => {
 
         let hasError = false;
@@ -318,6 +317,97 @@ const CIFRForm = () => {
         setErrors({});
     };
 
+
+
+    // const handleSearch = async ({ searchKey, searchText, section, name }) => {
+
+    //     try {
+
+    //         // const res = await api.post("/search", {
+    //         //     key: searchKey,
+    //         //     value: searchText
+    //         // });
+
+    //          const res = {
+    //         data: [
+    //             "Mumbai",
+    //             "Pune",
+    //             "Delhi",
+    //             "Chennai",
+    //             "Bangalore"
+    //         ]
+    //     };
+    //         const filtered = res.data.filter(item =>
+    //         item.toLowerCase().includes(searchText.toLowerCase())
+    //     );
+
+    //     console.log("Filtered result:", filtered,searchKey);
+
+    //     // ✅ set dropdown results correctly
+    //     setSearchResults(prev => ({
+    //         ...prev,
+    //         [`${section}.${name}`]: filtered
+    //     }));
+
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+
+    // };
+const handleSearch = async ({ searchKey, searchText, section, name }) => {
+const data = [
+  {
+    searchValue: "place_of_issue",
+    data: [
+      "Mumbai",
+      "Pune",
+      "Delhi",
+      "Chennai",
+      "Bangalore",
+      "Delhi",
+      "Chennai",
+      "Bangalore"
+    ]
+  },
+  {
+    searchValue: "city",
+    data: [
+      "USA",
+      "London",
+      "India"
+    ]
+  }
+];
+  try {
+
+    // find matching searchValue
+    const matched = data.find(item => item.searchValue === searchKey);
+
+    if (!matched) {
+      setSearchResults(prev => ({
+        ...prev,
+        [`${section}.${name}`]: []
+      }));
+      return;
+    }
+
+    // filter results
+    const filtered = matched.data.filter(item =>
+      item.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    console.log("Filtered result:", filtered, searchKey);
+
+    setSearchResults(prev => ({
+      ...prev,
+      [`${section}.${name}`]: filtered
+    }));
+
+  } catch (error) {
+    console.error(error);
+  }
+
+};
     /* ================= UI ================= */
 
     return (
@@ -422,7 +512,10 @@ const CIFRForm = () => {
                                                                     key={name}
                                                                     section={sectionKey}
                                                                     name={name}
-                                                                    field={field}
+                                                                    field={{
+                                                                        ...field,
+                                                                        onSearch: handleSearch
+                                                                    }}
                                                                     value={
                                                                         formData?.[sectionKey]?.[name]
                                                                     }
@@ -431,7 +524,8 @@ const CIFRForm = () => {
                                                                     }
                                                                     onChange={handleChange}
                                                                     formData={formData}
-
+                                                                    searchResults={searchResults[`${sectionKey}.${name}`] || []}
+                                                                    setSearchResults={setSearchResults}
                                                                 />
 
                                                             ))
