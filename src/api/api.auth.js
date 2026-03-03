@@ -221,3 +221,16 @@ export const fetchCIFCPermissions = async () => {
      throw error;
   }
 }
+
+
+
+export const fetchSearcherValue = async () => {
+  try{
+    //check
+    const res = await api.post(`/finacale/call`);
+    return res.data;
+  }catch(error){
+    console.error("CIRC Permission fetching failed");
+     throw error;
+  }
+}

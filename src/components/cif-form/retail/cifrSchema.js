@@ -1,5 +1,7 @@
 // schema.js
 
+import { Currency } from "lucide-react";
+
 export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
   const getHideValue = (section, field) => {
@@ -150,6 +152,15 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
       title: "General Information",
 
+      personTitle:{
+        hide: getHideValue("generalInformation", "personTitle"),
+        label: "Person Title",
+        type: "search",
+        // searchValue:"titl","PERSONSALUTATION ",
+        searchValue:"personsalutation",
+        required: true,
+      },
+
       firstName: {
         hide: getHideValue("generalInformation", "firstName"),
         label: "First Name",
@@ -176,7 +187,10 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         type: "text"
       },
 
-
+blank: {
+        label: "",
+        type: "blank"
+      },
 
 
       gender: {
@@ -201,7 +215,9 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
       birthCountry: {
         hide: getHideValue("generalInformation", "birthCountry"),
         label: "Birth Country",
-        type: "text",
+        type: "search",
+        // COUNTRY 
+        searchValue:"country",
         required: true
       },
 
@@ -216,6 +232,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         ]
       },
 
+      
       nonResidentIndicator: {
         label: "Non Resident Indicator",
         type: "select",
@@ -227,6 +244,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         ]
       },
 
+    
       nonResidentDate: {
         label: "Non Resident Date",
         type: "date",
@@ -242,11 +260,60 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
           }
         }
       },
+
+      staffIndicator: {
+        label: "Staff Indicator",
+        type: "select",
+        required: true,
+        options: [
+          { label: "Select", value: "" },
+          { label: "Yes", value: "yes" },
+          { label: "No", value: "no" }
+        ]
+      },
+
+      staffId:{
+        label: "Staff ID",
+        type: "text",
+        required: (form) => form.staffIndicator === "yes" ? true : false,
+        validate: (value, form) => {
+          if (form.staffIndicator === "yes" && !value)
+            return "Staff ID is required";
+        } 
+      },
+
       primarySolid: {
         label: "Primary SOLID",
-        type: "text",
+        type: "search",
+        // SERVICE_OUTLET
+        searchValue:"service_outlet",
         required: true
       },
+
+      segment:{
+        label: "Segment",
+        type: "search",
+        // SEGMENTATION_CLASS
+        searchValue:"segmentation_class",
+        required: true
+      },
+
+      subSegment: {
+        label: "Sub Segment",
+        type: "search",
+        // SUB_SEGMENT
+        searchValue:"sub_segment",
+        required: true
+      },
+
+      taxTable: {
+        label: "Tax deduction at sourcetable",
+        type: "search",
+        // TAX_SLAB
+        searchValue:"tax_slab",
+        required: true
+      },
+
     },
 
     primaryIntroducerDetails: {
@@ -515,13 +582,33 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
       },
     },
 
+    currency:{
+      title: "Currency",
+      ccy:{
+        label: "CCY",
+        type:"search",
+        required: true,
+        // CURRENCY
+        searchValue:"currency",
+      }
+    },
     generalDetails: {
 
       title: "General Details",
       nationality: {
         label: "Nationality",
-        type: "text",
+        type: "search",
+        // NATIONALITY
+
+        searchValue:"nationality",
         required: true,
+      },
+      resdingCountry: {
+        label: "Residing Country",
+        type: "search",
+        // COUNTRY
+        searchValue:"country",
+        required: true
       },
       martialStatus: {
         label: "Marital Status",
@@ -563,7 +650,10 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
       title: "Employment Details",
       occupation: {
         label: "Occupation",
-        type: "text",
+        type: "search",
+        // CONTACT_OCCUPATION
+
+        searchValue:"contact_occupation",
         required: true,
       },
       employerName: {

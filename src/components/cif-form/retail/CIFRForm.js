@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DynamicField from "../DynamicField";
 import { CIFR_SCHEMA } from "./cifrSchema";
 import SelectType from "../SelectType";
-import { fetchCIFRPermissions } from "../../../api/api.auth";
+import { fetchCIFRPermissions,fetchSearcherValue } from "../../../api/api.auth";
 
 const CIFRForm = () => {
 
@@ -376,11 +376,22 @@ const data = [
       "London",
       "India"
     ]
+  },{
+    searchValue: "country",
+    data: [
+      "USA",
+      "London",
+      "India"
+    ]
   }
 ];
   try {
 
     // find matching searchValue
+    const res = await fetchSearcherValue(searchKey);
+
+    console.log(res);
+
     const matched = data.find(item => item.searchValue === searchKey);
 
     if (!matched) {
