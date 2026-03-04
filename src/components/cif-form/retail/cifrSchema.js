@@ -412,17 +412,19 @@ blank: {
 
 
       countryOfResidence: {
+         hide:getHideValue("permanentAddress","countryOfResidence"),
         label: "Country of Residence",
         type: "search",
         searchValue:"coun",
-        required: true,
+        required: true && !getHideValue("permanentAddress","countryOfResidence"),
         
       },
 
       postalCode: {
+        hide: getHideValue("permanentAddress","postalCode"),
         label: "Postal Code",
         type: "text",
-        required: true,
+        required: true && !getHideValue("permanentAddress","postalCode"),
         validate: (value) => {
           if (value.length < 4 || value.length > 7)
             return "Postal Code must be between 4 and 7 characters";
@@ -435,9 +437,10 @@ blank: {
       title: "Present Address",
 
       sameAsPermanent: {
+        hide: getHideValue("presentAddress","sameAsPermanent"),
         label: "Same as Permanent Address",
         type: "radio",
-        required: true,
+        required: true && !getHideValue("presentAddress","sameAsPermanent"),
         options: [
           { label: "Select", value: "" },
           { label: "Yes", value: "yes" },
@@ -446,53 +449,62 @@ blank: {
       },
 
       blank: {
+       hide: getHideValue("presentAddress","blank"),
         label: "",
-        type: "blank"
+        type: "blank",
+        required:false && !getHideValue(""),
       },
 
       addressLine1: {
+        hide: getHideValue("presentAddress","addressLine1"),
         label: "Address Line 1",
         type: "text",
-        required: true
+        required: true && !getHideValue("presentAddress","addressLine1"),
       },
 
       addressLine2: {
+        hide: getHideValue("presentAddress","addressLine2"),
         label: "Address Line 2",
         type: "text",
-        required: true
+        required: true && !getHideValue("presentAddress","addressLine2"),
       },
 
       houseNo: {
+        hide: getHideValue("presentAddress","houseNo"),
         label: "House No",
         type: "text",
-        require: true
+        require: true && !getHideValue("presentAddress","houseNo"),
       },
 
       city: {
+        hide: getHideValue("presentAddress","city"),
         label: "City",
         type: "search",
         searchValue:"city",
-        required: true
+        required: true & !getHideValue("presentAddress","city"),
       },
 
       stateProvinceRegion: {
+       hide: getHideValue("presentAddress","stateProvinceRegion"),
         label: "State/Province/Region",
         type: "search",
         searchValue:"state",
-        required: true
+        required: true && !getHideValue("presentAddress","stateProvinceRegion"),
       },
 
       countryOfResidence: {
+        hide: getHideValue("presentAddress","countryOfResidence"),
         label: "Country of Residence",
         type: "search",
         searchValue:"coun",
-        required: true,
+        required: true && !getHideValue("presentAddress","countryOfResidence"),
       },
 
       postalCode: {
+        hide: getHideValue("presentAddress"," postalCode"),
         label: "Postal Code",
         type: "text",
-        required: true,
+        required: true && !getHideValue("presentAddress"," postalCode"),
         validate: (value) => {
           if (value.length < 4 || value.length > 7)
             return "Postal Code must be between 4 and 7 characters";
@@ -506,34 +518,40 @@ blank: {
       title: "NRB Address",
 
       addressLine1: {
+        hide: getHideValue("nrbAddress","addressLine1"),
         label: "Address Line 1",
         type: "text",
-        required: true
+        required: true && !getHideValue("nrbAddress","addressLine1"),
       },
 
       addressLine2: {
+        hide: getHideValue("nrbAddress","addressLine2"),
         label: "Address Line 2",
-        type: "text"
+        type: "text",
+        required:false && !getHideValue(""),
       },
 
       streetNo: {
+        hide:getHideValue("nrbAddress","streetNo"),
         label: "Street No",
         type: "text",
-        required: true
+        required: true && !getHideValue("nrbAddress","streetNo"),
       },
 
       city: {
+        hide: getHideValue("nrbAddress","city"),
         label: "City",
         type: "search",
         searchValue:"city",
-        required: true
+        required: true && !getHideValue("nrbAddress","city"),
       },
 
       countryOfResidence: {
+        hide: getHideValue("nrbAddress","countryOfResidence"),
         label: "Country of Residence",
         type: "search",
         searchValue:"coun",
-        required: true,
+        required: true && !getHideValue("nrbAddress","countryOfResidence"),
         // options: [
         //   { label: "Select Country", value: "" },
         //   { label: "India", value: "india" },
@@ -542,9 +560,10 @@ blank: {
       },
 
       postalCode: {
+        hide: getHideValue("nrbAddress","postalCode"),
         label: "Postal Code",
         type: "text",
-        required: true,
+        required: true && !getHideValue("nrbAddress","postalCode"),
         validate: (value) => {
           if (value.length < 4 || value.length > 7)
             return "Postal Code must be between 4 and 7 characters";
@@ -557,9 +576,10 @@ blank: {
       title: "Phone Details",
 
       primaryPhoneNumber: {
+        hide: getHideValue("phoneDetails","primaryPhoneNumber"),
         label: "Primary Phone Number",
         type: "text",
-        required: true,
+        required: true && !getHideValue("phoneDetails","primaryPhoneNumber"),
         validate: (value) => {
           if (!/^\d{10}$/.test(value))
             return "Phone number must be 10 digits";
@@ -567,8 +587,10 @@ blank: {
       },
 
       secondaryPhoneNumber: {
+        hide: getHideValue("phoneDetails","secondaryPhoneNumber"),
         label: "Secondary Phone Number",
         type: "text",
+        required:false && !getHideValue(""),
         validate: (value) => {
           if (value && !/^\d{10}$/.test(value))
             return "Phone number must be 10 digits";
@@ -581,9 +603,10 @@ blank: {
       title: "Email Details",
 
       emailId: {
+        hide: getHideValue("emailDetails","emailId"),
         label: "Email",
         type: "text",
-        required: true,
+        required: true && !getHideValue("emailDetails","emailId"),
         validate: (value) => {
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
             return "Invalid email address";
@@ -591,8 +614,10 @@ blank: {
       },
 
       alternateEmailId: {
+         hide: getHideValue("emailDetails","alternateEmailId"),
         label: "Alternate Email",
         type: "text",
+        required:false && !getHideValue(""),
         validate: (value) => {
           if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
             return "Invalid email address";
@@ -603,40 +628,46 @@ blank: {
     currency:{
       title: "Currency",
       ccy:{
+        hide:getHideValue("currency","ccy"),
         label: "CCY",
         type:"search",
-        required: true,
+        required: true && !getHideValue("currency","ccy"),
         // CURRENCY
         searchValue:"crcy",
       },
       creditDiscount:{
+        hide:getHideValue("currency","creditDiscount"),
         label:"Credit Discount pcnt",
         type:"text",
-        required:true,
+        required:true && !getHideValue("currency","creditDiscount"),
       
       },
       debitDiscount:{
+         hide:getHideValue("currency","debitDiscount"),
         label:"Debit Discount pcnt",
         type:"text",
-        required:true,
+        required:true && !getHideValue("currency","debitDiscount"),
       
       },
        withoutholdingTaxDiscount:{
+        hide: getHideValue("currency","withoutholdingTaxDiscount"),
         label:"Withoutholding Tax pcnt",
         type:"text",
-        required:true,
+        required:true && !getHideValue("currency","withoutholdingTaxDiscount"),
       
       },
        withoutholdingTaxFloorLimit:{
+        hide:getHideValue("currency","withoutholdingTaxFloorLimit"),
         label:"Withoutholding Tax Floor Limit",
         type:"text",
-        required:true,
+        required:true && !getHideValue("currency","withoutholdingTaxFloorLimit"),
       
       },
        preferentialexpiryDate:{
+        hide:getHideValue("currency","preferentialexpiryDate"),
         label:"Preferential Expiry Date ",
         type:"date",
-        required:true,
+        required:true && !getHideValue("currency","preferentialexpiryDate"),
       
       },
     
@@ -645,24 +676,27 @@ blank: {
 
       title: "General Details",
       nationality: {
+        hide:getHideValue("generalDetails","nationality"),
         label: "Nationality",
         type: "search",
         // NATIONALITY
 
         searchValue:"NATN",
-        required: true,
+        required: true && !getHideValue("generalDetails","nationality"),
       },
       resdingCountry: {
+        hide:getHideValue("generalDetails","resdingCountry"),
         label: "Residing Country",
         type: "search",
         // COUNTRY
         searchValue:"coun",
-        required: true
+        required: true && !getHideValue("generalDetails","resdingCountry"),
       },
       martialStatus: {
+        hide:getHideValue("generalDetails","martialStatus"),
         label: "Marital Status",
         type: "select",
-        required: true,
+        required: true && !getHideValue("generalDetails","martialStatus"),
         options: [
           { label: "Select", value: "" },
           { label: "Single", value: "single" },
@@ -672,6 +706,7 @@ blank: {
         ]
       },
       spouseName: {
+       
         label: "Spouse Name",
         type: "text",
         required: (form) => form.martialStatus === "married" ? true : false,
@@ -698,22 +733,27 @@ blank: {
 
       title: "Employment Details",
       occupation: {
+        hide: getHideValue("employmentDetails","occupation"),
         label: "Occupation",
         type: "search",
         // CONTACT_OCCUPATION
 
         searchValue:"OCCU",
-        required: true,
+        required: true && !getHideValue("employmentDetails","occupation"),
       },
+      
       employerName: {
+        hide:getHideValue("employmentDetails","employerName"),
         label: "Employer Name",
         type: "text",
-        required: true,
+        required: true && !getHideValue("employmentDetails","employerName"),
       },
+
       officeAddress: {
+        hide: getHideValue("employmentDetails","officeAddress"),
         label: "Office Address",
         type: "text",
-        required: true,
+        required: true && !getHideValue("employmentDetails","officeAddress"),
       },
     },
 
@@ -721,28 +761,33 @@ blank: {
 
       title: "Income Details",
       annualIncome: {
+        hide:getHideValue("incomeDetails","annualIncome"),
         label: "Annual Income",
         type: "text",
-        required: true,
+        required: true && !getHideValue("incomeDetails","annualIncome"),
       },
+      
       sourceOfIncome: {
+       hide: getHideValue("incomeDetails","sourceOfIncome"),
         label: "Source of Income",
         type: "text",
-        required: true,
+        required: true && !getHideValue("incomeDetails","sourceOfIncome"),
       },
     },
 
     BankDetails: {
       title: "Bank Details",
       bankName: {
+        hide:getHideValue("BankDetails","bankName"),
         label: "Bank Name",
         type: "text",
-        required: true,
+        required: true && !getHideValue("BankDetails","bankName"),
       },
       branchName: {
+        hide:getHideValue("BankDetails","branchName"),
         label: "Branch Name",
         type: "text",
-        required: true
+        required: true && !getHideValue("BankDetails","branchName"),
       },
     },
   }
