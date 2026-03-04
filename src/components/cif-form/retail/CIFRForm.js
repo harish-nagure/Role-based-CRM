@@ -354,61 +354,113 @@ const CIFRForm = () => {
     //     }
 
     // };
-const handleSearch = async ({ searchKey, searchText, section, name }) => {
-const data = [
-  {
-    searchValue: "place_of_issue",
-    data: [
-      "Mumbai",
-      "Pune",
-      "Delhi",
-      "Chennai",
-      "Bangalore",
-      "Delhi",
-      "Chennai",
-      "Bangalore"
-    ]
-  },
-  {
-    searchValue: "city",
-    data: [
-      "USA",
-      "London",
-      "India"
-    ]
-  },{
-    searchValue: "country",
-    data: [
-      "USA",
-      "London",
-      "India"
-    ]
-  }
-];
-  try {
 
-    // find matching searchValue
-    const res = await fetchSearcherValue(searchKey);
+    const parseFinacleResponse = (xmlString) => {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
-    console.log(res);
+  const customData = xmlDoc.getElementsByTagName("executeFinacleScript_CustomData")[0];
+  const recCount = parseInt(
+    customData.getElementsByTagName("recCount")[0]?.textContent || 0
+  );
 
-    const matched = data.find(item => item.searchValue === searchKey);
+  const result = [];
 
-    if (!matched) {
-      setSearchResults(prev => ({
-        ...prev,
-        [`${section}.${name}`]: []
-      }));
-      return;
+  for (let i = 1; i <= recCount; i++) {
+    const value = customData.getElementsByTagName(`value_${i}`)[0]?.textContent;
+    const label = customData.getElementsByTagName(`localetext_${i}`)[0]?.textContent;
+    const rating = customData.getElementsByTagName(`rating_${i}`)[0]?.textContent;
+    const ratingType = customData.getElementsByTagName(`ratingtype_${i}`)[0]?.textContent;
+
+    if (value && label) {
+      result.push({
+        value,
+        label,
+        rating,
+        ratingType
+      });
     }
+  }
 
-    // filter results
-    const filtered = matched.data.filter(item =>
-      item.toLowerCase().includes(searchText.toLowerCase())
+  return result;
+};
+// const handleSearch = async ({ searchKey, searchText, section, name }) => {
+// const data = [
+//   {
+//     searchValue: "place_of_issue",
+//     data: [
+//       "Mumbai",
+//       "Pune",
+//       "Delhi",
+//       "Chennai",
+//       "Bangalore",
+//       "Delhi",
+//       "Chennai",
+//       "Bangalore"
+//     ]
+//   },
+//   {
+//     searchValue: "city",
+//     data: [
+//       "USA",
+//       "London",
+//       "India"
+//     ]
+//   },{
+//     searchValue: "country",
+//     data: [
+//       "USA",
+//       "London",
+//       "India"
+//     ]
+//   }
+// ];
+//   try {
+
+//     // find matching searchValue
+//     const res = await fetchSearcherValue(searchKey);
+
+//     console.log("Harish"+res);
+
+//     const matched = data.find(item => item.searchValue === searchKey);
+
+//     if (!matched) {
+//       setSearchResults(prev => ({
+//         ...prev,
+//         [`${section}.${name}`]: []
+//       }));
+//       return;
+//     }
+
+//     // filter results
+//     const filtered = matched.data.filter(item =>
+//       item.toLowerCase().includes(searchText.toLowerCase())
+//     );
+
+//     console.log("Filtered result:", filtered, searchKey);
+
+//     setSearchResults(prev => ({
+//       ...prev,
+//       [`${section}.${name}`]: filtered
+//     }));
+
+//   } catch (error) {
+//     console.error(error);
+//   }
+
+// };
+const handleSearch = async ({ searchKey, searchText, section, name }) => {
+  try {
+    const xmlResponse = await fetchSearcherValue(searchKey);
+console.log("XML"+xmlResponse);
+    const parsedData = parseFinacleResponse(xmlResponse);
+    console.log("Data json"+parsedData[0])
+    console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
+    const filtered = parsedData.filter(item =>
+      item.label.toLowerCase().includes(searchText.toLowerCase())
     );
-
-    console.log("Filtered result:", filtered, searchKey);
-
+    
+    console.log("Fileter"+filtered)
     setSearchResults(prev => ({
       ...prev,
       [`${section}.${name}`]: filtered
@@ -417,9 +469,8 @@ const data = [
   } catch (error) {
     console.error(error);
   }
-
-};
-    /* ================= UI ================= */
+};   
+/* ================= UI ================= */
 
     return (
         <>
@@ -535,7 +586,7 @@ const data = [
                                                                     }
                                                                     onChange={handleChange}
                                                                     formData={formData}
-                                                                    searchResults={searchResults[`${sectionKey}.${name}`] || []}
+                                                                    searchResults={searchResults}
                                                                     setSearchResults={setSearchResults}
                                                                 />
 

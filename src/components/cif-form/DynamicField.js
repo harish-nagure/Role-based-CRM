@@ -13,7 +13,7 @@ const DynamicField = ({
   formData,
   hide,
   setFormData,
-  searchResults = [],
+  searchResults = {},
   setSearchResults
 }) => {
   const wrapperRef = useRef(null);
@@ -333,81 +333,88 @@ const DynamicField = ({
 
         </div>
       )} */}
+{field.type === "search" && (
+  <div className="relative w-full" ref={wrapperRef}>
 
-      {field.type === "search" && (
-        <div className="relative w-full" ref={wrapperRef}>
+    {/* Input Wrapper */}
+    <div className="relative">
 
-          {/* Input Wrapper */}
-          <div className="relative">
+      {/* Search Icon */}
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none">
+        <TextSearch size={20} />
+      </div>
 
-            {/* Search Icon */}
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none">
-              <TextSearch size={20} />
-            </div>
+      {/* Input */}
+      <input
+        type="text"
+        value={value || ""}
+        placeholder={field.placeholder || "Search..."}
+        disabled={isDisabled}
+        className={commonClass}
+        onFocus={() => {
+          field.onSearch?.({
+            searchKey: field.searchValue,
+            searchText: "",
+            section,
+            name
+          });
+        }}
+        onChange={(e) => {
+          const val = e.target.value;
 
-            {/* Input */}
-            <input
-              type="text"
-              value={value || ""}
-              placeholder={field.placeholder || "Search..."}
-              disabled={isDisabled}
-              className={`${commonClass}`}
-              onFocus={() => {
-                field.onSearch?.({
-                  searchKey: field.searchValue,
-                  searchText: "",
-                  section,
-                  name
-                });
-              }}
-              onChange={(e) => {
-                const val = e.target.value;
+          onChange(section, name, val, field);
 
-                onChange(section, name, val, field);
+          field.onSearch?.({
+            searchKey: field.searchValue,
+            searchText: val,
+            section,
+            name
+          });
+        }}
+      />
+    </div>
 
-                field.onSearch?.({
-                  searchKey: field.searchValue,
-                  searchText: val,
-                  section,
-                  name
-                });
-              }}
-            />
+    {/* Dropdown */}
+    {searchResults?.[`${section}.${name}`]?.length > 0 && (
+      <div
+        className="absolute mt-1 w-full z-50 bg-white border border-muted 
+        rounded-lg shadow-md max-h-48 overflow-y-auto custom-scrollbar"
+      >
+        {searchResults[`${section}.${name}`].map((item) => (
+          <div
+            key={item.value}
+            className="
+              px-4 py-2 text-sm
+              cursor-pointer
+              transition-all duration-150 ease-in-out
+              hover:text-primary
+              hover:bg-[#7a809660]
+            "
+            onClick={() => {
+              // ✅ Put selected label in input
+              onChange(section, name, item.label, field);
 
+              // ✅ Optional: store value separately if needed
+              // setFormData(prev => ({
+              //   ...prev,
+              //   [`${name}_code`]: item.value
+              // }));
+
+              // ✅ Clear dropdown
+              setSearchResults(prev => ({
+                ...prev,
+                [`${section}.${name}`]: []
+              }));
+            }}
+          >
+            {item.label}
           </div>
+        ))}
+      </div>
+    )}
 
-          {/* Dropdown */}
-          {searchResults?.length > 0 && (
-            <div className="absolute mt-1 w-full z-50 bg-white border border-muted 
-            rounded-lg shadow-md max-h-48 overflow-y-auto custom-scrollbar">
-              {searchResults.map((item, index) => (
-                <div
-                  key={index}
-                  className="
-                    px-4 py-2 text-sm
-                    cursor-pointer
-                    transition-all duration-150 ease-in-out
-                    hover:text-primary
-                    hover:bg-[#7a809660]
-                  "
-                  onClick={() => {
-                    onChange(section, name, item, field);
-
-                    setSearchResults(prev => ({
-                      ...prev,
-                      [`${section}.${name}`]: []
-                    }));
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
-
-            </div>
-          )}
-
-        </div>
-      )}
+  </div>
+)}
       {error && (
         <span className="text-error text-xs">
           {error}

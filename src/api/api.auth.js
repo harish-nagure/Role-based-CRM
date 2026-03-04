@@ -224,10 +224,10 @@ export const fetchCIFCPermissions = async () => {
 
 
 
-export const fetchSearcherValue = async () => {
+export const fetchSearcherValue = async (custinpValue) => {
   try{
     //check
-    const res = await api.post(`/finacale/call`);
+    const res = await api.post("/finacle/call?custinp=" + custinpValue);
     return res.data;
   }catch(error){
     console.error("CIRC Permission fetching failed");

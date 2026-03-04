@@ -23,7 +23,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         hide: getHideValue("IdentificationDetails", "documentType"),
         label: "Document Type",
         type: "select",
-        required: true,
+        required: true && !getHideValue("IdentificationDetails", "documentType"),
         placeholder: "Select Document",
         options: [
           { label: "Select Document", value: "" },
@@ -45,7 +45,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         hide: getHideValue("IdentificationDetails", "documentNumber"),
         label: "Document Number",
         type: "text",
-        required: true,
+        required: true && !getHideValue("IdentificationDetails", "documentNumber"),
         placeholder: "Enter Document Number",
 
 
@@ -64,21 +64,21 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         hide: getHideValue("IdentificationDetails", "placeOfIssue"),
         label: "Place Of Issue",
         type: "search",
-        required: true,
-         searchValue: "place_of_issue",
+        required: true && !getHideValue("IdentificationDetails", "placeOfIssue"),
+         searchValue: "city",
         validate: (value) => {
           if (!value) return;
           if (value.length < 3)
             return "Place of Issue must be at least 3 characters";
         }
       },
-
+      
       countryOfIssue: {
         hide: getHideValue("IdentificationDetails", "countryOfIssue"),
         label: "Country Of Issue",
         type: "search",
-        searchValue: "city",
-        required: true,
+        searchValue: "coun",
+        required: true && !getHideValue("IdentificationDetails", "countryOfIssue"),
         validate: (value) => {
           if (!value) return;
           if (value.length < 3)
@@ -157,7 +157,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         label: "Person Title",
         type: "search",
         // searchValue:"titl","PERSONSALUTATION ",
-        searchValue:"personsalutation",
+        searchValue:"titl",
         required: true,
       },
 
@@ -217,11 +217,11 @@ blank: {
         label: "Birth Country",
         type: "search",
         // COUNTRY 
-        searchValue:"country",
+        searchValue:"coun",
         required: true
       },
-
       minorIndicator: {
+        hide: getHideValue("generalInformation", "minorIndicator"),
         label: "Minor Indicator",
         type: "select",
         required: true,
@@ -234,9 +234,11 @@ blank: {
 
       
       nonResidentIndicator: {
+        
+        hide: getHideValue("generalInformation", "nonResidentIndicator"),
         label: "Non Resident Indicator",
         type: "select",
-        required: true,
+        required: true && !getHideValue("generalInformation", "nonResidentIndicator"),
         options: [
           { label: "Select", value: "" },
           { label: "Yes", value: "yes" },
@@ -286,15 +288,16 @@ blank: {
         label: "Primary SOLID",
         type: "search",
         // SERVICE_OUTLET
-        searchValue:"service_outlet",
+        searchValue:"SEROUT",
         required: true
       },
 
       segment:{
+      
         label: "Segment",
         type: "search",
         // SEGMENTATION_CLASS
-        searchValue:"segmentation_class",
+        searchValue:"SEGME",
         required: true
       },
 
@@ -302,7 +305,7 @@ blank: {
         label: "Sub Segment",
         type: "search",
         // SUB_SEGMENT
-        searchValue:"sub_segment",
+        searchValue:"SUBSEGME",
         required: true
       },
 
@@ -310,7 +313,7 @@ blank: {
         label: "Tax deduction at sourcetable",
         type: "search",
         // TAX_SLAB
-        searchValue:"tax_slab",
+        searchValue:"TAX",
         required: true
       },
 
