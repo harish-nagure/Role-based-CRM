@@ -1,6 +1,5 @@
 // schema.js
 
-import { Currency } from "lucide-react";
 
 export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
@@ -90,7 +89,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         hide: getHideValue("IdentificationDetails", "issueDate"),
         label: "Issue Date",
         type: "date",
-        required: true,
+        required: true && !getHideValue("IdentificationDetails", "issueDate"),
 
         validate: (value) => {
           if (!value) return;
@@ -105,7 +104,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         hide: getHideValue("IdentificationDetails", "expiryDate"),
         label: "Expiry Date",
         type: "date",
-        required: true,
+        required: true && !getHideValue("IdentificationDetails", "expiryDate"),
 
         validate: (value, form) => {
 
@@ -134,7 +133,7 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         hide: getHideValue("IdentificationDetails", "documentFile"),
         label: "Upload Document",
         type: "file",
-        required: true,
+        required: true && !getHideValue("IdentificationDetails", "documentFile"),
         accept: ".pdf,.png,.jpg,.jpeg",
         validate: (value) => {
           if (!value) return;
@@ -158,27 +157,28 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         type: "search",
         // searchValue:"titl","PERSONSALUTATION ",
         searchValue:"titl",
-        required: true,
+        required: true && !getHideValue("generalInformation", "personTitle"),
       },
 
       firstName: {
         hide: getHideValue("generalInformation", "firstName"),
         label: "First Name",
         type: "text",
-        required: true
+        required: true && !getHideValue("generalInformation", "firstName"),
       },
 
       middleName: {
         hide: getHideValue("generalInformation", "middleName"),
         label: "Middle Name",
         type: "text"
+
       },
 
       lastName: {
         hide: getHideValue("generalInformation", "lastName"),
         label: "Last Name",
         type: "text",
-        required: true
+        required: true && !getHideValue("generalInformation", "lastName"),
       },
 
       shortName: {
@@ -197,7 +197,7 @@ blank: {
         hide: getHideValue("generalInformation", "gender"),
         label: "Gender",
         type: "select",
-        required: true,
+        required: true && !getHideValue("generalInformation", "gender"),
         options: [
           { label: "Select Gender", value: "" },
           { label: "Male", value: "male" },
@@ -209,7 +209,7 @@ blank: {
         hide: getHideValue("generalInformation", "dateOfBirth"),
         label: "Date Of Birth",
         type: "date",
-        required: true
+        required: true && !getHideValue("generalInformation", "dateOfBirth"),
       },
 
       birthCountry: {
@@ -218,7 +218,7 @@ blank: {
         type: "search",
         // COUNTRY 
         searchValue:"coun",
-        required: true
+        required: true && !getHideValue("generalInformation", "birthCountry"),
       },
       minorIndicator: {
         hide: getHideValue("generalInformation", "minorIndicator"),
@@ -248,6 +248,7 @@ blank: {
 
     
       nonResidentDate: {
+        
         label: "Non Resident Date",
         type: "date",
         required: (form) => form.nonResidentIndicator === "yes" ? true : false,
@@ -264,9 +265,10 @@ blank: {
       },
 
       staffIndicator: {
+         hide: getHideValue("generalInformation", "staffIndicator"),
         label: "Staff Indicator",
         type: "select",
-        required: true,
+        required: true && !getHideValue("generalInformation", "staffIndicator"),
         options: [
           { label: "Select", value: "" },
           { label: "Yes", value: "yes" },
@@ -275,6 +277,7 @@ blank: {
       },
 
       staffId:{
+        
         label: "Staff ID",
         type: "text",
         required: (form) => form.staffIndicator === "yes" ? true : false,
@@ -285,36 +288,39 @@ blank: {
       },
 
       primarySolid: {
+         hide: getHideValue("generalInformation", "primarySolid"),
         label: "Primary SOLID",
         type: "search",
         // SERVICE_OUTLET
         searchValue:"SEROUT",
-        required: true
+        required: true && !("generalInformation", "primarySolid"),
       },
 
       segment:{
-      
+       hide: getHideValue("generalInformation", "segment"),
         label: "Segment",
         type: "search",
         // SEGMENTATION_CLASS
         searchValue:"SEGME",
-        required: true
+        required: true && !getHideValue("generalInformation", "segment"),
       },
 
       subSegment: {
+        hide:getHideValue("generalInformation", "subSegment"),
         label: "Sub Segment",
         type: "search",
         // SUB_SEGMENT
         searchValue:"SUBSEGME",
-        required: true
+        required: true && !getHideValue("generalInformation", "subSegment"),
       },
 
       taxTable: {
+        hide:getHideValue("generalInformation", "taxTable"),
         label: "Tax deduction at sourcetable",
         type: "search",
         // TAX_SLAB
         searchValue:"TAX",
-        required: true
+        required: true && !getHideValue("generalInformation", "taxTable"),
       },
 
     },
@@ -324,9 +330,10 @@ blank: {
       title: "Primary Introducer Details",
 
       cifType: {
+        hide:getHideValue("primaryIntroducerDetails","cifType"),
         label: "CIF Type",
         type: "select",
-        required: true,
+        required: true && !getHideValue("primaryIntroducerDetails","cifType"),
         options: [
           { label: "Select CIF Type", value: "" },
           { label: "Individual", value: "individual" },
@@ -336,9 +343,10 @@ blank: {
       },
 
       bankRelationship: {
+        hide:getHideValue("primaryIntroducerDetails","bankRelationship"),
         label: "Bank Relationship Type",
         type: "select",
-        required: true,
+        required: true && !getHideValue("primaryIntroducerDetails","bankRelationship"),
         options: [
           { label: "Select Relationship", value: "" },
           { label: "Customer", value: "customer" },
@@ -347,14 +355,16 @@ blank: {
       },
 
       cifId: {
+       hide: getHideValue("primaryIntroducerDetails","cifId"),
         label: "CIF ID",
         type: "text",
-        required: true
+        required: true && !getHideValue("primaryIntroducerDetails","cifId"),
       },
       nameOnCIF: {
+        hide: getHideValue("primaryIntroducerDetails","nameOnCIF"),
         label: "Name on CIF",
         type: "text",
-        required: true
+        required: true && !getHideValue("primaryIntroducerDetails","nameOnCIF"),
       }
     },
 
@@ -363,45 +373,50 @@ blank: {
       title: "Permanent Address",
 
       addressLine1: {
+        hide: getHideValue("permanentAddress","title"),
         label: "Address Line 1",
         type: "text",
-        required: true
+        required: true && !getHideValue("permanentAddress","title"),
       },
 
       addressLine2: {
+        hide:getHideValue("permanentAddress","addressLine2"),
         label: "Address Line 2",
-        type: "text"
+        type: "text",
+        required:false && !getHideValue("permanentAddress","addressLine2"),
       },
 
       houseNo: {
+         hide:getHideValue("permanentAddress","houseNo"),
         label: "House No",
         type: "text",
-        required: true
+        required: true && !getHideValue("permanentAddress","houseNo"),
       },
 
       city: {
+        hide:getHideValue("permanentAddress","city"),
         label: "City",
-        type: "text",
-        required: true
+        type: "search",
+        searchValue:"city",
+        required: true && !getHideValue("permanentAddress","city"),
       },
 
       stateProvinceRegion: {
+        hide:getHideValue("permanentAddress","stateProvinceRegion"),
         label: "State/Province/Region",
-        type: "text",
-        required: true
+        type: "search",
+        searchValue:"state",
+        required: true && !getHideValue("permanentAddress","stateProvinceRegion"),
       },
 
 
 
       countryOfResidence: {
         label: "Country of Residence",
-        type: "select",
+        type: "search",
+        searchValue:"coun",
         required: true,
-        options: [
-          { label: "Select Country", value: "" },
-          { label: "India", value: "india" },
-          { label: "USA", value: "usa" }
-        ]
+        
       },
 
       postalCode: {
@@ -455,25 +470,23 @@ blank: {
 
       city: {
         label: "City",
-        type: "text",
+        type: "search",
+        searchValue:"city",
         required: true
       },
 
       stateProvinceRegion: {
         label: "State/Province/Region",
-        type: "text",
+        type: "search",
+        searchValue:"state",
         required: true
       },
 
       countryOfResidence: {
         label: "Country of Residence",
-        type: "select",
+        type: "search",
+        searchValue:"coun",
         required: true,
-        options: [
-          { label: "Select Country", value: "" },
-          { label: "India", value: "india" },
-          { label: "USA", value: "usa" }
-        ]
       },
 
       postalCode: {
@@ -511,19 +524,21 @@ blank: {
 
       city: {
         label: "City",
-        type: "text",
+        type: "search",
+        searchValue:"city",
         required: true
       },
 
       countryOfResidence: {
         label: "Country of Residence",
-        type: "select",
+        type: "search",
+        searchValue:"coun",
         required: true,
-        options: [
-          { label: "Select Country", value: "" },
-          { label: "India", value: "india" },
-          { label: "USA", value: "usa" }
-        ]
+        // options: [
+        //   { label: "Select Country", value: "" },
+        //   { label: "India", value: "india" },
+        //   { label: "USA", value: "usa" }
+        // ]
       },
 
       postalCode: {
@@ -592,8 +607,39 @@ blank: {
         type:"search",
         required: true,
         // CURRENCY
-        searchValue:"currency",
-      }
+        searchValue:"crcy",
+      },
+      creditDiscount:{
+        label:"Credit Discount pcnt",
+        type:"text",
+        required:true,
+      
+      },
+      debitDiscount:{
+        label:"Debit Discount pcnt",
+        type:"text",
+        required:true,
+      
+      },
+       withoutholdingTaxDiscount:{
+        label:"Withoutholding Tax pcnt",
+        type:"text",
+        required:true,
+      
+      },
+       withoutholdingTaxFloorLimit:{
+        label:"Withoutholding Tax Floor Limit",
+        type:"text",
+        required:true,
+      
+      },
+       preferentialexpiryDate:{
+        label:"Preferential Expiry Date ",
+        type:"date",
+        required:true,
+      
+      },
+    
     },
     generalDetails: {
 
@@ -603,14 +649,14 @@ blank: {
         type: "search",
         // NATIONALITY
 
-        searchValue:"nationality",
+        searchValue:"NATN",
         required: true,
       },
       resdingCountry: {
         label: "Residing Country",
         type: "search",
         // COUNTRY
-        searchValue:"country",
+        searchValue:"coun",
         required: true
       },
       martialStatus: {
@@ -656,7 +702,7 @@ blank: {
         type: "search",
         // CONTACT_OCCUPATION
 
-        searchValue:"contact_occupation",
+        searchValue:"OCCU",
         required: true,
       },
       employerName: {
