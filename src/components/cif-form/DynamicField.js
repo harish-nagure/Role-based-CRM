@@ -789,9 +789,10 @@ const DynamicField = ({
 
               onFocus={() => {
                 field.onSearch?.({
-                  searchKey: searchKey,
+                  searchKey: field.searchValue,
                   searchText: "",
                   section,
+                  subSection: safeSubSection,
                   name
                 });
               }}
@@ -803,7 +804,7 @@ const DynamicField = ({
                 handleChange(e);
 
                 field.onSearch?.({
-                  searchKey: `${section}.${subSection}.${name}`,
+                  searchKey: field.searchValue,
                   searchText: val,
                   section,
                   subSection: safeSubSection,

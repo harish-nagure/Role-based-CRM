@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DynamicField from "../DynamicField";
 import { CIFR_SCHEMA } from "./cifrSchema";
 import SelectType from "../SelectType";
-import { fetchCIFRPermissions,fetchSearcherValue } from "../../../api/api.auth";
+import { fetchCIFRPermissions,fetchSearcherValueRetail } from "../../../api/api.auth";
 
 const CIFRForm = () => {
 
@@ -428,42 +428,42 @@ const CIFRForm = () => {
 // };
 const handleSearch = async ({ searchKey, searchText, section, name }) => {
   try {
-//     const xmlResponse = await fetchSearcherValue(searchKey);
-// console.log("XML"+xmlResponse);
-//     const parsedData = parseFinacleResponse(xmlResponse);
-//     console.log("Data json"+parsedData[0])
-//     console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
+    const xmlResponse = await fetchSearcherValueRetail(searchKey);
+console.log("XML"+xmlResponse);
+    const parsedData = parseFinacleResponse(xmlResponse);
+    console.log("Data json"+parsedData[0])
+    console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
 
-    const parsedData = [{
-    "value": "ALAP",
-    "label": "ALAPPUZHA",
-    "rating": "ALAPPUZHA",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALBA",
-    "label": "ALBANY",
-    "rating": "ALBANY",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALBU",
-    "label": "ALBUQUERQUE",
-    "rating": "ALBUQUERQUE",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALBU1",
-    "label": "ALBURY WODONGA",
-    "rating": "ALBURY WODONGA",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALIC",
-    "label": "ALICE SPRINGS",
-    "rating": "ALICE SPRINGS",
-    "ratingType": "CITY"
-  }] 
+//     const parsedData = [{
+//     "value": "ALAP",
+//     "label": "ALAPPUZHA",
+//     "rating": "ALAPPUZHA",
+//     "ratingType": "CITY"
+//   },
+//   {
+//     "value": "ALBA",
+//     "label": "ALBANY",
+//     "rating": "ALBANY",
+//     "ratingType": "CITY"
+//   },
+//   {
+//     "value": "ALBU",
+//     "label": "ALBUQUERQUE",
+//     "rating": "ALBUQUERQUE",
+//     "ratingType": "CITY"
+//   },
+//   {
+//     "value": "ALBU1",
+//     "label": "ALBURY WODONGA",
+//     "rating": "ALBURY WODONGA",
+//     "ratingType": "CITY"
+//   },
+//   {
+//     "value": "ALIC",
+//     "label": "ALICE SPRINGS",
+//     "rating": "ALICE SPRINGS",
+//     "ratingType": "CITY"
+//   }] 
 
   
     const filtered = parsedData.filter(item =>

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DynamicField from "../DynamicField";
 import { CIFC_SCHEMA } from "./cifcSchema";
 import SelectType from "../SelectType";
-import { fetchCIFRPermissions,fetchSearcherValueCorporate } from "../../../api/api.auth";
+import { fetchCIFRPermissions, fetchSearcherValueCorporate } from "../../../api/api.auth";
 import { List } from "lucide-react";
 
 const CIFCForm = () => {
@@ -172,26 +172,26 @@ const CIFCForm = () => {
 
     const handleChange = (section, subSection, name, value, field) => {
 
-         console.log("Changed:", {
-    section,
-    subSection,
-    name,
-    value,
-    field
-  });
+        console.log("Changed:", {
+            section,
+            subSection,
+            name,
+            value,
+            field
+        });
 
-  let updatedValue = value;
+        let updatedValue = value;
 
         /* checkbox fix */
         if (field.type === "checkbox") {
 
-    const currentValues =
-      formData?.[section]?.[subSection]?.[name] || [];
+            const currentValues =
+                formData?.[section]?.[subSection]?.[name] || [];
 
-    updatedValue = currentValues.includes(value)
-      ? currentValues.filter(v => v !== value)
-      : [...currentValues, value];
-  }
+            updatedValue = currentValues.includes(value)
+                ? currentValues.filter(v => v !== value)
+                : [...currentValues, value];
+        }
 
 
         /* base update */
@@ -512,91 +512,91 @@ const CIFCForm = () => {
         setErrors({});
         setStep(0);
     };
-const parseFinacleResponse = (xmlString) => {
-  const parser = new DOMParser();
-  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    const parseFinacleResponse = (xmlString) => {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
-  const customData = xmlDoc.getElementsByTagName("executeFinacleScript_CustomData")[0];
-  const recCount = parseInt(
-    customData.getElementsByTagName("recCount")[0]?.textContent || 0
-  );
+        const customData = xmlDoc.getElementsByTagName("executeFinacleScript_CustomData")[0];
+        const recCount = parseInt(
+            customData.getElementsByTagName("recCount")[0]?.textContent || 0
+        );
 
-  const result = [];
+        const result = [];
 
-  for (let i = 1; i <= recCount; i++) {
-    const value = customData.getElementsByTagName(`value_${i}`)[0]?.textContent;
-    const label = customData.getElementsByTagName(`localetext_${i}`)[0]?.textContent;
-    const rating = customData.getElementsByTagName(`rating_${i}`)[0]?.textContent;
-    const ratingType = customData.getElementsByTagName(`ratingtype_${i}`)[0]?.textContent;
+        for (let i = 1; i <= recCount; i++) {
+            const value = customData.getElementsByTagName(`value_${i}`)[0]?.textContent;
+            const label = customData.getElementsByTagName(`localetext_${i}`)[0]?.textContent;
+            const rating = customData.getElementsByTagName(`rating_${i}`)[0]?.textContent;
+            const ratingType = customData.getElementsByTagName(`ratingtype_${i}`)[0]?.textContent;
 
-    if (value && label) {
-      result.push({
-        value,
-        label,
-        rating,
-        ratingType
-      });
-    }
-  }
+            if (value && label) {
+                result.push({
+                    value,
+                    label,
+                    rating,
+                    ratingType
+                });
+            }
+        }
 
-  return result;
-};
+        return result;
+    };
 
-const handleSearch = async ({ searchKey, searchText, section, subSection, name}) => {
-  try {
-//     const xmlResponse = await fetchSearcherValueCorporate(searchKey);
-// console.log("XML"+xmlResponse);
-//     const parsedData = parseFinacleResponse(xmlResponse);
-//     console.log("Data json"+parsedData[0])
-//     console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
+    const handleSearch = async ({ searchKey, searchText, section, subSection, name }) => {
+        try {
+            const xmlResponse = await fetchSearcherValueCorporate(searchKey);
+            console.log("XML" + xmlResponse);
+            const parsedData = parseFinacleResponse(xmlResponse);
+            console.log("Data json" + parsedData[0])
+            console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
 
-    const parsedData = [{
-    "value": "ALAP",
-    "label": "ALAPPUZHA",
-    "rating": "ALAPPUZHA",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALBA",
-    "label": "ALBANY",
-    "rating": "ALBANY",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALBU",
-    "label": "ALBUQUERQUE",
-    "rating": "ALBUQUERQUE",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALBU1",
-    "label": "ALBURY WODONGA",
-    "rating": "ALBURY WODONGA",
-    "ratingType": "CITY"
-  },
-  {
-    "value": "ALIC",
-    "label": "ALICE SPRINGS",
-    "rating": "ALICE SPRINGS",
-    "ratingType": "CITY"
-  }] 
-  console.log("parsedData"+searchKey,searchText,section,name,subSection)
-  
-    const filtered = parsedData.filter(item =>
-      item.label.toLowerCase().includes(searchText.toLowerCase())
-    );
-    
-    console.log("Fileter"+filtered)
-    setSearchResults(prev => ({
-      ...prev,
-      [`${section}.${subSection}.${name}`]: filtered
-    }));
+            //     const parsedData = [{
+            //     "value": "ALAP",
+            //     "label": "ALAPPUZHA",
+            //     "rating": "ALAPPUZHA",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALBA",
+            //     "label": "ALBANY",
+            //     "rating": "ALBANY",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALBU",
+            //     "label": "ALBUQUERQUE",
+            //     "rating": "ALBUQUERQUE",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALBU1",
+            //     "label": "ALBURY WODONGA",
+            //     "rating": "ALBURY WODONGA",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALIC",
+            //     "label": "ALICE SPRINGS",
+            //     "rating": "ALICE SPRINGS",
+            //     "ratingType": "CITY"
+            //   }] 
+            console.log("parsedData" + searchKey, searchText, section, name, subSection)
 
-    console.log("Search Results:", searchResults);
-  } catch (error) {
-    console.error(error);
-  }
-}; 
+            const filtered = parsedData.filter(item =>
+                item.label.toLowerCase().includes(searchText.toLowerCase())
+            );
+
+            console.log("Fileter" + filtered)
+            setSearchResults(prev => ({
+                ...prev,
+                [`${section}.${subSection}.${name}`]: filtered
+            }));
+
+            console.log("Search Results:", searchResults);
+        } catch (error) {
+            console.error(error);
+        }
+    };
     /* ================= UI ================= */
 
     return (
@@ -725,9 +725,9 @@ const handleSearch = async ({ searchKey, searchText, section, subSection, name})
                                                                 // section={innerKey}
                                                                 name={name}
                                                                 field={{
-                                                                        ...field,
-                                                                        onSearch: handleSearch
-                                                                    }}
+                                                                    ...field,
+                                                                    onSearch: handleSearch
+                                                                }}
                                                                 value={
                                                                     formData?.[currentSectionKey]?.[innerKey]?.[name] || ""
                                                                 }
@@ -738,8 +738,8 @@ const handleSearch = async ({ searchKey, searchText, section, subSection, name})
                                                                 formData={formData}
                                                                 setFormData={setFormData}
                                                                 // onSearch={handleSearch}   
-                                                                    searchResults={searchResults}
-                                                                    setSearchResults={setSearchResults}
+                                                                searchResults={searchResults}
+                                                                setSearchResults={setSearchResults}
                                                             />
 
                                                         ))}
