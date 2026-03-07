@@ -789,6 +789,17 @@ blank: {
         type: "text",
         required: true && !getHideValue("BankDetails","branchName"),
       },
+      accountNumber: {
+        hide:getHideValue("BankDetails","accountNumber"),
+        label: "Account Number",
+        type: "checkbox",
+        required: true && !getHideValue("BankDetails","accountNumber"),
+           options: [
+                        { label: "Equity", value: "equity" },
+                        { label: "Effective Control", value: "effective_control" },
+                        { label: "Other", value: "other" }
+                    ],
+      },
     },
   }
 };

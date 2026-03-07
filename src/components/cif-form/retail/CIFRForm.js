@@ -167,10 +167,22 @@ const CIFRForm = () => {
         field
     ) => {
 
-        const updatedSection = {
-            ...formData?.[section],
-            [name]: value
-        };
+        console.log("handleChange:", section, name, value, field);
+
+    /* checkbox fix */
+   let updatedValue = value;
+
+  // For checkbox we already receive array from DynamicField
+  if (field.type === "checkbox") {
+    updatedValue = value;
+  }
+
+    const updatedSection = {
+        ...formData?.[section],
+        [name]: updatedValue
+    };
+
+
 
         const updatedForm = {
             ...formData,
@@ -318,43 +330,6 @@ const CIFRForm = () => {
     };
 
 
-
-    // const handleSearch = async ({ searchKey, searchText, section, name }) => {
-
-    //     try {
-
-    //         // const res = await api.post("/search", {
-    //         //     key: searchKey,
-    //         //     value: searchText
-    //         // });
-
-    //          const res = {
-    //         data: [
-    //             "Mumbai",
-    //             "Pune",
-    //             "Delhi",
-    //             "Chennai",
-    //             "Bangalore"
-    //         ]
-    //     };
-    //         const filtered = res.data.filter(item =>
-    //         item.toLowerCase().includes(searchText.toLowerCase())
-    //     );
-
-    //     console.log("Filtered result:", filtered,searchKey);
-
-    //     // ✅ set dropdown results correctly
-    //     setSearchResults(prev => ({
-    //         ...prev,
-    //         [`${section}.${name}`]: filtered
-    //     }));
-
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-
-    // };
-
     const parseFinacleResponse = (xmlString) => {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlString, "text/xml");
@@ -384,6 +359,8 @@ const CIFRForm = () => {
 
   return result;
 };
+
+
 // const handleSearch = async ({ searchKey, searchText, section, name }) => {
 // const data = [
 //   {
@@ -451,11 +428,44 @@ const CIFRForm = () => {
 // };
 const handleSearch = async ({ searchKey, searchText, section, name }) => {
   try {
-    const xmlResponse = await fetchSearcherValue(searchKey);
-console.log("XML"+xmlResponse);
-    const parsedData = parseFinacleResponse(xmlResponse);
-    console.log("Data json"+parsedData[0])
-    console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
+//     const xmlResponse = await fetchSearcherValue(searchKey);
+// console.log("XML"+xmlResponse);
+//     const parsedData = parseFinacleResponse(xmlResponse);
+//     console.log("Data json"+parsedData[0])
+//     console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
+
+    const parsedData = [{
+    "value": "ALAP",
+    "label": "ALAPPUZHA",
+    "rating": "ALAPPUZHA",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALBA",
+    "label": "ALBANY",
+    "rating": "ALBANY",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALBU",
+    "label": "ALBUQUERQUE",
+    "rating": "ALBUQUERQUE",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALBU1",
+    "label": "ALBURY WODONGA",
+    "rating": "ALBURY WODONGA",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALIC",
+    "label": "ALICE SPRINGS",
+    "rating": "ALICE SPRINGS",
+    "ratingType": "CITY"
+  }] 
+
+  
     const filtered = parsedData.filter(item =>
       item.label.toLowerCase().includes(searchText.toLowerCase())
     );
@@ -470,6 +480,7 @@ console.log("XML"+xmlResponse);
     console.error(error);
   }
 };   
+
 /* ================= UI ================= */
 
     return (
@@ -573,6 +584,7 @@ console.log("XML"+xmlResponse);
                                                                 <DynamicField
                                                                     key={name}
                                                                     section={sectionKey}
+                                                                    subSection=""
                                                                     name={name}
                                                                     field={{
                                                                         ...field,

@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DynamicField from "../DynamicField";
 import { CIFC_SCHEMA } from "./cifcSchema";
 import SelectType from "../SelectType";
-import { fetchCIFRPermissions } from "../../../api/api.auth";
+import { fetchCIFRPermissions,fetchSearcherValueCorporate } from "../../../api/api.auth";
 import { List } from "lucide-react";
 
 const CIFCForm = () => {
@@ -17,6 +17,7 @@ const CIFCForm = () => {
     const [schema, setSchema] = useState({});
     const sections = Object.keys(schema);
 
+    const [searchResults, setSearchResults] = useState({});
     const [formData, setFormData] = useState({
         BenficiaryDetails: {
             OwnerShipDetails: []
@@ -169,140 +170,28 @@ const CIFCForm = () => {
 
     /* ================= HANDLE CHANGE ================= */
 
-    //     const handleChange = (section, subSection, name, value, field) => {
-    //         //Checkbox
-    //         let updatedValue;
-    //         if (field.type === "checkbox") {
-
-    //             const currentValues = Array.isArray(formData?.[section]?.[subSection]?.[name])
-    //                 ? formData[section][name]
-    //                 : [];
-
-    //             if (currentValues.includes(value)) {
-    //                 // remove
-    //                 updatedValue = currentValues.filter(v => v !== value);
-    //                 value = updatedValue;
-    //             } else {
-    //                 // add
-    //                 updatedValue = [...currentValues, value];
-    //                 value = updatedValue;
-    //             }
-
-    //         }
-
-
-    //         // const updatedSection = {
-
-    //         //     ...formData?.[section],
-    //         //     [name]: value
-    //         // };
-
-    //         // const updatedForm = {
-
-    //         //     ...formData,
-    //         //     [section]: updatedSection
-    //         // };
-
-    //         const updatedForm = {
-    //         ...formData,
-    //         [section]: {
-    //             ...formData?.[section],
-    //             [subSection]: {
-    //                 ...formData?.[section]?.[subSection],
-    //                 [name]: value   // ✅ now correct
-    //             }
-    //         }
-    //     };
-    //         console.log("updatedForm:", updatedForm);
-
-
-    //         // Address Sync (COPY ONLY ON YES)
-
-
-    // if (section === "presentAddress" && name === "sameAsPermanent") {
-
-    //             if (value === "yes") {
-
-    //                 const permanent = formData?.permanentAddress || {};
-
-    //                 updatedForm.presentAddress = {
-    //                     ...updatedForm.presentAddress,
-    //                     sameAsPermanent: "yes",
-    //                     addressLine1: permanent.addressLine1 || "",
-    //                     addressLine2: permanent.addressLine2 || "",
-    //                     houseNo: permanent.houseNo || "",
-    //                     city: permanent.city || "",
-    //                     stateProvinceRegion:
-    //                         permanent.stateProvinceRegion || "",
-    //                     countryOfResidence:
-    //                         permanent.countryOfResidence || "",
-    //                     postalCode: permanent.postalCode || ""
-    //                 };
-    //             }
-    //             else {
-    //                 updatedForm.presentAddress = {
-    //                     sameAsPermanent: "no"
-    //                 };
-
-    //             }
-
-    //         }
-
-    //         if (section === "permanentAddress" && formData?.presentAddress?.sameAsPermanent === "yes") {
-
-    //             const permanent = {
-    //                 ...formData.permanentAddress,
-    //                 [name]: value
-    //             };
-
-    //             updatedForm.presentAddress = {
-    //                 sameAsPermanent: "yes",
-
-    //                 addressLine1: permanent.addressLine1 || "",
-    //                 addressLine2: permanent.addressLine2 || "",
-    //                 houseNo: permanent.houseNo || "",
-    //                 city: permanent.city || "",
-    //                 stateProvinceRegion:
-    //                     permanent.stateProvinceRegion || "",
-    //                 countryOfResidence:
-    //                     permanent.countryOfResidence || "",
-    //                 postalCode: permanent.postalCode || ""
-    //             };
-
-    //         }
-
-
-    //         setFormData(updatedForm);
-
-    //         const error =
-    //             validateField(section, name, value, field);
-
-    //         setErrors(prev => ({
-    //         ...prev,
-    //         [section]: {
-    //             ...prev?.[section],
-    //             [subSection]: {
-    //                 ...prev?.[section]?.[subSection],
-    //                 [name]: error
-    //             }
-    //         }
-    //     }));
-    //     };
-
     const handleChange = (section, subSection, name, value, field) => {
 
-        let updatedValue = value;
+         console.log("Changed:", {
+    section,
+    subSection,
+    name,
+    value,
+    field
+  });
+
+  let updatedValue = value;
 
         /* checkbox fix */
         if (field.type === "checkbox") {
 
-            const currentValues =
-                formData?.[section]?.[subSection]?.[name] || [];
+    const currentValues =
+      formData?.[section]?.[subSection]?.[name] || [];
 
-            updatedValue = currentValues.includes(value)
-                ? currentValues.filter(v => v !== value)
-                : [...currentValues, value];
-        }
+    updatedValue = currentValues.includes(value)
+      ? currentValues.filter(v => v !== value)
+      : [...currentValues, value];
+  }
 
 
         /* base update */
@@ -407,6 +296,8 @@ const CIFCForm = () => {
 
         /* save */
         setFormData(updatedForm);
+
+        console.log("Updated Form:", formData);
 
 
         /* validation */
@@ -621,7 +512,91 @@ const CIFCForm = () => {
         setErrors({});
         setStep(0);
     };
+const parseFinacleResponse = (xmlString) => {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
+  const customData = xmlDoc.getElementsByTagName("executeFinacleScript_CustomData")[0];
+  const recCount = parseInt(
+    customData.getElementsByTagName("recCount")[0]?.textContent || 0
+  );
+
+  const result = [];
+
+  for (let i = 1; i <= recCount; i++) {
+    const value = customData.getElementsByTagName(`value_${i}`)[0]?.textContent;
+    const label = customData.getElementsByTagName(`localetext_${i}`)[0]?.textContent;
+    const rating = customData.getElementsByTagName(`rating_${i}`)[0]?.textContent;
+    const ratingType = customData.getElementsByTagName(`ratingtype_${i}`)[0]?.textContent;
+
+    if (value && label) {
+      result.push({
+        value,
+        label,
+        rating,
+        ratingType
+      });
+    }
+  }
+
+  return result;
+};
+
+const handleSearch = async ({ searchKey, searchText, section, subSection, name}) => {
+  try {
+//     const xmlResponse = await fetchSearcherValueCorporate(searchKey);
+// console.log("XML"+xmlResponse);
+//     const parsedData = parseFinacleResponse(xmlResponse);
+//     console.log("Data json"+parsedData[0])
+//     console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
+
+    const parsedData = [{
+    "value": "ALAP",
+    "label": "ALAPPUZHA",
+    "rating": "ALAPPUZHA",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALBA",
+    "label": "ALBANY",
+    "rating": "ALBANY",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALBU",
+    "label": "ALBUQUERQUE",
+    "rating": "ALBUQUERQUE",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALBU1",
+    "label": "ALBURY WODONGA",
+    "rating": "ALBURY WODONGA",
+    "ratingType": "CITY"
+  },
+  {
+    "value": "ALIC",
+    "label": "ALICE SPRINGS",
+    "rating": "ALICE SPRINGS",
+    "ratingType": "CITY"
+  }] 
+  console.log("parsedData"+searchKey,searchText,section,name,subSection)
+  
+    const filtered = parsedData.filter(item =>
+      item.label.toLowerCase().includes(searchText.toLowerCase())
+    );
+    
+    console.log("Fileter"+filtered)
+    setSearchResults(prev => ({
+      ...prev,
+      [`${section}.${subSection}.${name}`]: filtered
+    }));
+
+    console.log("Search Results:", searchResults);
+  } catch (error) {
+    console.error(error);
+  }
+}; 
     /* ================= UI ================= */
 
     return (
@@ -749,7 +724,10 @@ const CIFCForm = () => {
                                                                 subSection={innerKey}
                                                                 // section={innerKey}
                                                                 name={name}
-                                                                field={field}
+                                                                field={{
+                                                                        ...field,
+                                                                        onSearch: handleSearch
+                                                                    }}
                                                                 value={
                                                                     formData?.[currentSectionKey]?.[innerKey]?.[name] || ""
                                                                 }
@@ -759,6 +737,9 @@ const CIFCForm = () => {
                                                                 onChange={handleChange}
                                                                 formData={formData}
                                                                 setFormData={setFormData}
+                                                                // onSearch={handleSearch}   
+                                                                    searchResults={searchResults}
+                                                                    setSearchResults={setSearchResults}
                                                             />
 
                                                         ))}

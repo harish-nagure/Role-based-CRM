@@ -2015,3 +2015,130 @@ export default CIFCForm;
 )}
         </div>
       )}
+
+
+
+
+
+
+
+      
+    //     const handleChange = (section, subSection, name, value, field) => {
+    //         //Checkbox
+    //         let updatedValue;
+    //         if (field.type === "checkbox") {
+
+    //             const currentValues = Array.isArray(formData?.[section]?.[subSection]?.[name])
+    //                 ? formData[section][name]
+    //                 : [];
+
+    //             if (currentValues.includes(value)) {
+    //                 // remove
+    //                 updatedValue = currentValues.filter(v => v !== value);
+    //                 value = updatedValue;
+    //             } else {
+    //                 // add
+    //                 updatedValue = [...currentValues, value];
+    //                 value = updatedValue;
+    //             }
+
+    //         }
+
+
+    //         // const updatedSection = {
+
+    //         //     ...formData?.[section],
+    //         //     [name]: value
+    //         // };
+
+    //         // const updatedForm = {
+
+    //         //     ...formData,
+    //         //     [section]: updatedSection
+    //         // };
+
+    //         const updatedForm = {
+    //         ...formData,
+    //         [section]: {
+    //             ...formData?.[section],
+    //             [subSection]: {
+    //                 ...formData?.[section]?.[subSection],
+    //                 [name]: value   // ✅ now correct
+    //             }
+    //         }
+    //     };
+    //         console.log("updatedForm:", updatedForm);
+
+
+    //         // Address Sync (COPY ONLY ON YES)
+
+
+    // if (section === "presentAddress" && name === "sameAsPermanent") {
+
+    //             if (value === "yes") {
+
+    //                 const permanent = formData?.permanentAddress || {};
+
+    //                 updatedForm.presentAddress = {
+    //                     ...updatedForm.presentAddress,
+    //                     sameAsPermanent: "yes",
+    //                     addressLine1: permanent.addressLine1 || "",
+    //                     addressLine2: permanent.addressLine2 || "",
+    //                     houseNo: permanent.houseNo || "",
+    //                     city: permanent.city || "",
+    //                     stateProvinceRegion:
+    //                         permanent.stateProvinceRegion || "",
+    //                     countryOfResidence:
+    //                         permanent.countryOfResidence || "",
+    //                     postalCode: permanent.postalCode || ""
+    //                 };
+    //             }
+    //             else {
+    //                 updatedForm.presentAddress = {
+    //                     sameAsPermanent: "no"
+    //                 };
+
+    //             }
+
+    //         }
+
+    //         if (section === "permanentAddress" && formData?.presentAddress?.sameAsPermanent === "yes") {
+
+    //             const permanent = {
+    //                 ...formData.permanentAddress,
+    //                 [name]: value
+    //             };
+
+    //             updatedForm.presentAddress = {
+    //                 sameAsPermanent: "yes",
+
+    //                 addressLine1: permanent.addressLine1 || "",
+    //                 addressLine2: permanent.addressLine2 || "",
+    //                 houseNo: permanent.houseNo || "",
+    //                 city: permanent.city || "",
+    //                 stateProvinceRegion:
+    //                     permanent.stateProvinceRegion || "",
+    //                 countryOfResidence:
+    //                     permanent.countryOfResidence || "",
+    //                 postalCode: permanent.postalCode || ""
+    //             };
+
+    //         }
+
+
+    //         setFormData(updatedForm);
+
+    //         const error =
+    //             validateField(section, name, value, field);
+
+    //         setErrors(prev => ({
+    //         ...prev,
+    //         [section]: {
+    //             ...prev?.[section],
+    //             [subSection]: {
+    //                 ...prev?.[section]?.[subSection],
+    //                 [name]: error
+    //             }
+    //         }
+    //     }));
+    //     };

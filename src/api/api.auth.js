@@ -234,3 +234,16 @@ export const fetchSearcherValue = async (custinpValue) => {
      throw error;
   }
 }
+
+
+
+export const fetchSearcherValueCorporate = async (custinpValue) => {
+  try{
+    //check
+    const res = await api.post("/finacle/corporate/call?custinp=" + custinpValue);
+    return res.data;
+  }catch(error){
+    console.error("CIRC Permission fetching failed");
+     throw error;
+  }
+}
