@@ -446,7 +446,7 @@ import { Upload, TextSearch } from "lucide-react";
 
 const DynamicField = ({
   section,
-  subSection="",
+  subSection = "",
   name,
   field,
   value,
@@ -458,7 +458,7 @@ const DynamicField = ({
   searchResults = {},
   setSearchResults
 }) => {
-
+const [isOptionSelected, setIsOptionSelected] = useState(false);
   const wrapperRef = useRef(null);
 
   // ✅ Safe subsection
@@ -469,7 +469,7 @@ const DynamicField = ({
     ? `${section}.${safeSubSection}.${name}`
     : `${section}.${name}`;
 
-    console.log(searchKey);
+  console.log(searchKey);
   // Close dropdown on outside click
   useEffect(() => {
 
@@ -521,42 +521,42 @@ const DynamicField = ({
 
   const handleChange = (e, optionValue = null) => {
 
-  let val;
+    let val;
 
-  switch (field.type) {
+    switch (field.type) {
 
-    case "file":
-      val = e.target.files?.[0] || null;
-      break;
+      case "file":
+        val = e.target.files?.[0] || null;
+        break;
 
-    case "checkbox":
+      case "checkbox":
 
-      let currentValues = Array.isArray(value) ? [...value] : [];
+        let currentValues = Array.isArray(value) ? [...value] : [];
 
-      if (e.target.checked) {
-        currentValues.push(optionValue);
-      } else {
-        currentValues = currentValues.filter(v => v !== optionValue);
-      }
+        if (e.target.checked) {
+          currentValues.push(optionValue);
+        } else {
+          currentValues = currentValues.filter(v => v !== optionValue);
+        }
 
-      val = currentValues;
-      break;
+        val = currentValues;
+        break;
 
-    case "radio":
-      val = e.target.value;
-      break;
+      case "radio":
+        val = e.target.value;
+        break;
 
-    case "search":
-      val = e.target.value;
-      break;
+      case "search":
+        val = e.target.value;
+        break;
 
-    default:
-      val = e.target.value;
+      default:
+        val = e.target.value;
 
-  }
+    }
 
-  onChange(section,safeSubSection, name, val, field);
-};
+    onChange(section, safeSubSection, name, val, field);
+  };
   const isDisabled =
     safeSubSection === "presentAddress" &&
     name !== "sameAsPermanent" &&
@@ -812,6 +812,11 @@ const DynamicField = ({
                 });
 
               }}
+              onBlur={() => {
+                if (field.required && !searchResults?.[searchKey]?.some(i => i.label === value)) {
+                  onChange(section, safeSubSection, name, "", field);
+                }
+              }}
             />
 
           </div>
@@ -827,13 +832,15 @@ const DynamicField = ({
                   className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
                   onClick={() => {
 
-                    if(subSection){
-                      
+                    if (subSection) {
+
                       onChange(section, subSection, name, item.label, field);
-                     
-                    }else{
-                       onChange(section, name, item.label, field);
+
+                    } else {
+                      onChange(section, name, item.label, field);
                     }
+
+
                     setSearchResults(prev => ({
                       ...prev,
                       [searchKey]: []
