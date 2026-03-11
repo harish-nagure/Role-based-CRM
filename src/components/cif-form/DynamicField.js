@@ -441,7 +441,7 @@
 // export default DynamicField;
 
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect,useState } from "react";
 import { Upload, TextSearch } from "lucide-react";
 
 const DynamicField = ({
@@ -458,7 +458,6 @@ const DynamicField = ({
   searchResults = {},
   setSearchResults
 }) => {
-const [isOptionSelected, setIsOptionSelected] = useState(false);
   const wrapperRef = useRef(null);
 
   // ✅ Safe subsection
