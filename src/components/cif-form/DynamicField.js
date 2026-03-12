@@ -441,7 +441,7 @@
 // export default DynamicField;
 
 
-import React, { useRef, useEffect,useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Upload, TextSearch } from "lucide-react";
 
 const DynamicField = ({
@@ -468,7 +468,7 @@ const DynamicField = ({
     ? `${section}.${safeSubSection}.${name}`
     : `${section}.${name}`;
 
-  console.log(searchKey);
+  // console.log(searchKey);
   // Close dropdown on outside click
   useEffect(() => {
 
@@ -507,37 +507,64 @@ const DynamicField = ({
       : "border-muted focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
     }`;
 
-  // const handleChange = (e) => {
 
-  //   const val =
-  //     field.type === "file"
-  //       ? e.target.files[0]
-  //       : e.target.value;
 
-  //   onChange(section, name, val, field);
+  // const handleChange = (e, optionValue = null) => {
 
+  //   let val;
+
+  //   switch (field.type) {
+
+  //     case "file":
+  //       val = e.target.files?.[0] || null;
+  //       break;
+
+  //     case "checkbox":
+
+  //       let currentValues = Array.isArray(value) ? [...value] : [];
+
+  //       if (e.target.checked) {
+  //         currentValues.push(optionValue);
+  //       } else {
+  //         currentValues = currentValues.filter(v => v !== optionValue);
+  //       }
+
+  //       val = currentValues;
+  //       break;
+
+  //     case "radio":
+  //       val = e.target.value;
+  //       break;
+
+  //     case "search":
+  //       val = e.target.value;
+  //       break;
+
+  //     default:
+  //       val = e.target.value;
+
+  //   }
+
+  //   onChange(section, safeSubSection, name, val, field);
   // };
 
-  const handleChange = (e, optionValue = null) => {
 
+
+  const handleChange = (e, optionValue = null) => {
     let val;
 
     switch (field.type) {
-
       case "file":
         val = e.target.files?.[0] || null;
         break;
 
       case "checkbox":
-
         let currentValues = Array.isArray(value) ? [...value] : [];
-
         if (e.target.checked) {
           currentValues.push(optionValue);
         } else {
           currentValues = currentValues.filter(v => v !== optionValue);
         }
-
         val = currentValues;
         break;
 
@@ -551,10 +578,13 @@ const DynamicField = ({
 
       default:
         val = e.target.value;
-
     }
 
-    onChange(section, safeSubSection, name, val, field);
+    if (safeSubSection) {
+      onChange(section, safeSubSection, name, val, field);
+    } else {
+      onChange(section, name, val, field);
+    }
   };
   const isDisabled =
     safeSubSection === "presentAddress" &&
@@ -831,10 +861,8 @@ const DynamicField = ({
                   className="px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
                   onClick={() => {
 
-                    if (subSection) {
-
-                      onChange(section, subSection, name, item.label, field);
-
+                    if (safeSubSection) {
+                      onChange(section, safeSubSection, name, item.label, field);
                     } else {
                       onChange(section, name, item.label, field);
                     }

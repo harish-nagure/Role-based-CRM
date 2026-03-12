@@ -247,3 +247,15 @@ export const fetchSearcherValueCorporate = async (custinpValue) => {
      throw error;
   }
 }
+
+
+// finacleRequestRetail
+export const finacleRequestRetail = async (payload) => {
+  try{
+    const res = await api.post("/finacle/retail/add",payload);
+    return res.data;
+  }catch(error){
+    console.error("CIRC Permission fetching failed");
+     throw error;
+  }
+}

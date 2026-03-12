@@ -8,12 +8,13 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
       (p) => p.section === section && p.field === field
     );
 
-    console.log(`Checking hide for ${section} - ${field}:`, perm);
+    // console.log(`Checking hide for ${section} - ${field}:`, perm);
     return perm ? perm.hide : false; // default false if not found
   };
 
 
   return {
+
     IdentificationDetails: {
 
       title: "Identification Details",
@@ -37,7 +38,10 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
           const validTypes = ["passport", "aadhar", "pan"];
           if (!validTypes.includes(value))
             return "Invalid Document Type";
-        }
+        },
+
+        xmlTag: "DocCode",
+        xmlParent: "EntityDoctData"
       },
 
       documentNumber: {
@@ -56,7 +60,12 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
             return "Aadhar number must be 12 digits";
           if (form.documentType === "pan" && value.length !== 10)
             return "PAN number must be 10 characters";
-        }
+        },
+
+
+        xmlTag: "ReferenceNum",
+        xmlParent: "EntityDoctData"
+
       },
 
       placeOfIssue: {
@@ -64,14 +73,17 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         label: "Place Of Issue",
         type: "search",
         required: true && !getHideValue("IdentificationDetails", "placeOfIssue"),
-         searchValue: "city",
+        searchValue: "city",
         validate: (value) => {
           if (!value) return;
           if (value.length < 3)
             return "Place of Issue must be at least 3 characters";
-        }
+        },
+
+        xmlTag: "PlaceOfIssue",
+        xmlParent: "EntityDoctData"
       },
-      
+
       countryOfIssue: {
         hide: getHideValue("IdentificationDetails", "countryOfIssue"),
         label: "Country Of Issue",
@@ -82,7 +94,10 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
           if (!value) return;
           if (value.length < 3)
             return "Country of Issue must be at least 3 characters";
-        }
+        },
+
+        xmlTag: "CountryOfIssue",
+        xmlParent: "EntityDoctData"
       },
 
       issueDate: {
@@ -97,7 +112,12 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
           if (value > today)
             return "Issue Date cannot be future date";
-        }
+        },
+
+
+
+        xmlTag: "IssueDt",
+        xmlParent: "EntityDoctData"
       },
 
       expiryDate: {
@@ -118,8 +138,11 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
           if (form.issueDate && value <= form.issueDate)
             return "Expiry must be greater than Issue Date";
 
-          
-        }
+
+        },
+
+        xmlTag: "DocExpiryDate",
+        xmlParent: "EntityDoctData"
       },
 
       issuingAuthority: {
@@ -127,6 +150,10 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         label: "Issuing Authority",
         type: "text",
         required: true && !getHideValue("IdentificationDetails", "issuingAuthority"),
+
+
+        xmlTag: "TypeCode",
+        xmlParent: "EntityDoctData"
       },
 
       documentFile: {
@@ -151,13 +178,16 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
       title: "General Information",
 
-      personTitle:{
+      personTitle: {
         hide: getHideValue("generalInformation", "personTitle"),
         label: "Person Title",
         type: "search",
         // searchValue:"titl","PERSONSALUTATION ",
-        searchValue:"titl",
+        searchValue: "titl",
         required: true && !getHideValue("generalInformation", "personTitle"),
+
+        xmlTag: "Salutation",
+        xmlParent: "CustData"
       },
 
       firstName: {
@@ -165,13 +195,18 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         label: "First Name",
         type: "text",
         required: true && !getHideValue("generalInformation", "firstName"),
+
+        xmlTag: "FirstName",
+        xmlParent: "CustData"
       },
 
       middleName: {
         hide: getHideValue("generalInformation", "middleName"),
         label: "Middle Name",
-        type: "text"
+        type: "text",
 
+        xmlTag: "MiddleName",
+        xmlParent: "CustData",
       },
 
       lastName: {
@@ -179,15 +214,21 @@ export const CIFR_SCHEMA = ({ canWrite = false, permissions = [] }) => {
         label: "Last Name",
         type: "text",
         required: true && !getHideValue("generalInformation", "lastName"),
+
+        xmlTag: "LastName",
+        xmlParent: "CustData"
       },
 
       shortName: {
         hide: getHideValue("generalInformation", "shortName"),
         label: "Short Name",
-        type: "text"
+        type: "text",
+
+        xmlTag: "ShortName",
+        xmlParent: "CustData"
       },
 
-blank: {
+      blank: {
         label: "",
         type: "blank"
       },
@@ -202,7 +243,10 @@ blank: {
           { label: "Select Gender", value: "" },
           { label: "Male", value: "male" },
           { label: "Female", value: "female" }
-        ]
+        ],
+
+        xmlTag: "Gender",
+        xmlParent: "CustData",
       },
 
       dateOfBirth: {
@@ -210,6 +254,9 @@ blank: {
         label: "Date Of Birth",
         type: "date",
         required: true && !getHideValue("generalInformation", "dateOfBirth"),
+
+        xmlTag: "DateOfBirth",
+        xmlParent: "CustData"
       },
 
       birthCountry: {
@@ -217,9 +264,13 @@ blank: {
         label: "Birth Country",
         type: "search",
         // COUNTRY 
-        searchValue:"coun",
+        searchValue: "coun",
         required: true && !getHideValue("generalInformation", "birthCountry"),
+
+        xmlTag: "DateOfBirth",
+        xmlParent: "CustData"
       },
+
       minorIndicator: {
         hide: getHideValue("generalInformation", "minorIndicator"),
         label: "Minor Indicator",
@@ -229,12 +280,16 @@ blank: {
           { label: "Select", value: "" },
           { label: "Yes", value: "yes" },
           { label: "No", value: "no" }
-        ]
+        ],
+
+        xmlTag: "IsMinor",
+        xmlParent: "CustData"
+
       },
 
-      
+
       nonResidentIndicator: {
-        
+
         hide: getHideValue("generalInformation", "nonResidentIndicator"),
         label: "Non Resident Indicator",
         type: "select",
@@ -243,12 +298,15 @@ blank: {
           { label: "Select", value: "" },
           { label: "Yes", value: "yes" },
           { label: "No", value: "no" }
-        ]
+        ],
+
+        xmlTag: "IsNonResident",
+        xmlParent: "CustData"
       },
 
-    
+
       nonResidentDate: {
-        
+
         label: "Non Resident Date",
         type: "date",
         required: (form) => form.nonResidentIndicator === "yes" ? true : false,
@@ -265,7 +323,7 @@ blank: {
       },
 
       staffIndicator: {
-         hide: getHideValue("generalInformation", "staffIndicator"),
+        hide: getHideValue("generalInformation", "staffIndicator"),
         label: "Staff Indicator",
         type: "select",
         required: true && !getHideValue("generalInformation", "staffIndicator"),
@@ -273,54 +331,69 @@ blank: {
           { label: "Select", value: "" },
           { label: "Yes", value: "yes" },
           { label: "No", value: "no" }
-        ]
+        ],
+        xmlTag: "StaffFlag",
+        xmlParent: "CustData"
       },
 
-      staffId:{
-        
+      staffId: {
+
         label: "Staff ID",
         type: "text",
         required: (form) => form.staffIndicator === "yes" ? true : false,
         validate: (value, form) => {
           if (form.staffIndicator === "yes" && !value)
             return "Staff ID is required";
-        } 
+        }
       },
 
       primarySolid: {
-         hide: getHideValue("generalInformation", "primarySolid"),
+        hide: getHideValue("generalInformation", "primarySolid"),
         label: "Primary SOLID",
         type: "search",
         // SERVICE_OUTLET
-        searchValue:"SEROUT",
-        required: true && !("generalInformation", "primarySolid"),
+        searchValue: "SEROUT",
+        required: true && !getHideValue("generalInformation", "primarySolid"),
+
+        xmlTag: "PrimarySolId",
+        xmlParent: "CustData"
       },
 
-      segment:{
-       hide: getHideValue("generalInformation", "segment"),
+      segment: {
+        hide: getHideValue("generalInformation", "segment"),
         label: "Segment",
         type: "search",
         // SEGMENTATION_CLASS
-        searchValue:"SEGME",
+        searchValue: "SEGME",
         required: true && !getHideValue("generalInformation", "segment"),
+
+        xmlTag: "SegmentationClass",
+        xmlParent: "CustData"
       },
 
       subSegment: {
-        hide:getHideValue("generalInformation", "subSegment"),
+        hide: getHideValue("generalInformation", "subSegment"),
         label: "Sub Segment",
         type: "search",
         // SUB_SEGMENT
-        searchValue:"SUBSEGME",
+        searchValue: "SUBSEGME",
         required: true && !getHideValue("generalInformation", "subSegment"),
+
+        xmlTag: "SubSegment",
+        xmlParent: "CustData"
       },
 
       taxTable: {
-        hide:getHideValue("generalInformation", "taxTable"),
+        hide: getHideValue("generalInformation", "taxTable"),
         label: "Tax deduction at sourcetable",
         type: "search",
         // TAX_SLAB
-        searchValue:"TAX",
+        searchValue: "TAX",
         required: true && !getHideValue("generalInformation", "taxTable"),
+
+        xmlTag: "TaxDeductionTable",
+        xmlParent: "CustData"
+
       },
 
     },
@@ -330,23 +403,25 @@ blank: {
       title: "Primary Introducer Details",
 
       cifType: {
-        hide:getHideValue("primaryIntroducerDetails","cifType"),
+        hide: getHideValue("primaryIntroducerDetails", "cifType"),
         label: "CIF Type",
         type: "select",
-        required: true && !getHideValue("primaryIntroducerDetails","cifType"),
+        required: true && !getHideValue("primaryIntroducerDetails", "cifType"),
         options: [
           { label: "Select CIF Type", value: "" },
           { label: "Individual", value: "individual" },
           { label: "Corporate", value: "corporate" },
           { label: "Retail", value: "retail" }
-        ]
+        ],
+
+
       },
 
       bankRelationship: {
-        hide:getHideValue("primaryIntroducerDetails","bankRelationship"),
+        hide: getHideValue("primaryIntroducerDetails", "bankRelationship"),
         label: "Bank Relationship Type",
         type: "select",
-        required: true && !getHideValue("primaryIntroducerDetails","bankRelationship"),
+        required: true && !getHideValue("primaryIntroducerDetails", "bankRelationship"),
         options: [
           { label: "Select Relationship", value: "" },
           { label: "Customer", value: "customer" },
@@ -355,451 +430,452 @@ blank: {
       },
 
       cifId: {
-       hide: getHideValue("primaryIntroducerDetails","cifId"),
+        hide: getHideValue("primaryIntroducerDetails", "cifId"),
         label: "CIF ID",
         type: "text",
-        required: true && !getHideValue("primaryIntroducerDetails","cifId"),
+        required: true && !getHideValue("primaryIntroducerDetails", "cifId"),
       },
       nameOnCIF: {
-        hide: getHideValue("primaryIntroducerDetails","nameOnCIF"),
+        hide: getHideValue("primaryIntroducerDetails", "nameOnCIF"),
         label: "Name on CIF",
         type: "text",
-        required: true && !getHideValue("primaryIntroducerDetails","nameOnCIF"),
+        required: true && !getHideValue("primaryIntroducerDetails", "nameOnCIF"),
       }
     },
 
-    permanentAddress: {
+    // permanentAddress: {
 
-      title: "Permanent Address",
+    //   title: "Permanent Address",
 
-      addressLine1: {
-        hide: getHideValue("permanentAddress","title"),
-        label: "Address Line 1",
-        type: "text",
-        required: true && !getHideValue("permanentAddress","title"),
-      },
+    //   addressLine1: {
+    //     hide: getHideValue("permanentAddress","title"),
+    //     label: "Address Line 1",
+    //     type: "text",
+    //     required: true && !getHideValue("permanentAddress","title"),
+    //   },
 
-      addressLine2: {
-        hide:getHideValue("permanentAddress","addressLine2"),
-        label: "Address Line 2",
-        type: "text",
-        required:false && !getHideValue("permanentAddress","addressLine2"),
-      },
+    //   addressLine2: {
+    //     hide:getHideValue("permanentAddress","addressLine2"),
+    //     label: "Address Line 2",
+    //     type: "text",
+    //     required:false && !getHideValue("permanentAddress","addressLine2"),
+    //   },
 
-      houseNo: {
-         hide:getHideValue("permanentAddress","houseNo"),
-        label: "House No",
-        type: "text",
-        required: true && !getHideValue("permanentAddress","houseNo"),
-      },
+    //   houseNo: {
+    //      hide:getHideValue("permanentAddress","houseNo"),
+    //     label: "House No",
+    //     type: "text",
+    //     required: true && !getHideValue("permanentAddress","houseNo"),
+    //   },
 
-      city: {
-        hide:getHideValue("permanentAddress","city"),
-        label: "City",
-        type: "search",
-        searchValue:"city",
-        required: true && !getHideValue("permanentAddress","city"),
-      },
+    //   city: {
+    //     hide:getHideValue("permanentAddress","city"),
+    //     label: "City",
+    //     type: "search",
+    //     searchValue:"city",
+    //     required: true && !getHideValue("permanentAddress","city"),
+    //   },
 
-      stateProvinceRegion: {
-        hide:getHideValue("permanentAddress","stateProvinceRegion"),
-        label: "State/Province/Region",
-        type: "search",
-        searchValue:"state",
-        required: true && !getHideValue("permanentAddress","stateProvinceRegion"),
-      },
+    //   stateProvinceRegion: {
+    //     hide:getHideValue("permanentAddress","stateProvinceRegion"),
+    //     label: "State/Province/Region",
+    //     type: "search",
+    //     searchValue:"state",
+    //     required: true && !getHideValue("permanentAddress","stateProvinceRegion"),
+    //   },
 
 
 
-      countryOfResidence: {
-         hide:getHideValue("permanentAddress","countryOfResidence"),
-        label: "Country of Residence",
-        type: "search",
-        searchValue:"coun",
-        required: true && !getHideValue("permanentAddress","countryOfResidence"),
-        
-      },
+    //   countryOfResidence: {
+    //      hide:getHideValue("permanentAddress","countryOfResidence"),
+    //     label: "Country of Residence",
+    //     type: "search",
+    //     searchValue:"coun",
+    //     required: true && !getHideValue("permanentAddress","countryOfResidence"),
 
-      postalCode: {
-        hide: getHideValue("permanentAddress","postalCode"),
-        label: "Postal Code",
-        type: "text",
-        required: true && !getHideValue("permanentAddress","postalCode"),
-        validate: (value) => {
-          if (value.length < 4 || value.length > 7)
-            return "Postal Code must be between 4 and 7 characters";
-        }
-      }
-    },
+    //   },
 
-    presentAddress: {
+    //   postalCode: {
+    //     hide: getHideValue("permanentAddress","postalCode"),
+    //     label: "Postal Code",
+    //     type: "text",
+    //     required: true && !getHideValue("permanentAddress","postalCode"),
+    //     validate: (value) => {
+    //       if (value.length < 4 || value.length > 7)
+    //         return "Postal Code must be between 4 and 7 characters";
+    //     }
+    //   }
+    // },
 
-      title: "Present Address",
+    // presentAddress: {
 
-      sameAsPermanent: {
-        hide: getHideValue("presentAddress","sameAsPermanent"),
-        label: "Same as Permanent Address",
-        type: "radio",
-        required: true && !getHideValue("presentAddress","sameAsPermanent"),
-        options: [
-          { label: "Select", value: "" },
-          { label: "Yes", value: "yes" },
-          { label: "No", value: "no" }
-        ]
-      },
+    //   title: "Present Address",
 
-      blank: {
-       hide: getHideValue("presentAddress","blank"),
-        label: "",
-        type: "blank",
-        required:false && !getHideValue(""),
-      },
+    //   sameAsPermanent: {
+    //     hide: getHideValue("presentAddress","sameAsPermanent"),
+    //     label: "Same as Permanent Address",
+    //     type: "radio",
+    //     required: true && !getHideValue("presentAddress","sameAsPermanent"),
+    //     options: [
+    //       { label: "Select", value: "" },
+    //       { label: "Yes", value: "yes" },
+    //       { label: "No", value: "no" }
+    //     ]
+    //   },
 
-      addressLine1: {
-        hide: getHideValue("presentAddress","addressLine1"),
-        label: "Address Line 1",
-        type: "text",
-        required: true && !getHideValue("presentAddress","addressLine1"),
-      },
+    //   blank: {
+    //    hide: getHideValue("presentAddress","blank"),
+    //     label: "",
+    //     type: "blank",
+    //     required:false && !getHideValue(""),
+    //   },
 
-      addressLine2: {
-        hide: getHideValue("presentAddress","addressLine2"),
-        label: "Address Line 2",
-        type: "text",
-        required: true && !getHideValue("presentAddress","addressLine2"),
-      },
+    //   addressLine1: {
+    //     hide: getHideValue("presentAddress","addressLine1"),
+    //     label: "Address Line 1",
+    //     type: "text",
+    //     required: true && !getHideValue("presentAddress","addressLine1"),
+    //   },
 
-      houseNo: {
-        hide: getHideValue("presentAddress","houseNo"),
-        label: "House No",
-        type: "text",
-        require: true && !getHideValue("presentAddress","houseNo"),
-      },
+    //   addressLine2: {
+    //     hide: getHideValue("presentAddress","addressLine2"),
+    //     label: "Address Line 2",
+    //     type: "text",
+    //     required: true && !getHideValue("presentAddress","addressLine2"),
+    //   },
 
-      city: {
-        hide: getHideValue("presentAddress","city"),
-        label: "City",
-        type: "search",
-        searchValue:"city",
-        required: true & !getHideValue("presentAddress","city"),
-      },
+    //   houseNo: {
+    //     hide: getHideValue("presentAddress","houseNo"),
+    //     label: "House No",
+    //     type: "text",
+    //     require: true && !getHideValue("presentAddress","houseNo"),
+    //   },
 
-      stateProvinceRegion: {
-       hide: getHideValue("presentAddress","stateProvinceRegion"),
-        label: "State/Province/Region",
-        type: "search",
-        searchValue:"state",
-        required: true && !getHideValue("presentAddress","stateProvinceRegion"),
-      },
+    //   city: {
+    //     hide: getHideValue("presentAddress","city"),
+    //     label: "City",
+    //     type: "search",
+    //     searchValue:"city",
+    //     required: true & !getHideValue("presentAddress","city"),
+    //   },
 
-      countryOfResidence: {
-        hide: getHideValue("presentAddress","countryOfResidence"),
-        label: "Country of Residence",
-        type: "search",
-        searchValue:"coun",
-        required: true && !getHideValue("presentAddress","countryOfResidence"),
-      },
+    //   stateProvinceRegion: {
+    //    hide: getHideValue("presentAddress","stateProvinceRegion"),
+    //     label: "State/Province/Region",
+    //     type: "search",
+    //     searchValue:"state",
+    //     required: true && !getHideValue("presentAddress","stateProvinceRegion"),
+    //   },
 
-      postalCode: {
-        hide: getHideValue("presentAddress"," postalCode"),
-        label: "Postal Code",
-        type: "text",
-        required: true && !getHideValue("presentAddress"," postalCode"),
-        validate: (value) => {
-          if (value.length < 4 || value.length > 7)
-            return "Postal Code must be between 4 and 7 characters";
-        }
-      }
+    //   countryOfResidence: {
+    //     hide: getHideValue("presentAddress","countryOfResidence"),
+    //     label: "Country of Residence",
+    //     type: "search",
+    //     searchValue:"coun",
+    //     required: true && !getHideValue("presentAddress","countryOfResidence"),
+    //   },
 
-    },
+    //   postalCode: {
+    //     hide: getHideValue("presentAddress","postalCode"),
+    //     label: "Postal Code",
+    //     type: "text",
+    //     required: true && !getHideValue("presentAddress","postalCode"),
+    //     validate: (value) => {
+    //       if (value.length < 4 || value.length > 7)
+    //         return "Postal Code must be between 4 and 7 characters";
+    //     }
+    //   }
 
-    nrbAddress: {
+    // },
 
-      title: "NRB Address",
+    // nrbAddress: {
 
-      addressLine1: {
-        hide: getHideValue("nrbAddress","addressLine1"),
-        label: "Address Line 1",
-        type: "text",
-        required: true && !getHideValue("nrbAddress","addressLine1"),
-      },
+    //   title: "NRB Address",
 
-      addressLine2: {
-        hide: getHideValue("nrbAddress","addressLine2"),
-        label: "Address Line 2",
-        type: "text",
-        required:false && !getHideValue(""),
-      },
+    //   addressLine1: {
+    //     hide: getHideValue("nrbAddress","addressLine1"),
+    //     label: "Address Line 1",
+    //     type: "text",
+    //     required: true && !getHideValue("nrbAddress","addressLine1"),
+    //   },
 
-      streetNo: {
-        hide:getHideValue("nrbAddress","streetNo"),
-        label: "Street No",
-        type: "text",
-        required: true && !getHideValue("nrbAddress","streetNo"),
-      },
+    //   addressLine2: {
+    //     hide: getHideValue("nrbAddress","addressLine2"),
+    //     label: "Address Line 2",
+    //     type: "text",
+    //     required:false && !getHideValue(""),
+    //   },
 
-      city: {
-        hide: getHideValue("nrbAddress","city"),
-        label: "City",
-        type: "search",
-        searchValue:"city",
-        required: true && !getHideValue("nrbAddress","city"),
-      },
+    //   streetNo: {
+    //     hide:getHideValue("nrbAddress","streetNo"),
+    //     label: "Street No",
+    //     type: "text",
+    //     required: true && !getHideValue("nrbAddress","streetNo"),
+    //   },
 
-      countryOfResidence: {
-        hide: getHideValue("nrbAddress","countryOfResidence"),
-        label: "Country of Residence",
-        type: "search",
-        searchValue:"coun",
-        required: true && !getHideValue("nrbAddress","countryOfResidence"),
-        // options: [
-        //   { label: "Select Country", value: "" },
-        //   { label: "India", value: "india" },
-        //   { label: "USA", value: "usa" }
-        // ]
-      },
+    //   city: {
+    //     hide: getHideValue("nrbAddress","city"),
+    //     label: "City",
+    //     type: "search",
+    //     searchValue:"city",
+    //     required: true && !getHideValue("nrbAddress","city"),
+    //   },
 
-      postalCode: {
-        hide: getHideValue("nrbAddress","postalCode"),
-        label: "Postal Code",
-        type: "text",
-        required: true && !getHideValue("nrbAddress","postalCode"),
-        validate: (value) => {
-          if (value.length < 4 || value.length > 7)
-            return "Postal Code must be between 4 and 7 characters";
-        }
-      }
-    },
+    //   countryOfResidence: {
+    //     hide: getHideValue("nrbAddress","countryOfResidence"),
+    //     label: "Country of Residence",
+    //     type: "search",
+    //     searchValue:"coun",
+    //     required: true && !getHideValue("nrbAddress","countryOfResidence"),
+    //     // options: [
+    //     //   { label: "Select Country", value: "" },
+    //     //   { label: "India", value: "india" },
+    //     //   { label: "USA", value: "usa" }
+    //     // ]
+    //   },
 
-    phoneDetails: {
+    //   postalCode: {
+    //     hide: getHideValue("nrbAddress","postalCode"),
+    //     label: "Postal Code",
+    //     type: "text",
+    //     required: true && !getHideValue("nrbAddress","postalCode"),
+    //     validate: (value) => {
+    //       if (value.length < 4 || value.length > 7)
+    //         return "Postal Code must be between 4 and 7 characters";
+    //     }
+    //   }
+    // },
 
-      title: "Phone Details",
+    // phoneDetails: {
 
-      primaryPhoneNumber: {
-        hide: getHideValue("phoneDetails","primaryPhoneNumber"),
-        label: "Primary Phone Number",
-        type: "text",
-        required: true && !getHideValue("phoneDetails","primaryPhoneNumber"),
-        validate: (value) => {
-          if (!/^\d{10}$/.test(value))
-            return "Phone number must be 10 digits";
-        }
-      },
+    //   title: "Phone Details",
 
-      secondaryPhoneNumber: {
-        hide: getHideValue("phoneDetails","secondaryPhoneNumber"),
-        label: "Secondary Phone Number",
-        type: "text",
-        required:false && !getHideValue(""),
-        validate: (value) => {
-          if (value && !/^\d{10}$/.test(value))
-            return "Phone number must be 10 digits";
-        }
-      }
-    },
+    //   primaryPhoneNumber: {
+    //     hide: getHideValue("phoneDetails","primaryPhoneNumber"),
+    //     label: "Primary Phone Number",
+    //     type: "text",
+    //     required: true && !getHideValue("phoneDetails","primaryPhoneNumber"),
+    //     validate: (value) => {
+    //       if (!/^\d{10}$/.test(value))
+    //         return "Phone number must be 10 digits";
+    //     }
+    //   },
 
-    emailDetails: {
+    //   secondaryPhoneNumber: {
+    //     hide: getHideValue("phoneDetails","secondaryPhoneNumber"),
+    //     label: "Secondary Phone Number",
+    //     type: "text",
+    //     required:false && !getHideValue(""),
+    //     validate: (value) => {
+    //       if (value && !/^\d{10}$/.test(value))
+    //         return "Phone number must be 10 digits";
+    //     }
+    //   }
+    // },
 
-      title: "Email Details",
+    // emailDetails: {
 
-      emailId: {
-        hide: getHideValue("emailDetails","emailId"),
-        label: "Email",
-        type: "text",
-        required: true && !getHideValue("emailDetails","emailId"),
-        validate: (value) => {
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-            return "Invalid email address";
-        }
-      },
+    //   title: "Email Details",
 
-      alternateEmailId: {
-         hide: getHideValue("emailDetails","alternateEmailId"),
-        label: "Alternate Email",
-        type: "text",
-        required:false && !getHideValue(""),
-        validate: (value) => {
-          if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-            return "Invalid email address";
-        }
-      },
-    },
+    //   emailId: {
+    //     hide: getHideValue("emailDetails","emailId"),
+    //     label: "Email",
+    //     type: "text",
+    //     required: true && !getHideValue("emailDetails","emailId"),
+    //     validate: (value) => {
+    //       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+    //         return "Invalid email address";
+    //     }
+    //   },
 
-    currency:{
-      title: "Currency",
-      ccy:{
-        hide:getHideValue("currency","ccy"),
-        label: "CCY",
-        type:"search",
-        required: true && !getHideValue("currency","ccy"),
-        // CURRENCY
-        searchValue:"crcy",
-      },
-      creditDiscount:{
-        hide:getHideValue("currency","creditDiscount"),
-        label:"Credit Discount pcnt",
-        type:"text",
-        required:true && !getHideValue("currency","creditDiscount"),
-      
-      },
-      debitDiscount:{
-         hide:getHideValue("currency","debitDiscount"),
-        label:"Debit Discount pcnt",
-        type:"text",
-        required:true && !getHideValue("currency","debitDiscount"),
-      
-      },
-       withoutholdingTaxDiscount:{
-        hide: getHideValue("currency","withoutholdingTaxDiscount"),
-        label:"Withoutholding Tax pcnt",
-        type:"text",
-        required:true && !getHideValue("currency","withoutholdingTaxDiscount"),
-      
-      },
-       withoutholdingTaxFloorLimit:{
-        hide:getHideValue("currency","withoutholdingTaxFloorLimit"),
-        label:"Withoutholding Tax Floor Limit",
-        type:"text",
-        required:true && !getHideValue("currency","withoutholdingTaxFloorLimit"),
-      
-      },
-       preferentialexpiryDate:{
-        hide:getHideValue("currency","preferentialexpiryDate"),
-        label:"Preferential Expiry Date ",
-        type:"date",
-        required:true && !getHideValue("currency","preferentialexpiryDate"),
-      
-      },
-    
-    },
-    generalDetails: {
+    //   alternateEmailId: {
+    //      hide: getHideValue("emailDetails","alternateEmailId"),
+    //     label: "Alternate Email",
+    //     type: "text",
+    //     required:false && !getHideValue(""),
+    //     validate: (value) => {
+    //       if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+    //         return "Invalid email address";
+    //     }
+    //   },
+    // },
 
-      title: "General Details",
-      nationality: {
-        hide:getHideValue("generalDetails","nationality"),
-        label: "Nationality",
-        type: "search",
-        // NATIONALITY
+    // currency:{
+    //   title: "Currency",
+    //   ccy:{
+    //     hide:getHideValue("currency","ccy"),
+    //     label: "CCY",
+    //     type:"search",
+    //     required: true && !getHideValue("currency","ccy"),
+    //     // CURRENCY
+    //     searchValue:"crcy",
+    //   },
+    //   creditDiscount:{
+    //     hide:getHideValue("currency","creditDiscount"),
+    //     label:"Credit Discount pcnt",
+    //     type:"text",
+    //     required:true && !getHideValue("currency","creditDiscount"),
 
-        searchValue:"NATN",
-        required: true && !getHideValue("generalDetails","nationality"),
-      },
-      resdingCountry: {
-        hide:getHideValue("generalDetails","resdingCountry"),
-        label: "Residing Country",
-        type: "search",
-        // COUNTRY
-        searchValue:"coun",
-        required: true && !getHideValue("generalDetails","resdingCountry"),
-      },
-      martialStatus: {
-        hide:getHideValue("generalDetails","martialStatus"),
-        label: "Marital Status",
-        type: "select",
-        required: true && !getHideValue("generalDetails","martialStatus"),
-        options: [
-          { label: "Select", value: "" },
-          { label: "Single", value: "single" },
-          { label: "Married", value: "married" },
-          { label: "Divorced", value: "divorced" },
-          { label: "Widowed", value: "widowed" }
-        ]
-      },
-      spouseName: {
-       
-        label: "Spouse Name",
-        type: "text",
-        required: (form) => form.martialStatus === "married" ? true : false,
-        validate: (value, form) => {
-          if (form.martialStatus === "married" && !value)
-            return "Spouse Name is required";
-        }
-      },
-      spouseNumber: {
-        label: "Spouse Number",
-        type: "text",
-        required: (form) => form.martialStatus === "married" ? true : false,
-        validate: (value, form) => {
-          if (form.martialStatus === "married") {
-            if (!value) return "Spouse Number is required";
-            if (!/^\d{10}$/.test(value))
-              return "Phone number must be 10 digits";
-          }
-        }
-      },
-    },
+    //   },
+    //   debitDiscount:{
+    //      hide:getHideValue("currency","debitDiscount"),
+    //     label:"Debit Discount pcnt",
+    //     type:"text",
+    //     required:true && !getHideValue("currency","debitDiscount"),
 
-    employmentDetails: {
+    //   },
+    //    withoutholdingTaxDiscount:{
+    //     hide: getHideValue("currency","withoutholdingTaxDiscount"),
+    //     label:"Withoutholding Tax pcnt",
+    //     type:"text",
+    //     required:true && !getHideValue("currency","withoutholdingTaxDiscount"),
 
-      title: "Employment Details",
-      occupation: {
-        hide: getHideValue("employmentDetails","occupation"),
-        label: "Occupation",
-        type: "search",
-        // CONTACT_OCCUPATION
+    //   },
+    //    withoutholdingTaxFloorLimit:{
+    //     hide:getHideValue("currency","withoutholdingTaxFloorLimit"),
+    //     label:"Withoutholding Tax Floor Limit",
+    //     type:"text",
+    //     required:true && !getHideValue("currency","withoutholdingTaxFloorLimit"),
 
-        searchValue:"OCCU",
-        required: true && !getHideValue("employmentDetails","occupation"),
-      },
-      
-      employerName: {
-        hide:getHideValue("employmentDetails","employerName"),
-        label: "Employer Name",
-        type: "text",
-        required: true && !getHideValue("employmentDetails","employerName"),
-      },
+    //   },
+    //    preferentialexpiryDate:{
+    //     hide:getHideValue("currency","preferentialexpiryDate"),
+    //     label:"Preferential Expiry Date ",
+    //     type:"date",
+    //     required:true && !getHideValue("currency","preferentialexpiryDate"),
 
-      officeAddress: {
-        hide: getHideValue("employmentDetails","officeAddress"),
-        label: "Office Address",
-        type: "text",
-        required: true && !getHideValue("employmentDetails","officeAddress"),
-      },
-    },
+    //   },
 
-    incomeDetails: {
+    // },
+    // generalDetails: {
 
-      title: "Income Details",
-      annualIncome: {
-        hide:getHideValue("incomeDetails","annualIncome"),
-        label: "Annual Income",
-        type: "text",
-        required: true && !getHideValue("incomeDetails","annualIncome"),
-      },
-      
-      sourceOfIncome: {
-       hide: getHideValue("incomeDetails","sourceOfIncome"),
-        label: "Source of Income",
-        type: "text",
-        required: true && !getHideValue("incomeDetails","sourceOfIncome"),
-      },
-    },
+    //   title: "General Details",
+    //   nationality: {
+    //     hide:getHideValue("generalDetails","nationality"),
+    //     label: "Nationality",
+    //     type: "search",
+    //     // NATIONALITY
 
-    BankDetails: {
-      title: "Bank Details",
-      bankName: {
-        hide:getHideValue("BankDetails","bankName"),
-        label: "Bank Name",
-        type: "text",
-        required: true && !getHideValue("BankDetails","bankName"),
-      },
-      branchName: {
-        hide:getHideValue("BankDetails","branchName"),
-        label: "Branch Name",
-        type: "text",
-        required: true && !getHideValue("BankDetails","branchName"),
-      },
-      accountNumber: {
-        hide:getHideValue("BankDetails","accountNumber"),
-        label: "Account Number",
-        type: "checkbox",
-        required: true && !getHideValue("BankDetails","accountNumber"),
-           options: [
-                        { label: "Equity", value: "equity" },
-                        { label: "Effective Control", value: "effective_control" },
-                        { label: "Other", value: "other" }
-                    ],
-      },
-    },
+    //     searchValue:"NATN",
+    //     required: true && !getHideValue("generalDetails","nationality"),
+    //   },
+    //   resdingCountry: {
+    //     hide:getHideValue("generalDetails","resdingCountry"),
+    //     label: "Residing Country",
+    //     type: "search",
+    //     // COUNTRY
+    //     searchValue:"coun",
+    //     required: true && !getHideValue("generalDetails","resdingCountry"),
+    //   },
+    //   martialStatus: {
+    //     hide:getHideValue("generalDetails","martialStatus"),
+    //     label: "Marital Status",
+    //     type: "select",
+    //     required: true && !getHideValue("generalDetails","martialStatus"),
+    //     options: [
+    //       { label: "Select", value: "" },
+    //       { label: "Single", value: "single" },
+    //       { label: "Married", value: "married" },
+    //       { label: "Divorced", value: "divorced" },
+    //       { label: "Widowed", value: "widowed" }
+    //     ]
+    //   },
+    //   spouseName: {
+
+    //     label: "Spouse Name",
+    //     type: "text",
+    //     required: (form) => form.martialStatus === "married" ? true : false,
+    //     validate: (value, form) => {
+    //       if (form.martialStatus === "married" && !value)
+    //         return "Spouse Name is required";
+    //     }
+    //   },
+    //   spouseNumber: {
+    //     label: "Spouse Number",
+    //     type: "text",
+    //     required: (form) => form.martialStatus === "married" ? true : false,
+    //     validate: (value, form) => {
+    //       if (form.martialStatus === "married") {
+    //         if (!value) return "Spouse Number is required";
+    //         if (!/^\d{10}$/.test(value))
+    //           return "Phone number must be 10 digits";
+    //       }
+    //     }
+    //   },
+    // },
+
+    // employmentDetails: {
+
+    //   title: "Employment Details",
+    //   occupation: {
+    //     hide: getHideValue("employmentDetails","occupation"),
+    //     label: "Occupation",
+    //     type: "search",
+    //     // CONTACT_OCCUPATION
+
+    //     searchValue:"OCCU",
+    //     required: true && !getHideValue("employmentDetails","occupation"),
+    //   },
+
+    //   employerName: {
+    //     hide:getHideValue("employmentDetails","employerName"),
+    //     label: "Employer Name",
+    //     type: "text",
+    //     required: true && !getHideValue("employmentDetails","employerName"),
+    //   },
+
+    //   officeAddress: {
+    //     hide: getHideValue("employmentDetails","officeAddress"),
+    //     label: "Office Address",
+    //     type: "text",
+    //     required: true && !getHideValue("employmentDetails","officeAddress"),
+    //   },
+    // },
+
+    // incomeDetails: {
+
+    //   title: "Income Details",
+    //   annualIncome: {
+    //     hide:getHideValue("incomeDetails","annualIncome"),
+    //     label: "Annual Income",
+    //     type: "text",
+    //     required: true && !getHideValue("incomeDetails","annualIncome"),
+    //   },
+
+    //   sourceOfIncome: {
+    //    hide: getHideValue("incomeDetails","sourceOfIncome"),
+    //     label: "Source of Income",
+    //     type: "text",
+    //     required: true && !getHideValue("incomeDetails","sourceOfIncome"),
+    //   },
+    // },
+
+    // BankDetails: {
+    //   title: "Bank Details",
+    //   bankName: {
+    //     hide:getHideValue("BankDetails","bankName"),
+    //     label: "Bank Name",
+    //     type: "text",
+    //     required: true && !getHideValue("BankDetails","bankName"),
+    //   },
+    //   branchName: {
+    //     hide:getHideValue("BankDetails","branchName"),
+    //     label: "Branch Name",
+    //     type: "text",
+    //     required: true && !getHideValue("BankDetails","branchName"),
+    //   },
+    //   accountNumber: {
+    //     hide:getHideValue("BankDetails","accountNumber"),
+    //     label: "Account Number",
+    //     type: "checkbox",
+    //     required: true && !getHideValue("BankDetails","accountNumber"),
+    //        options: [
+    //                     { label: "Equity", value: "equity" },
+    //                     { label: "Effective Control", value: "effective_control" },
+    //                     { label: "Other", value: "other" }
+    //                 ],
+    //   },
+    // },
+
   }
 };

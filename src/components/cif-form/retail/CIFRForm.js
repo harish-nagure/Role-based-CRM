@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DynamicField from "../DynamicField";
 import { CIFR_SCHEMA } from "./cifrSchema";
 import SelectType from "../SelectType";
-import { fetchCIFRPermissions,fetchSearcherValueRetail } from "../../../api/api.auth";
+import { generateFinacleXMLRetail } from "./finacleRetailXmlGenerator";
+import { fetchCIFRPermissions, fetchSearcherValueRetail, finacleRequestRetail } from "../../../api/api.auth";
 
 const CIFRForm = () => {
 
@@ -169,18 +170,18 @@ const CIFRForm = () => {
 
         console.log("handleChange:", section, name, value, field);
 
-    /* checkbox fix */
-   let updatedValue = value;
+        /* checkbox fix */
+        let updatedValue = value;
 
-  // For checkbox we already receive array from DynamicField
-  if (field.type === "checkbox") {
-    updatedValue = value;
-  }
+        // For checkbox we already receive array from DynamicField
+        if (field.type === "checkbox") {
+            updatedValue = value;
+        }
 
-    const updatedSection = {
-        ...formData?.[section],
-        [name]: updatedValue
-    };
+        const updatedSection = {
+            ...formData?.[section],
+            [name]: updatedValue
+        };
 
 
 
@@ -265,7 +266,7 @@ const CIFRForm = () => {
 
 
     /* ================= SUBMIT ================= */
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
 
         let hasError = false;
 
@@ -313,12 +314,24 @@ const CIFRForm = () => {
                 formData
             );
 
-            navigate(
-                "/identification",
-                {
-                    state: formData
-                }
-            );
+            const xml = generateFinacleXMLRetail(schema, formData);
+
+            console.log("Generated XML:", xml);
+
+            try {
+                const res = await finacleRequestRetail(xml);
+                console.log("Finacle Response:", res);
+            } catch (err) {
+                alert("Invalid CIF or not found");
+                // setShowForm(false);
+                console.log(err);
+            }
+            // navigate(
+            //     "/identification",
+            //     {
+            //         state: formData
+            //     }
+            // );
 
         }
 
@@ -331,157 +344,92 @@ const CIFRForm = () => {
 
 
     const parseFinacleResponse = (xmlString) => {
-  const parser = new DOMParser();
-  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
-  const customData = xmlDoc.getElementsByTagName("executeFinacleScript_CustomData")[0];
-  const recCount = parseInt(
-    customData.getElementsByTagName("recCount")[0]?.textContent || 0
-  );
+        const customData = xmlDoc.getElementsByTagName("executeFinacleScript_CustomData")[0];
+        const recCount = parseInt(
+            customData.getElementsByTagName("recCount")[0]?.textContent || 0
+        );
 
-  const result = [];
+        const result = [];
 
-  for (let i = 1; i <= recCount; i++) {
-    const value = customData.getElementsByTagName(`value_${i}`)[0]?.textContent;
-    const label = customData.getElementsByTagName(`localetext_${i}`)[0]?.textContent;
-    const rating = customData.getElementsByTagName(`rating_${i}`)[0]?.textContent;
-    const ratingType = customData.getElementsByTagName(`ratingtype_${i}`)[0]?.textContent;
+        for (let i = 1; i <= recCount; i++) {
+            const value = customData.getElementsByTagName(`value_${i}`)[0]?.textContent;
+            const label = customData.getElementsByTagName(`localetext_${i}`)[0]?.textContent;
+            const rating = customData.getElementsByTagName(`rating_${i}`)[0]?.textContent;
+            const ratingType = customData.getElementsByTagName(`ratingtype_${i}`)[0]?.textContent;
 
-    if (value && label) {
-      result.push({
-        value,
-        label,
-        rating,
-        ratingType
-      });
-    }
-  }
+            if (value && label) {
+                result.push({
+                    value,
+                    label,
+                    rating,
+                    ratingType
+                });
+            }
+        }
 
-  return result;
-};
+        return result;
+    };
 
 
-// const handleSearch = async ({ searchKey, searchText, section, name }) => {
-// const data = [
-//   {
-//     searchValue: "place_of_issue",
-//     data: [
-//       "Mumbai",
-//       "Pune",
-//       "Delhi",
-//       "Chennai",
-//       "Bangalore",
-//       "Delhi",
-//       "Chennai",
-//       "Bangalore"
-//     ]
-//   },
-//   {
-//     searchValue: "city",
-//     data: [
-//       "USA",
-//       "London",
-//       "India"
-//     ]
-//   },{
-//     searchValue: "country",
-//     data: [
-//       "USA",
-//       "London",
-//       "India"
-//     ]
-//   }
-// ];
-//   try {
+    const handleSearch = async ({ searchKey, searchText, section, name }) => {
+        try {
+            const xmlResponse = await fetchSearcherValueRetail(searchKey);
+            console.log("XML" + xmlResponse);
+            const parsedData = parseFinacleResponse(xmlResponse);
+            console.log("Data json" + parsedData[0])
+            console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
 
-//     // find matching searchValue
-//     const res = await fetchSearcherValue(searchKey);
+            //     const parsedData = [{
+            //     "value": "ALAP",
+            //     "label": "ALAPPUZHA",
+            //     "rating": "ALAPPUZHA",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALBA",
+            //     "label": "ALBANY",
+            //     "rating": "ALBANY",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALBU",
+            //     "label": "ALBUQUERQUE",
+            //     "rating": "ALBUQUERQUE",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALBU1",
+            //     "label": "ALBURY WODONGA",
+            //     "rating": "ALBURY WODONGA",
+            //     "ratingType": "CITY"
+            //   },
+            //   {
+            //     "value": "ALIC",
+            //     "label": "ALICE SPRINGS",
+            //     "rating": "ALICE SPRINGS",
+            //     "ratingType": "CITY"
+            //   }] 
 
-//     console.log("Harish"+res);
 
-//     const matched = data.find(item => item.searchValue === searchKey);
+            const filtered = parsedData.filter(item =>
+                item.label.toLowerCase().includes(searchText.toLowerCase())
+            );
 
-//     if (!matched) {
-//       setSearchResults(prev => ({
-//         ...prev,
-//         [`${section}.${name}`]: []
-//       }));
-//       return;
-//     }
+            console.log("Fileter" + filtered)
+            setSearchResults(prev => ({
+                ...prev,
+                [`${section}.${name}`]: filtered
+            }));
 
-//     // filter results
-//     const filtered = matched.data.filter(item =>
-//       item.toLowerCase().includes(searchText.toLowerCase())
-//     );
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-//     console.log("Filtered result:", filtered, searchKey);
-
-//     setSearchResults(prev => ({
-//       ...prev,
-//       [`${section}.${name}`]: filtered
-//     }));
-
-//   } catch (error) {
-//     console.error(error);
-//   }
-
-// };
-const handleSearch = async ({ searchKey, searchText, section, name }) => {
-  try {
-    const xmlResponse = await fetchSearcherValueRetail(searchKey);
-console.log("XML"+xmlResponse);
-    const parsedData = parseFinacleResponse(xmlResponse);
-    console.log("Data json"+parsedData[0])
-    console.log("Parsed Data JSON:", JSON.stringify(parsedData, null, 2));
-
-//     const parsedData = [{
-//     "value": "ALAP",
-//     "label": "ALAPPUZHA",
-//     "rating": "ALAPPUZHA",
-//     "ratingType": "CITY"
-//   },
-//   {
-//     "value": "ALBA",
-//     "label": "ALBANY",
-//     "rating": "ALBANY",
-//     "ratingType": "CITY"
-//   },
-//   {
-//     "value": "ALBU",
-//     "label": "ALBUQUERQUE",
-//     "rating": "ALBUQUERQUE",
-//     "ratingType": "CITY"
-//   },
-//   {
-//     "value": "ALBU1",
-//     "label": "ALBURY WODONGA",
-//     "rating": "ALBURY WODONGA",
-//     "ratingType": "CITY"
-//   },
-//   {
-//     "value": "ALIC",
-//     "label": "ALICE SPRINGS",
-//     "rating": "ALICE SPRINGS",
-//     "ratingType": "CITY"
-//   }] 
-
-  
-    const filtered = parsedData.filter(item =>
-      item.label.toLowerCase().includes(searchText.toLowerCase())
-    );
-    
-    console.log("Fileter"+filtered)
-    setSearchResults(prev => ({
-      ...prev,
-      [`${section}.${name}`]: filtered
-    }));
-
-  } catch (error) {
-    console.error(error);
-  }
-};   
-
-/* ================= UI ================= */
+    /* ================= UI ================= */
 
     return (
         <>
