@@ -830,7 +830,7 @@ const DynamicField = ({
 
                 const val = e.target.value;
 
-                handleChange(e);
+                // handleChange(e);
 
                 field.onSearch?.({
                   searchKey: field.searchValue,
@@ -841,11 +841,11 @@ const DynamicField = ({
                 });
 
               }}
-              onBlur={() => {
-                if (field.required && !searchResults?.[searchKey]?.some(i => i.label === value)) {
-                  onChange(section, safeSubSection, name, "", field);
-                }
-              }}
+              // onBlur={() => {
+              //   if (field.required && !searchResults?.[searchKey]?.some(i => i.label === value)) {
+              //     onChange(section, safeSubSection, name, "", field);
+              //   }
+              // }}
             />
 
           </div>

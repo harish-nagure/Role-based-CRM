@@ -39,6 +39,8 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                         if (!validTypes.includes(value))
                             return "Invalid Document Type";
                     }
+
+                    
                 },
 
                 documentNumber: {
@@ -57,33 +59,42 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                             return "Aadhar number must be 12 digits";
                         if (form.documentType === "pan" && value.length !== 10)
                             return "PAN number must be 10 characters";
-                    }
+                    },
+
+                    xmlTag: "referenceNumber",
+                    xmlParent: "EntityDoctData"
                 },
 
                 placeOfIssue: {
                     hide: getHideValue("IdentificationDetails", "placeOfIssue"),
                     label: "Place Of Issue",
                     type: "search",
-                    searchValue:"city",
+                    searchValue: "city",
                     required: true && !getHideValue("IdentificationDetails", "placeOfIssue"),
                     validate: (value) => {
                         if (!value) return;
                         if (value.length < 3)
                             return "Place of Issue must be at least 3 characters";
-                    }
+                    },
+
+                    xmlTag: "placeOfIssue",
+                    xmlParent: "EntityDoctData"
                 },
 
                 countryOfIssue: {
                     hide: getHideValue("IdentificationDetails", "countryOfIssue"),
                     label: "Country Of Issue",
                     type: "search",
-                    searchValue:"coun",
+                    searchValue: "coun",
                     required: true && !getHideValue("IdentificationDetails", "countryOfIssue"),
                     validate: (value) => {
                         if (!value) return;
                         if (value.length < 3)
                             return "Country of Issue must be at least 3 characters";
-                    }
+                    },
+
+                    xmlTag: "docIssueDate",
+                    xmlParent: "EntityDoctData"
                 },
 
                 issueDate: {
@@ -98,7 +109,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
                         if (value > today)
                             return "Issue Date cannot be future date";
-                    }
+                    },
+
+                    xmlTag: "docDescr",
+                    xmlParent: "EntityDoctData"
                 },
 
                 expiryDate: {
@@ -163,7 +177,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     hide: getHideValue("generalInformation", "middleName"),
                     label: "Middle Name",
                     type: "text",
-                    required:false && !getHideValue(""),
+                    required: false && !getHideValue(""),
                 },
 
                 lastName: {
@@ -177,7 +191,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     hide: getHideValue("generalInformation", "shortName"),
                     label: "Short Name",
                     type: "text",
-                    required:false && !getHideValue(""),
+                    required: false && !getHideValue(""),
                 },
 
 
@@ -206,7 +220,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     hide: getHideValue("generalInformation", "birthCountry"),
                     label: "Birth Country",
                     type: "search",
-                    searchValue:"coun",
+                    searchValue: "coun",
                     required: true && !getHideValue("generalInformation", "birthCountry"),
                 },
 
@@ -214,7 +228,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     hide: getHideValue("generalInformation", "minorIndicator"),
                     label: "Minor Indicator",
                     type: "select",
-                    required: true && !getHideValue("generalInformation", "birthCountry"),
+                    required: true && !getHideValue("generalInformation", "minorIndicator"),
                     options: [
                         { label: "Select", value: "" },
                         { label: "Yes", value: "yes" },
@@ -235,7 +249,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 nonResidentDate: {
-                    
+
                     label: "Non Resident Date",
                     type: "date",
                     required: (form) => form.nonResidentIndicator === "yes" ? true : false,
@@ -251,10 +265,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     }
                 },
                 primarySolid: {
-                    hide:getHideValue("generalInformation", "primarySolid"),
+                    hide: getHideValue("generalInformation", "primarySolid"),
                     label: "Primary SOLID",
                     type: "search",
-                    searchValue:"serout",
+                    searchValue: "serout",
                     required: true && !getHideValue("generalInformation", "primarySolid"),
                 },
             },
@@ -264,10 +278,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 title: "Primary Introducer Details",
 
                 cifType: {
-                    hide:getHideValue("primaryIntroducerDetails","cifType"),
+                    hide: getHideValue("primaryIntroducerDetails", "cifType"),
                     label: "CIF Type",
                     type: "select",
-                    required: true && !getHideValue("primaryIntroducerDetails","cifType"),
+                    required: true && !getHideValue("primaryIntroducerDetails", "cifType"),
                     options: [
                         { label: "Select CIF Type", value: "" },
                         { label: "Individual", value: "individual" },
@@ -277,10 +291,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 bankRelationship: {
-                    hide:getHideValue("primaryIntroducerDetails","bankRelationship"),
+                    hide: getHideValue("primaryIntroducerDetails", "bankRelationship"),
                     label: "Bank Relationship Type",
                     type: "select",
-                    required: true && !getHideValue("primaryIntroducerDetails","bankRelationship"),
+                    required: true && !getHideValue("primaryIntroducerDetails", "bankRelationship"),
                     options: [
                         { label: "Select Relationship", value: "" },
                         { label: "Customer", value: "customer" },
@@ -289,16 +303,16 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 cifId: {
-                    hide:getHideValue("primaryIntroducerDetails","cifId"),
+                    hide: getHideValue("primaryIntroducerDetails", "cifId"),
                     label: "CIF ID",
                     type: "text",
-                    required: true && !getHideValue("primaryIntroducerDetails","cifId"),
+                    required: true && !getHideValue("primaryIntroducerDetails", "cifId"),
                 },
                 nameOnCIF: {
-                     hide:getHideValue("primaryIntroducerDetails"," nameOnCIF"),
+                    hide: getHideValue("primaryIntroducerDetails", "nameOnCIF"),
                     label: "Name on CIF",
                     type: "text",
-                    required: true && !getHideValue("primaryIntroducerDetails"," nameOnCIF"),
+                    required: true && !getHideValue("primaryIntroducerDetails", "nameOnCIF"),
                 }
             },
 
@@ -307,50 +321,50 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 title: "Permanent Address",
 
                 addressLine1: {
-                    hide: getHideValue("permanentAddress","addressLine1"),
+                    hide: getHideValue("permanentAddress", "addressLine1"),
                     label: "Address Line 1",
                     type: "text",
-                    required: true && !getHideValue("permanentAddress","addressLine1"),
+                    required: true && !getHideValue("permanentAddress", "addressLine1"),
                 },
 
                 addressLine2: {
-                     hide: getHideValue("permanentAddress","addressLine2"),
+                    hide: getHideValue("permanentAddress", "addressLine2"),
                     label: "Address Line 2",
                     type: "text",
-                    required:false && !getHideValue(""),
+                    required: false && !getHideValue(""),
                 },
 
                 houseNo: {
-                    hide:getHideValue("permanentAddress","houseNo"),
+                    hide: getHideValue("permanentAddress", "houseNo"),
                     label: "House No",
                     type: "text",
-                    required: true && !getHideValue("permanentAddress","houseNo"),
+                    required: true && !getHideValue("permanentAddress", "houseNo"),
                 },
 
                 city: {
-                    hide:getHideValue("permanentAddress","city"),
+                    hide: getHideValue("permanentAddress", "city"),
                     label: "City",
                     type: "search",
-                    searchValue:"city",
-                    required: true && !getHideValue("permanentAddress","city"),
+                    searchValue: "city",
+                    required: true && !getHideValue("permanentAddress", "city"),
                 },
 
                 stateProvinceRegion: {
-                    hide:getHideValue("permanentAddress","stateProvinceRegion"),
+                    hide: getHideValue("permanentAddress", "stateProvinceRegion"),
                     label: "State/Province/Region",
                     type: "search",
-                    searchValue:"state",
-                    required: true && !getHideValue("permanentAddress","stateProvinceRegion"),
+                    searchValue: "state",
+                    required: true && !getHideValue("permanentAddress", "stateProvinceRegion"),
                 },
 
 
 
                 countryOfResidence: {
-                    hide:getHideValue("permanentAddress","countryOfResidence"),
+                    hide: getHideValue("permanentAddress", "countryOfResidence"),
                     label: "Country of Residence",
                     type: "search",
-                    searchValue:"coun",
-                    required: true && !getHideValue("permanentAddress","countryOfResidence"),
+                    searchValue: "coun",
+                    required: true && !getHideValue("permanentAddress", "countryOfResidence"),
                     options: [
                         { label: "Select Country", value: "" },
                         { label: "India", value: "india" },
@@ -359,10 +373,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 postalCode: {
-                    hide:getHideValue("permanentAddress","postalCode"),
+                    hide: getHideValue("permanentAddress", "postalCode"),
                     label: "Postal Code",
                     type: "text",
-                    required: true && !getHideValue("permanentAddress","postalCode"),
+                    required: true && !getHideValue("permanentAddress", "postalCode"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 7)
                             return "Postal Code must be between 4 and 7 characters";
@@ -375,10 +389,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 title: "Present Address",
 
                 sameAsPermanent: {
-                    hide:getHideValue("presentAddress","sameAsPermanent"),
+                    hide: getHideValue("presentAddress", "sameAsPermanent"),
                     label: "Same as Permanent Address",
                     type: "radio",
-                    required: true && !getHideValue("presentAddress","sameAsPermanent"),
+                    required: true && !getHideValue("presentAddress", "sameAsPermanent"),
                     options: [
                         { label: "Select", value: "" },
                         { label: "Yes", value: "yes" },
@@ -387,55 +401,55 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 blank: {
-                    hide:getHideValue("presentAddress","blank"),
+                    hide: getHideValue("presentAddress", "blank"),
                     label: "",
                     type: "blank",
-                    required:false && getHideValue(""),
+                    required: false && getHideValue(""),
                 },
 
                 addressLine1: {
-                    hide:getHideValue("presentAddress","addressLine1"),
+                    hide: getHideValue("presentAddress", "addressLine1"),
                     label: "Address Line 1",
                     type: "text",
-                    required: true && !getHideValue("presentAddress","addressLine1"),
+                    required: true && !getHideValue("presentAddress", "addressLine1"),
                 },
 
                 addressLine2: {
-                    hide: getHideValue("presentAddress","addressLine2"),
+                    hide: getHideValue("presentAddress", "addressLine2"),
                     label: "Address Line 2",
                     type: "text",
-                    required: true && !getHideValue("presentAddress","addressLine2"),
+                    required: true && !getHideValue("presentAddress", "addressLine2"),
                 },
 
                 houseNo: {
-                    hide:getHideValue("presentAddress","houseNo"),
+                    hide: getHideValue("presentAddress", "houseNo"),
                     label: "House No",
                     type: "text",
-                    require: true && !getHideValue("presentAddress","houseNo"),
+                    required: true && !getHideValue("presentAddress", "houseNo"),
                 },
 
                 city: {
-                     hide:getHideValue("presentAddress","city"),
+                    hide: getHideValue("presentAddress", "city"),
                     label: "City",
                     type: "search",
-                    searchValue:"city",
-                    required: true && !getHideValue("presentAddress","city"),
+                    searchValue: "city",
+                    required: true && !getHideValue("presentAddress", "city"),
                 },
 
                 stateProvinceRegion: {
-                    hide:getHideValue("presentAddress","stateProvinceRegion"),
+                    hide: getHideValue("presentAddress", "stateProvinceRegion"),
                     label: "State/Province/Region",
                     type: "search",
-                    searchValue:"state",
-                    required: true && !getHideValue("presentAddress","stateProvinceRegion"),
+                    searchValue: "state",
+                    required: true && !getHideValue("presentAddress", "stateProvinceRegion"),
                 },
 
                 countryOfResidence: {
-                    hide:getHideValue("presentAddress","countryOfResidence"),
+                    hide: getHideValue("presentAddress", "countryOfResidence"),
                     label: "Country of Residence",
                     type: "search",
-                    searchValue:"coun",
-                    required: true && !getHideValue("presentAddress","countryOfResidence"),
+                    searchValue: "coun",
+                    required: true && !getHideValue("presentAddress", "countryOfResidence"),
                     options: [
                         { label: "Select Country", value: "" },
                         { label: "India", value: "india" },
@@ -444,10 +458,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 postalCode: {
-                    hide:getHideValue("presentAddress","postalCode"),
+                    hide: getHideValue("presentAddress", "postalCode"),
                     label: "Postal Code",
                     type: "text",
-                    required: true && !getHideValue("presentAddress","postalCode"),
+                    required: true && !getHideValue("presentAddress", "postalCode"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 7)
                             return "Postal Code must be between 4 and 7 characters";
@@ -463,32 +477,32 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
             OwnerShipDetails: {
                 title: "Benefical Owner",
-                
+
                 name: {
                     label: "Name",
                     type: "text",
-                    hide:getHideValue("BenficiaryDetails","name"),
-                    required: true && !getHideValue("BenficiaryDetails","OwnerShipDetails"),
+                    hide: getHideValue("BenficiaryDetails", "name"),
+                    required: true && !getHideValue("BenficiaryDetails", "OwnerShipDetails"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50)
                             return "Name must be between 4 and 50 characters";
                     }
                 },
                 desgination: {
-                    hide:getHideValue("BenficiaryDetails","desgination"),
+                    hide: getHideValue("BenficiaryDetails", "desgination"),
                     label: "Designation",
                     type: "text",
-                    required: true && !getHideValue("BenficiaryDetails","desgination"),
+                    required: true && !getHideValue("BenficiaryDetails", "desgination"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50)
                             return "Designation must be between 4 and 50 characters";
                     }
                 },
                 idNo: {
-                    hide: getHideValue("BenficiaryDetails","idNo"),
+                    hide: getHideValue("BenficiaryDetails", "idNo"),
                     label: "ID Number",
                     type: "text",
-                    required: true && !getHideValue("BenficiaryDetails","idNo"),
+                    required: true && !getHideValue("BenficiaryDetails", "idNo"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50)
                             return "ID Number must be between 4 and 50 characters";
@@ -496,11 +510,11 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 idIssueCountry: {
-                    hide:getHideValue("BenficiaryDetails","idIssueCountry"),
+                    hide: getHideValue("BenficiaryDetails", "idIssueCountry"),
                     label: "ID Issue Country",
                     type: "search",
-                    searchValue:"",
-                    required: true && !getHideValue("BenficiaryDetails","idIssueCountry"),
+                    searchValue: "coun",
+                    required: true && !getHideValue("BenficiaryDetails", "idIssueCountry"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50)
                             return "ID Issue Country must be between 4 and 50 characters";
@@ -508,17 +522,17 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 dob: {
-                    hide:getHideValue("BenficiaryDetails","dob"),
+                    hide: getHideValue("BenficiaryDetails", "dob"),
                     label: "Date of Birth",
                     type: "date",
-                    required: true && !getHideValue("BenficiaryDetails","dob"),
+                    required: true && !getHideValue("BenficiaryDetails", "dob"),
                     validate: (value) => {
                         if (!value) return;
 
                         const today = new Date().toISOString().split("T")[0];
 
                         if (value > today)
-                            return "Date of birth cannot be past date";
+                            return "Date of birth cannot be future date";
 
                         if (new Date().getFullYear() - new Date(value).getFullYear() < 18)
                             return "Minimum age should be 18 years";
@@ -526,10 +540,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 currentAddress: {
-                    hide:getHideValue("BenficiaryDetails","currentAddress"),
+                    hide: getHideValue("BenficiaryDetails", "currentAddress"),
                     label: "Current Address",
                     type: "text",
-                    required: true && !getHideValue("BenficiaryDetails","currentAddress"),
+                    required: true && !getHideValue("BenficiaryDetails", "currentAddress"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50)
                             return "Current Address must be between 4 and 50 characters";
@@ -537,10 +551,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 sourceOfBO: {
-                    hide: getHideValue("BenficiaryDetails","sourceOfBO"),
+                    hide: getHideValue("BenficiaryDetails", "sourceOfBO"),
                     label: "Source of BO",
                     type: "checkbox",
-                    required: true && !getHideValue("BenficiaryDetails","sourceOfBO"),
+                    required: true && !getHideValue("BenficiaryDetails", "sourceOfBO"),
 
                     options: [
                         { label: "Equity", value: "equity" },
@@ -622,7 +636,7 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 // }
 
                 add: {
-                   
+
                     label: "Add",
                     type: "button",
                     variant: "primary",
@@ -736,10 +750,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
 
                 title: "List of Directors Details",
                 name: {
-                    hide:getHideValue(" ListOfDirectorsDetails","name"),
+                    hide: getHideValue("ListOfDirectorsDetails", "name"),
                     label: "Name",
                     type: "text",
-                    required: true && !getHideValue(" ListOfDirectorsDetails","name"),
+                    required: true && !getHideValue("ListOfDirectorsDetails", "name"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50) {
                             return "Name must be between 4 and 50 characters";
@@ -748,10 +762,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 idNo: {
-                    hide:getHideValue(" ListOfDirectorsDetails","idNo"),
+                    hide: getHideValue("ListOfDirectorsDetails", "idNo"),
                     label: "ID No",
                     type: "text",
-                    required: true && !getHideValue(" ListOfDirectorsDetails","idNo"),
+                    required: true && !getHideValue("ListOfDirectorsDetails", "idNo"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50) {
                             return "ID No must be between 4 and 50 characters";
@@ -760,10 +774,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                 },
 
                 desgination: {
-                    hide:getHideValue(" ListOfDirectorsDetails","desgination"),
+                    hide: getHideValue("ListOfDirectorsDetails", "desgination"),
                     label: "Designation",
                     type: "text",
-                    required: true && !getHideValue(" ListOfDirectorsDetails","desgination"),
+                    required: true && !getHideValue("ListOfDirectorsDetails", "desgination"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50) {
                             return "Designation must be between 4 and 50 characters";
@@ -771,10 +785,10 @@ export const CIFC_SCHEMA = ({ canWrite = false, permissions = [] }) => {
                     }
                 },
                 currentAddress: {
-                    hide:getHideValue(" ListOfDirectorsDetails","currentAddress"),
+                    hide: getHideValue("ListOfDirectorsDetails", "currentAddress"),
                     label: "Current Address",
                     type: "text",
-                    required: true && !getHideValue(" ListOfDirectorsDetails","currentAddress"),
+                    required: true && !getHideValue("ListOfDirectorsDetails", "currentAddress"),
                     validate: (value) => {
                         if (value.length < 4 || value.length > 50) {
                             return "Current Address must be between 4 and 50 characters";

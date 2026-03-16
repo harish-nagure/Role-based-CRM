@@ -250,12 +250,26 @@ export const fetchSearcherValueCorporate = async (custinpValue) => {
 
 
 // finacleRequestRetail
-export const finacleRequestRetail = async (payload) => {
-  try{
-    const res = await api.post("/finacle/retail/add",payload);
+// export const finacleRequestRetail = async (payload) => {
+//   try{
+//     const res = await api.post("/finacle/retail/add",payload);
+//     return res.data;
+//   }catch(error){
+//     console.error("CIRC Permission fetching failed");
+//      throw error;
+//   }
+// }
+
+export const finacleRequestRetail = async (xmlData) => {
+  try {
+    const res = await api.post("/finacle/retail/add", xmlData, {
+      headers: {
+        "Content-Type": "application/xml"
+      }
+    });
     return res.data;
-  }catch(error){
-    console.error("CIRC Permission fetching failed");
-     throw error;
+  } catch (error) {
+    console.error("Finacle Retail Add API failed", error);
+    throw error;
   }
-}
+};
